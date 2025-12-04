@@ -1,0 +1,177 @@
+<div class="demo-request-page">
+  <!-- Hero Section -->
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Transform Your HR with a Personalized Demo</h1>
+          <p class="hero-description">
+            See our HRMS in action and discover how we can help you streamline payroll, automate onboarding, 
+            and solve your unique HR challenges with a guided walkthrough from one of our experts.
+          </p>
+          
+          <div class="benefits-list">
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">groups</span>
+              <div>
+                <h3>Personalized Walkthrough</h3>
+                <p>A guided tour tailored to your specific business needs and questions.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">build_circle</span>
+              <div>
+                <h3>Solve Your HR Challenges</h3>
+                <p>See how our platform can address your most pressing HR issues.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">rocket_launch</span>
+              <div>
+                <h3>Streamline Payroll & Onboarding</h3>
+                <p>Discover features that save you time and reduce administrative overhead.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+          <app-card [elevated]="true">
+            <div class="form-header">
+              <h2>Schedule Your Free Demo</h2>
+            </div>
+
+            <form [formGroup]="demoForm" (ngSubmit)="onSubmit()" class="demo-form">
+              <!-- Success Message -->
+              <div *ngIf="submitSuccess" class="success-message">
+                <span class="material-symbols-outlined">check_circle</span>
+                <p>Thank you! We'll contact you shortly to schedule your demo.</p>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName">First Name *</label>
+                  <input 
+                    id="firstName"
+                    type="text" 
+                    formControlName="firstName"
+                    [class.error]="submitted && demoForm.get('firstName')?.invalid">
+                  <span *ngIf="submitted && demoForm.get('firstName')?.invalid" class="error-message">
+                    {{ getErrorMessage('firstName') }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName">Last Name *</label>
+                  <input 
+                    id="lastName"
+                    type="text" 
+                    formControlName="lastName"
+                    [class.error]="submitted && demoForm.get('lastName')?.invalid">
+                  <span *ngIf="submitted && demoForm.get('lastName')?.invalid" class="error-message">
+                    {{ getErrorMessage('lastName') }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Work Email *</label>
+                <input 
+                  id="email"
+                  type="email" 
+                  formControlName="email"
+                  placeholder="name@company.com"
+                  [class.error]="submitted && demoForm.get('email')?.invalid">
+                <span *ngIf="submitted && demoForm.get('email')?.invalid" class="error-message">
+                  {{ getErrorMessage('email') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input 
+                  id="phone"
+                  type="tel" 
+                  formControlName="phone"
+                  placeholder="+1 (555) 000-0000"
+                  [class.error]="submitted && demoForm.get('phone')?.invalid">
+                <span *ngIf="submitted && demoForm.get('phone')?.invalid" class="error-message">
+                  {{ getErrorMessage('phone') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label for="companyName">Company Name *</label>
+                <input 
+                  id="companyName"
+                  type="text" 
+                  formControlName="companyName"
+                  [class.error]="submitted && demoForm.get('companyName')?.invalid">
+                <span *ngIf="submitted && demoForm.get('companyName')?.invalid" class="error-message">
+                  {{ getErrorMessage('companyName') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label for="companySize">Company Size *</label>
+                <select 
+                  id="companySize"
+                  formControlName="companySize"
+                  [class.error]="submitted && demoForm.get('companySize')?.invalid">
+                  <option value="">Select company size</option>
+                  <option *ngFor="let size of companySizes" [value]="size">{{ size }}</option>
+                </select>
+                <span *ngIf="submitted && demoForm.get('companySize')?.invalid" class="error-message">
+                  {{ getErrorMessage('companySize') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label>What modules are you interested in? *</label>
+                <div class="modules-grid">
+                  <label 
+                    *ngFor="let module of modules"
+                    [class.selected]="isModuleSelected(module.id)"
+                    (click)="toggleModule(module.id)"
+                    class="module-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isModuleSelected(module.id)"
+                      (change)="toggleModule(module.id)">
+                    <span>{{ module.label }}</span>
+                  </label>
+                </div>
+                <span *ngIf="submitted && demoForm.get('interestedModules')?.invalid" class="error-message">
+                  Please select at least one module
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message (Optional)</label>
+                <textarea 
+                  id="message"
+                  formControlName="message"
+                  rows="4"
+                  placeholder="Tell us about any specific challenges or requirements..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary btn-lg"
+                  [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'Submitting...' : 'Submit Request' }}
+                </button>
+                <p class="form-disclaimer">
+                  By submitting, you agree to our <a href="#">Privacy Policy</a>.
+                </p>
+              </div>
+            </form>
+          </app-card>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+

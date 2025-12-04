@@ -1,0 +1,80 @@
+<div class="home-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">Streamline Your HR, Empower Your People.</h1>
+          <p class="hero-description">
+            The all-in-one platform to manage payroll, onboarding, performance, and more. 
+            Simplify your processes and focus on what matters most: your team.
+          </p>
+          <div class="hero-actions">
+            <a routerLink="/demo-request" class="btn btn-primary btn-lg">Get Started for Free</a>
+            <a routerLink="/features" class="btn btn-outline btn-lg">Explore Features</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <div class="hero-image-placeholder">
+            <span class="material-symbols-outlined">dashboard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="social-proof-section section-sm">
+    <div class="container">
+      <p class="social-proof-text">Trusted by the world's most innovative teams</p>
+      <div class="logo-grid">
+        <div class="logo-item">Company A</div>
+        <div class="logo-item">Company B</div>
+        <div class="logo-item">Company C</div>
+        <div class="logo-item">Company D</div>
+        <div class="logo-item">Company E</div>
+        <div class="logo-item">Company F</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Everything you need in one HR solution</h2>
+        <p class="section-description">
+          Our platform is designed to handle all your core HR tasks, giving you more time to build a great company culture.
+        </p>
+      </div>
+      <div class="features-grid">
+        <app-card *ngFor="let feature of features" [hoverable]="true" [elevated]="true" class="feature-card">
+          <div class="feature-icon">
+            <span class="material-symbols-outlined">{{ feature.icon }}</span>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section section-sm">
+    <div class="container">
+      <app-card [elevated]="true" class="cta-card">
+        <div class="cta-content text-center">
+          <h2>Ready to simplify your HR?</h2>
+          <p>
+            Join thousands of businesses that trust our platform to manage their most important asset—their people.
+          </p>
+          <div class="cta-actions">
+            <a routerLink="/demo-request" class="btn btn-primary btn-lg">Get started</a>
+            <a routerLink="/pricing" class="btn btn-ghost btn-lg">Learn more →</a>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </section>
+</div>
+

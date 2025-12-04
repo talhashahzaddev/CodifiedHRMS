@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Blog / Resources Listing Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-[#111318] dark:text-gray-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200/80 dark:border-gray-700/80 px-4 sm:px-6 lg:px-10 py-3 max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">HRMS Product</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-[#111318] dark:text-gray-300 dark:hover:text-white text-sm font-medium leading-normal" href="#">Product</a>
+<a class="text-[#111318] dark:text-gray-300 dark:hover:text-white text-sm font-medium leading-normal" href="#">Pricing</a>
+<a class="text-[#111318] dark:text-gray-300 dark:hover:text-white text-sm font-medium leading-normal" href="#">Resources</a>
+<a class="text-[#111318] dark:text-gray-300 dark:hover:text-white text-sm font-medium leading-normal" href="#">About Us</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Request a Demo</span>
+</button>
+</div>
+<div class="md:hidden">
+<button class="flex items-center justify-center p-2 rounded-md text-[#111318] dark:text-gray-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-wrap justify-between gap-6 p-4 mb-8">
+<div class="flex min-w-72 flex-col gap-3 max-w-3xl">
+<p class="text-[#111318] dark:text-white text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em]">The Latest in HR, Straight from the Experts</p>
+<p class="text-[#616f89] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal">Explore our collection of articles, guides, and webinars to stay ahead in the world of human resources.</p>
+</div>
+</div>
+<div class="flex gap-2 p-3 flex-wrap pr-4 mb-6 border-b border-gray-200/80 dark:border-gray-700/80">
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-primary/20 dark:bg-primary/30 pl-4 pr-4">
+<p class="text-primary dark:text-white text-sm font-medium leading-normal">All</p>
+</div>
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-4 pr-4 transition-colors">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Compliance</p>
+</div>
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-4 pr-4 transition-colors">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Recruiting</p>
+</div>
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-4 pr-4 transition-colors">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Culture</p>
+</div>
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-4 pr-4 transition-colors">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Payroll</p>
+</div>
+<div class="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-4 pr-4 transition-colors">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Benefits</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Abstract gradient of blue and purple shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzqmyHap0mPA5NyJYrcTnBN5Z91EwG8BOMfdOzalLXs1hDA4OhevWxY1pwtJOr-WaJhHy9GHL5CbivbyrYn6q8CUTiDadRXS8MC-rQshAWjCV6QrNwXaaL-FzZ3PiIjgB3YlXRgi57qs44zvIVWaBLra3O2EF8rH-1rtU21clGAKMcTPG2xWjOzvwpfTb7I5aCKQLjv2RhtG_nxiPns1IlRKg7YD5-S_qefs39WWWHrBJMFIoUjZBx5G5n-xdtyBXfzJMSSm8YV8g");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">BLOG | May 21, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">Mastering the Art of Employee Onboarding</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">A comprehensive guide to creating a seamless and effective onboarding experience for new hires.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Modern office setting with people collaborating" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0JhkAoKJYXbm0hlj62Nrx7NqmeSsbKX4OBr62LfZIhbX3Zh5tKTf-JH1c61kYU_JztnSD1CyyiRU5_DAL-RYN-_6qoxPntP0h7qrmwGY7YqbN3zaN07mLPIK4GZDfHSCuFHmZw0Qw9Fb0WVuEQYv2299oR6jyNcU-S6tojmjOf0y8lcWr7UjY0uvAlfZmu5EQTnnH8GJ2IvLonEZwYCVcvbEOc37DB1_sb6JlzqLZpCjDCFq8jlFkv1SXdMJ55GtcCvP8nUpLkEs");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">ARTICLE | May 18, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">The Future of Remote Work: Trends for 2024</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">Explore the key trends shaping remote and hybrid work environments in the coming year.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Stack of legal books on a desk" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAoUTM7gpfWV9oH4uFukTk5x_bk9Zh_lBGuqFS09kSyXXOuccPWsE4ljiOWbMuBIyJMm52Fym5Lsl3g2Wm-VnPE5_FVGhds_oxb494e76CspdIuPNPaesfrahUfkt6VOUjQ-Unh0n5NNTnsj1UXVN9pQQYdX97A3itrpaPLC4P5OmpvayvdWL51lBd_TcC5Gfkiv9yw4SbfxC-aw90HkIMiKIhCGrrt3MggxOXyE-uoT4fPUQ0rOmqnbXy3IZN5TVfYwBgPVULWo0s");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">WHITEPAPER | May 15, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">Navigating HR Compliance with Confidence</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">Stay up-to-date with the latest regulations and avoid costly legal pitfalls.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Diverse team members laughing in a meeting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjfTZI_o57QETV3USzOLizUcSryjaybbO3Rw8571X8QaZJx8Ar6W8dU0VHZFTUx3ioLLwEA5GnB3yJtlCljud2uT9tXZ0plt6m76TbHjpFEdmPheUh00pO74TiUrBaGhgzn3ITFXu5lMDDUMThEPzeTLX5LgHKnwg2PdcC1gbjG_jLHUT0W5g3Pgo7M6eihlDnSYXbBabGYVu7nhiIkMDYimFgp5umtMlTE-cWab1YhEWUDKOK6vUNQdbDzM3AUb54v7CQdFxwLRQ");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">BLOG | May 12, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">How to Build a Thriving Company Culture</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">Learn actionable steps to foster a positive and productive workplace for everyone.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Calculator and pen on a stack of financial documents" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCjHkqi7OxsVnqzhCkTOZbpLIOPmcBwOFxLhmRWBv9gzL22OxXYHV3OsHE0n7c0dbXyREDQbzdFf1zr0R47bM7eNar66SLlZ2xfME1jvSew6M9CQB0JA-SWwKU_4GPSGY_wcgVcHZQOKIs_P4J2QP0Dlybk2jUEAZK_fTiftv9xo5okDrSlBjpLaH5BQhDme7OrVK_50U3nmcmrx7YU9DsDDiAlHzsG3_DK2akdvWxWdIZm8Kdsmj9i_Ke_-5bOgXSVP9YfZEBm_yU");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">GUIDE | May 9, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">Simplifying Your Payroll Processes</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">Discover tools and techniques to make your payroll more efficient and accurate.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 pb-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden" data-alt="Two people shaking hands across a table" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnzNc3cfYfgEhUgO9WIA-OmdL9xqIghStnSZ6uz-ok5vThLaV_OGLQPOlTP8_AmpicPO3tnQnYqxvAoYVj79mAjICK7ffBp9J0r5E32YEgSdYDi5f_vJTYpBUyf0NeN_c7qj3iPwZsOCgMrzaxagYY-RgWpcdE80kiYeprEIrbyhohJe_6NHYS87j03qjADHJSy5vkDM6Gv9qQWTwHup9Xw_Fh3iA3YT0O-WXU4bhRABQr_G9aP6IV6BtnbAZZXmPw20lN38ddbz4");'></div>
+<div class="flex flex-col gap-2">
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">BLOG | May 6, 2024</p>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-normal group-hover:text-primary transition-colors">Top 5 Recruitment Strategies That Actually Work</p>
+<p class="text-[#616f89] dark:text-gray-400 text-sm font-normal leading-normal">Attract top talent with these proven methods for modern recruitment.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-center p-4 mt-8">
+<a class="flex size-10 items-center justify-center text-[#111318] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl">chevron_left</span>
+</a>
+<a class="text-sm font-bold leading-normal tracking-[0.015em] flex size-10 items-center justify-center text-white dark:text-white rounded-full bg-primary" href="#">1</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800" href="#">2</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800" href="#">3</a>
+<span class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-400 rounded-full">...</span>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800" href="#">8</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800" href="#">9</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111318] dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800" href="#">10</a>
+<a class="flex size-10 items-center justify-center text-[#111318] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</a>
+</div>
+</div>
+<section class="max-w-4xl mx-auto mt-20 mb-10 p-8 rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200/80 dark:border-gray-800">
+<div class="flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="max-w-md text-center md:text-left">
+<h3 class="text-2xl font-bold text-[#111318] dark:text-white mb-2">Get HR Insights Delivered to Your Inbox</h3>
+<p class="text-[#616f89] dark:text-gray-400">Subscribe to our newsletter for the latest articles, guides, and industry news.</p>
+</div>
+<form class="flex w-full max-w-sm flex-col sm:flex-row gap-3">
+<input class="flex-grow rounded-lg border-gray-300 dark:border-gray-700 bg-background-light dark:bg-gray-800 text-[#111318] dark:text-white focus:ring-primary focus:border-primary" placeholder="Enter your email" type="email"/>
+<button class="flex items-center justify-center rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors" type="submit">
+                                Subscribe
+                            </button>
+</form>
+</div>
+</section>
+</main>
+<footer class="bg-white dark:bg-gray-900/50 border-t border-gray-200/80 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+<div class="col-span-2 md:col-span-4 lg:col-span-1">
+<div class="flex items-center gap-3">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">HRMS Product</h2>
+</div>
+<p class="text-sm text-[#616f89] dark:text-gray-400 mt-4">The all-in-one platform for modern HR management.</p>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-[#111318] dark:text-white">Product</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Features</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Pricing</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Integrations</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Demo</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-[#111318] dark:text-white">Company</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">About Us</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Careers</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-[#111318] dark:text-white">Resources</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Blog</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Help Center</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Webinars</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-[#111318] dark:text-white">Legal</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Privacy Policy</a></li>
+<li><a class="text-sm text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center">
+<p class="text-sm text-[#616f89] dark:text-gray-400">© 2024 HRMS Product. All rights reserved.</p>
+<div class="flex space-x-4 mt-4 sm:mt-0">
+<a class="text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#"><svg class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16.03 6.02,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.7,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z"></path></svg></a>
+<a class="text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#"><svg class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12,2.04C6.5,2.04 2,6.53 2,12.06C2,17.06 5.66,21.21 10.44,21.96V14.96H7.9V12.06H10.44V9.85C10.44,7.32 11.93,5.96 14.22,5.96C15.31,5.96 16.45,6.15 16.45,6.15V8.62H15.19C13.95,8.62 13.56,9.39 13.56,10.18V12.06H16.34L15.89,14.96H13.56V21.96C18.34,21.21 22,17.06 22,12.06C22,6.53 17.5,2.04 12,2.04Z"></path></svg></a>
+<a class="text-[#616f89] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#"><svg class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path d="M2,12C2,9.25 3.3,6.8 5.2,5.2L6.7,6.7C5.3,7.9 4.4,9.8 4.4,12C4.4,14.2 5.3,16.1 6.7,17.3L5.2,18.8C3.3,17.2 2,14.75 2,12M22,12C22,9.25 20.7,6.8 18.8,5.2L17.3,6.7C18.7,7.9 19.6,9.8 19.6,12C19.6,14.2 18.7,16.1 17.3,17.3L18.8,18.8C20.7,17.2 22,14.75 22,12M12,6.9C9.17,6.9 6.9,9.17 6.9,12C6.9,14.83 9.17,17.1 12,17.1C14.83,17.1 17.1,14.83 17.1,12C17.1,9.17 14.83,6.9 12,6.9M12,4.6C10.3,4.6 8.7,5.2 7.5,6.3L6,4.8C7.6,3.2 9.7,2.3 12,2.3C14.3,2.3 16.4,3.2 18,4.8L16.5,6.3C15.3,5.2 13.7,4.6 12,4.6M12,19.4C10.3,19.4 8.7,18.8 7.5,17.7L6,19.2C7.6,20.8 9.7,21.7 12,21.7C14.3,21.7 16.4,20.8 18,19.2L16.5,17.7C15.3,18.8 13.7,19.4 12,19.4Z"></path></svg></a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,33 @@
+<header class="header">
+  <div class="container">
+    <nav class="nav">
+      <!-- Logo -->
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">
+          <span class="material-symbols-outlined">hub</span>
+        </span>
+        <span class="logo-text">CodifiedHRMS</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="nav-links" [class.mobile-open]="isMenuOpen">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+        <a routerLink="/features" routerLinkActive="active" (click)="closeMenu()">Features</a>
+        <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
+        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+        <a routerLink="/blog" routerLinkActive="active" (click)="closeMenu()">Blog</a>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="nav-actions">
+        <a routerLink="/demo-request" class="btn btn-primary">Request Demo</a>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+          <span class="material-symbols-outlined">{{ isMenuOpen ? 'close' : 'menu' }}</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+

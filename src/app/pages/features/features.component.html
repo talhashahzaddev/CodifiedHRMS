@@ -1,0 +1,46 @@
+<div class="features-page">
+  <!-- Hero Section -->
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content text-center">
+        <h1>All Your HR Tools, All in One Place</h1>
+        <p class="hero-description">
+          Our comprehensive platform simplifies every aspect of HR management, from payroll to performance reviews, 
+          freeing you up to focus on what matters most: your people.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="features-section section">
+    <div class="container">
+      <h2 class="section-title text-center">Explore Our Core Modules</h2>
+      <div class="features-grid">
+        <app-card *ngFor="let feature of features" [hoverable]="true" [elevated]="true" class="feature-card">
+          <div class="feature-icon">
+            <span class="material-symbols-outlined">{{ feature.icon }}</span>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section section-sm">
+    <div class="container">
+      <app-card [elevated]="true" class="cta-card text-center">
+        <h2>Ready to Transform Your HR?</h2>
+        <p>
+          See how our all-in-one platform can streamline your processes and empower your team.
+        </p>
+        <div class="cta-actions">
+          <a routerLink="/demo-request" class="btn btn-primary btn-lg">Schedule a Free Demo</a>
+        </div>
+      </app-card>
+    </div>
+  </section>
+</div>
+

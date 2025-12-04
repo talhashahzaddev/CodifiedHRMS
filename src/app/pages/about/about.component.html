@@ -1,0 +1,82 @@
+<div class="about-page">
+  <!-- Hero Section -->
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content text-center">
+        <h1>The People Behind Modern HR</h1>
+        <p class="hero-description">
+          We're dedicated to building the future of human resources management, one innovative feature at a time, 
+          to empower people and businesses.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="mission-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Our Mission</h2>
+        <p class="section-description">
+          Our core purpose is to simplify complex HR processes, empowering organizations to build happier, 
+          more productive workplaces through intuitive technology and dedicated support.
+        </p>
+      </div>
+
+      <div class="values-grid">
+        <app-card *ngFor="let value of values" [elevated]="true" class="value-card">
+          <div class="value-icon">
+            <span class="material-symbols-outlined">{{ value.icon }}</span>
+          </div>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.description }}</p>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>About Our Journey</h2>
+          <p>
+            Founded with the vision to revolutionize the HR industry, our journey began by identifying the critical 
+            need for a more human-centric approach to workplace management. We've grown from a small team of passionate 
+            innovators into a leading provider of HRMS solutions, consistently delivering tools that not only streamline 
+            operations but also foster a positive company culture.
+          </p>
+          <p>
+            Our story is one of growth, dedication, and a relentless commitment to empowering people and businesses. 
+            We believe that when HR teams have the right tools, they can focus on what truly matters: building great 
+            teams and creating amazing workplace experiences.
+          </p>
+        </div>
+        <div class="about-image">
+          <div class="image-placeholder">
+            <span class="material-symbols-outlined">groups</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section section-sm">
+    <div class="container">
+      <app-card [elevated]="true" class="cta-card text-center">
+        <h2>Ready to Transform Your HR?</h2>
+        <p>
+          Discover how our intuitive platform can streamline your processes and empower your team. 
+          Let's build a better workplace together.
+        </p>
+        <div class="cta-actions">
+          <a routerLink="/features" class="btn btn-primary btn-lg">See Our Product</a>
+          <a routerLink="/demo-request" class="btn btn-outline btn-lg">Contact Sales</a>
+        </div>
+      </app-card>
+    </div>
+  </section>
+</div>
+

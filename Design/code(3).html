@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Demo Request / Contact Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-10 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-black/10 dark:border-b-white/10 px-4 sm:px-10 py-3 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center gap-4 text-slate-800 dark:text-slate-200">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"></path>
+</g>
+<defs>
+<clippath id="clip0_6_319">
+<rect fill="white" height="48" width="48"></rect>
+</clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-slate-800 dark:text-slate-200 text-lg font-bold leading-tight tracking-[-0.015em]">HRMS Saas</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" href="#">Features</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" href="#">Pricing</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" href="#">About Us</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" href="#">Blog</a>
+</div>
+<div class="flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Request a Demo</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Login</span>
+</button>
+</div>
+</div>
+<button class="md:hidden flex items-center justify-center size-10 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="flex flex-1 justify-center py-10 lg:py-20 px-4 sm:px-6 lg:px-8">
+<div class="layout-content-container grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 w-full max-w-7xl">
+<div class="lg:col-span-5 flex flex-col gap-8">
+<div class="flex flex-col gap-3">
+<p class="text-slate-900 dark:text-white text-4xl sm:text-5xl font-black leading-tight tracking-[-0.033em]">Transform Your HR with a Personalized Demo</p>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal">
+                See our HRMS in action and discover how we can help you streamline payroll, automate onboarding, and solve your unique HR challenges with a guided walkthrough from one of our experts.
+              </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+<div class="flex flex-1 gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-4 flex-col">
+<div class="text-primary">
+<span class="material-symbols-outlined !text-3xl">groups</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Personalized Walkthrough</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">A guided tour tailored to your specific business needs and questions.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-4 flex-col">
+<div class="text-primary">
+<span class="material-symbols-outlined !text-3xl">build_circle</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Solve Your HR Challenges</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">See how our platform can address your most pressing HR issues.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-4 flex-col">
+<div class="text-primary">
+<span class="material-symbols-outlined !text-3xl">rocket_launch</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Streamline Payroll &amp; Onboarding</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Discover features that save you time and reduce administrative overhead.</p>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-slate-200 dark:border-slate-800">
+<p class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wider">Trusted by innovative companies</p>
+<div class="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-60">
+<img class="h-6" data-alt="Company A logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhuL0F3KO-2gX5NMu9nlxOCyklaTUoDGdUrZzkcwmhD7CBsU9NPZEuM38LP7gIe4r7u2w7d7WFWIgAbCKea4rG_63ZmPawpARCGqiWqlpW-18XnBUWabRsGqHxxPuJRU24uDNeMGx_Y-r4Yqv3FtlXVGcZUxcwK6hol7x_AaW29us5tBatuBVtGBj32pB72G2gqh_oZqxJ0U0DF2YvkE4ouL4Cs7zlxQ6w6DcPtzn7m6puoFMYBnZb8p3vJOeIq2hOC4M271cfst8"/>
+<img class="h-6" data-alt="Company B logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3kQcm8fPKMRSxoXVihiZZaRXx3hPRMiw3xhXsffXi9r8hc0aUOrrXy9NBmLblmXBSQ55mhT-vKL9wxxzCgAWtdxCPZXjA9Qq2HQv_iJVPjW0stO4GO7q_mlp_BtNccWyvikXqIVZE1t3EjNq_ekpFLwp4AN94lxxM6M-YZGqB7h-oRH4jDceMzZOItLI08Zz-WIk0UqSKGYZUBemHz8Bsdm4toQwbOEx4xB4bgBsr96R7ZSWGnBLVaQuUqBK4ENh4gMMCFk12p2U"/>
+<img class="h-6" data-alt="Company C logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyHYZL0t3TyP_hNQoztZYxcv_bD3VSaWIBy4wXYq1q5NxQq8xoibS6VhgYkY-Be_Z41IXGon60h0SE-8l1odlK7LpwWmRko3NKRnpS7ZE6bHvJQKXhe1SX5pEmEr0xR6wt8Ge26E36mW4YL4I1Ll3-mb9fspl8RmLBpCvvQzzkK4CAQ-zoe8PKMZ8l3wUlaa4YV_adJsZJtbUQkO8InLWWZ8mbsgFltw65WZ8-kemThmiOQ8QwFlXACc-t1Tsv8EH9ygJaJPrc6zI"/>
+<img class="h-6" data-alt="Company D logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl67vlSoXMqMsFMW14hW5lE2mLxzFK-ljtvCKVbaa-8939BkRZvtnAJV5Fszi8X8Fx7a50V_oGLV5NPSWwkdiW1-mAvL1IfU2xl01H6B_5ZymrN9EuMg37NZ_CC-7cRKgKxNRkPyEuJdHSOJbazl1jUdkwe-njVrGMLX204y_9m9TiintbLGSzLCTEJ7yCIeY6CH6AAca_s89XFzfquX3XLzZhev6LqyXxoaFTAOtip39GK2gky0_x9jcmZsI2p0sMhzCCP4-_xY0"/>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<div class="bg-white dark:bg-slate-900/50 p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Schedule Your Free Demo</h3>
+<form class="flex flex-col gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">First Name</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="Enter your first name" value=""/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Last Name</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="Enter your last name" value=""/>
+</label>
+</div>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Work Email</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="name@company.com" type="email" value=""/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Phone Number</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="+1 (555) 000-0000" type="tel" value=""/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Company Name</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="Enter your company name" value=""/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Company Size</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-sm font-normal leading-normal">
+<option>1-10 employees</option>
+<option>11-50 employees</option>
+<option>51-200 employees</option>
+<option>201-500 employees</option>
+<option>500+ employees</option>
+</select>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">What modules are you interested in?</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-slate-800/50 cursor-pointer">
+<input class="form-checkbox rounded text-primary focus:ring-primary/50" type="checkbox"/>
+<span class="text-sm text-slate-700 dark:text-slate-300">Payroll</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-slate-800/50 cursor-pointer">
+<input class="form-checkbox rounded text-primary focus:ring-primary/50" type="checkbox"/>
+<span class="text-sm text-slate-700 dark:text-slate-300">Onboarding</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-slate-800/50 cursor-pointer">
+<input class="form-checkbox rounded text-primary focus:ring-primary/50" type="checkbox"/>
+<span class="text-sm text-slate-700 dark:text-slate-300">Time Tracking</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-slate-800/50 cursor-pointer">
+<input class="form-checkbox rounded text-primary focus:ring-primary/50" type="checkbox"/>
+<span class="text-sm text-slate-700 dark:text-slate-300">Benefits</span>
+</label>
+</div>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Message (Optional)</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-28 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-sm font-normal leading-normal" placeholder="Tell us about any specific challenges or requirements..."></textarea>
+</label>
+<div class="flex flex-col gap-2 pt-2">
+<button class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors" type="submit">
+<span class="truncate">Submit Request</span>
+</button>
+<p class="text-xs text-center text-slate-500 dark:text-slate-400">By submitting, you agree to our <a class="underline hover:text-primary" href="#">Privacy Policy</a>.</p>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

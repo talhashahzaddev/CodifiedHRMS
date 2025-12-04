@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Features / Modules Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden text-gray-900 dark:text-gray-100">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-700 px-6 md:px-10 py-3 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
+<div class="flex items-center gap-4">
+<div class="text-primary size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">HRMS Product</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Resources</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Request a Demo</span>
+</button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined">menu</span>
+</div>
+</header>
+<main class="mt-[68px]"> <!-- Offset for fixed header -->
+<!-- HeroSection -->
+<div class="w-full">
+<div class="flex flex-col gap-6 px-4 py-16 text-center items-center">
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl">All Your HR Tools, All in One Place</h1>
+<p class="text-base font-normal leading-normal text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">Our comprehensive platform simplifies every aspect of HR management, from payroll to performance reviews, freeing you up to focus on what matters most: your people.</p>
+</div>
+</div>
+</div>
+<!-- SectionHeader -->
+<div class="w-full">
+<h2 class="text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5 text-center">Explore Our Core Modules</h2>
+</div>
+<!-- TextGrid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Payroll Management</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Simplify and automate your entire salary processing workflow with precision and ease.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Attendance</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Accurately track employee work hours, leaves, and overtime with our integrated system.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Performance</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Manage employee reviews, set goals, and foster a culture of continuous improvement.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Recruitment</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Streamline your hiring process from job posting to offer letter with our applicant tracking system.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">hourglass_top</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Timesheets</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Log time against projects and tasks for better resource management and billing.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300">
+<div class="text-primary">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Self Service</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Empower your employees with access to their own information, requests, and documents.</p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex-col hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-300 lg:col-start-2">
+<div class="text-primary">
+<span class="material-symbols-outlined">pie_chart</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-base font-bold leading-tight">Analytics</h3>
+<p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Gain valuable, data-driven insights into your workforce to make strategic HR decisions.</p>
+</div>
+</div>
+</div>
+<!-- CTASection -->
+<div class="w-full @container">
+<div class="flex flex-col justify-center items-center gap-6 px-4 py-16 @[480px]:gap-8 @[480px]:px-10 @[480px]:py-20 my-10 bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800">
+<div class="flex flex-col gap-2 text-center">
+<h2 class="text-3xl font-bold leading-tight tracking-tighter @[480px]:text-4xl @[480px]:font-black @[480px]:tracking-[-0.033em] max-w-[720px]">Ready to Transform Your HR?</h2>
+<p class="text-base font-normal leading-normal max-w-[720px] text-gray-700 dark:text-gray-300">See how our all-in-one platform can streamline your processes and empower your team.</p>
+</div>
+<div class="flex justify-center">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Schedule a Free Demo</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+</body></html>

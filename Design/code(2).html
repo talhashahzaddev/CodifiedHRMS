@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pricing Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-50 flex items-center justify-center w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-solid border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-50">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">HRMS Product</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal text-slate-800 dark:text-slate-200 hover:text-primary dark:hover:text-primary" href="#">Features</a>
+<a class="text-sm font-medium leading-normal text-slate-800 dark:text-slate-200 hover:text-primary dark:hover:text-primary" href="#">Solutions</a>
+<a class="text-sm font-bold leading-normal text-primary" href="#">Pricing</a>
+<a class="text-sm font-medium leading-normal text-slate-800 dark:text-slate-200 hover:text-primary dark:hover:text-primary" href="#">Login</a>
+</nav>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Get Started</span>
+</button>
+</div>
+<button class="md:hidden flex items-center justify-center rounded-lg p-2 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-10 sm:py-16 lg:py-24">
+<div class="flex flex-col max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 gap-12">
+<div class="flex flex-col items-center gap-6 text-center">
+<div class="flex flex-col gap-3 max-w-3xl">
+<h1 class="text-slate-900 dark:text-slate-50 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">Find the Perfect Plan for Your Business</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg sm:text-xl font-normal leading-normal">Choose the plan that fits your team's needs. Toggle between monthly and annual billing. Cancel anytime.</p>
+</div>
+<div class="flex w-full max-w-xs px-4 py-3">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-slate-200/80 dark:bg-slate-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-slate-50 text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal">
+<span class="truncate">Monthly</span>
+<input checked="" class="invisible w-0" name="billing_cycle" type="radio" value="Monthly"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-slate-50 text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal">
+<span class="truncate">Annual (save 20%)</span>
+<input class="invisible w-0" name="billing_cycle" type="radio" value="Annual (save 20%)"/>
+</label>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="flex flex-1 flex-col gap-6 rounded-xl border border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+<div class="flex flex-col gap-2">
+<h2 class="text-slate-900 dark:text-slate-50 text-xl font-bold leading-tight">Starter</h2>
+<p class="flex items-baseline gap-1 text-slate-900 dark:text-slate-50">
+<span class="text-5xl font-black leading-tight tracking-[-0.033em]">$29</span>
+<span class="font-medium text-slate-600 dark:text-slate-400">/ user / month</span>
+</p>
+</div>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-50 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="truncate">Start Free Trial</span>
+</button>
+<div class="h-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex flex-col gap-3">
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Employee Directory
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Leave Management
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Basic Reporting
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Standard Support
+                                </div>
+</div>
+</div>
+<div class="flex flex-1 flex-col gap-6 rounded-xl border-2 border-solid border-primary dark:border-primary bg-white dark:bg-slate-900 p-6 relative shadow-lg shadow-primary/10">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<h2 class="text-slate-900 dark:text-slate-50 text-xl font-bold leading-tight">Business</h2>
+<p class="text-white text-xs font-medium leading-normal tracking-[0.015em] rounded-full bg-primary px-3 py-1 text-center">Recommended</p>
+</div>
+<p class="flex items-baseline gap-1 text-slate-900 dark:text-slate-50">
+<span class="text-5xl font-black leading-tight tracking-[-0.033em]">$79</span>
+<span class="font-medium text-slate-600 dark:text-slate-400">/ user / month</span>
+</p>
+</div>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90">
+<span class="truncate">Start Free Trial</span>
+</button>
+<div class="h-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex flex-col gap-3">
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    All Starter features
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Performance Management
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Applicant Tracking (ATS)
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Advanced Reporting
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Priority Support
+                                </div>
+</div>
+</div>
+<div class="flex flex-1 flex-col gap-6 rounded-xl border border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+<div class="flex flex-col gap-2">
+<h2 class="text-slate-900 dark:text-slate-50 text-xl font-bold leading-tight">Enterprise</h2>
+<p class="flex items-baseline gap-1 text-slate-900 dark:text-slate-50">
+<span class="text-5xl font-black leading-tight tracking-[-0.033em]">Custom</span>
+</p>
+</div>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-50 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="truncate">Contact Sales</span>
+</button>
+<div class="h-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex flex-col gap-3">
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    All Business features
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Single Sign-On (SSO)
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Custom Integrations
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    Dedicated Account Manager
+                                </div>
+<div class="text-sm font-normal leading-normal flex gap-3 items-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                    24/7 Premium Support
+                                </div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-10 pt-16">
+<h3 class="text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal tracking-[0.05em] uppercase text-center">Frequently Asked Questions</h3>
+<div class="w-full max-w-3xl flex flex-col divide-y divide-slate-200 dark:divide-slate-800">
+<details class="group py-5">
+<summary class="flex items-center justify-between cursor-pointer list-none">
+<span class="text-lg font-medium text-slate-900 dark:text-slate-50">Can I change my plan later?</span>
+<span class="material-symbols-outlined text-slate-500 transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="mt-4 text-slate-600 dark:text-slate-400">Yes, you can upgrade or downgrade your plan at any time from your account settings. Prorated charges or credits will be applied automatically to your account.</p>
+</details>
+<details class="group py-5">
+<summary class="flex items-center justify-between cursor-pointer list-none">
+<span class="text-lg font-medium text-slate-900 dark:text-slate-50">What is your cancellation policy?</span>
+<span class="material-symbols-outlined text-slate-500 transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="mt-4 text-slate-600 dark:text-slate-400">You can cancel your subscription at any time. Your subscription will remain active until the end of the current billing cycle, and you will not be charged again.</p>
+</details>
+<details class="group py-5">
+<summary class="flex items-center justify-between cursor-pointer list-none">
+<span class="text-lg font-medium text-slate-900 dark:text-slate-50">Do you offer a free trial?</span>
+<span class="material-symbols-outlined text-slate-500 transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="mt-4 text-slate-600 dark:text-slate-400">Yes, we offer a 14-day free trial on our Starter and Business plans. No credit card is required to get started. You can explore all the features and decide which plan is right for you.</p>
+</details>
+<details class="group py-5">
+<summary class="flex items-center justify-between cursor-pointer list-none">
+<span class="text-lg font-medium text-slate-900 dark:text-slate-50">What payment methods do you accept?</span>
+<span class="material-symbols-outlined text-slate-500 transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="mt-4 text-slate-600 dark:text-slate-400">We accept all major credit cards, including Visa, Mastercard, and American Express. For Enterprise plans, we also support invoicing and bank transfers.</p>
+</details>
+</div>
+</div>
+</div>
+</main>
+<footer class="flex justify-center border-t border-solid border-slate-200 dark:border-slate-800">
+<div class="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-50">
+<div class="size-5 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-base font-bold">HRMS Product</h2>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400">© 2024 HRMS Product. All rights reserved.</p>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

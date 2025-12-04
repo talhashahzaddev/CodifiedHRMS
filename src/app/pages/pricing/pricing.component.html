@@ -1,0 +1,107 @@
+<div class="pricing-page">
+  <!-- Hero Section -->
+  <section class="page-hero section">
+    <div class="container">
+      <div class="hero-content text-center">
+        <h1>Find the Perfect Plan for Your Business</h1>
+        <p class="hero-description">
+          Choose the plan that fits your team's needs. Toggle between monthly and annual billing. Cancel anytime.
+        </p>
+        
+        <!-- Billing Toggle -->
+        <div class="billing-toggle">
+          <button 
+            [class.active]="billingCycle === 'monthly'"
+            (click)="billingCycle = 'monthly'"
+            class="toggle-btn">
+            Monthly
+          </button>
+          <button 
+            [class.active]="billingCycle === 'annual'"
+            (click)="billingCycle = 'annual'"
+            class="toggle-btn">
+            Annual <span class="save-badge">Save 20%</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="pricing-section section">
+    <div class="container">
+      <div class="pricing-grid">
+        <app-card 
+          *ngFor="let plan of plans" 
+          [class.featured-plan]="plan.isPopular"
+          [elevated]="plan.isPopular || false"
+          class="pricing-card">
+          <div class="pricing-header">
+            <div class="plan-name-row">
+              <h3>{{ plan.name }}</h3>
+              <span *ngIf="plan.isPopular" class="popular-badge">Recommended</span>
+            </div>
+            <div class="plan-price">
+              <span class="price-amount">{{ getPriceLabel(plan) }}</span>
+              <span *ngIf="!plan.isCustom" class="price-period">
+                / user / {{ billingCycle === 'monthly' ? 'month' : 'year' }}
+              </span>
+            </div>
+            <p class="plan-description">{{ plan.description }}</p>
+          </div>
+          
+          <div class="pricing-actions">
+            <a 
+              *ngIf="!plan.isCustom"
+              routerLink="/demo-request" 
+              class="btn btn-primary"
+              [class.btn-outline]="!plan.isPopular">
+              Start Free Trial
+            </a>
+            <a 
+              *ngIf="plan.isCustom"
+              routerLink="/demo-request" 
+              class="btn btn-outline">
+              Contact Sales
+            </a>
+          </div>
+
+          <div class="plan-divider"></div>
+
+          <div class="plan-features">
+            <div *ngFor="let feature of plan.features" class="feature-item">
+              <span class="material-symbols-outlined check-icon">check_circle</span>
+              <span>{{ feature }}</span>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section section">
+    <div class="container">
+      <h2 class="section-title text-center">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Can I change my plan later?</summary>
+          <p>Yes, you can upgrade or downgrade your plan at any time from your account settings. Prorated charges or credits will be applied automatically to your account.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What is your cancellation policy?</summary>
+          <p>You can cancel your subscription at any time. Your subscription will remain active until the end of the current billing cycle, and you will not be charged again.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do you offer a free trial?</summary>
+          <p>Yes, we offer a 14-day free trial on our Starter and Business plans. No credit card is required to get started. You can explore all the features and decide which plan is right for you.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What payment methods do you accept?</summary>
+          <p>We accept all major credit cards, including Visa, Mastercard, and American Express. For Enterprise plans, we also support invoicing and bank transfers.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>
+

@@ -1,0 +1,214 @@
+.about-page {
+  width: 100%;
+}
+
+.page-hero {
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
+  padding: var(--spacing-3xl) 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(0, 113, 230, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+
+    h1 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero-description {
+      font-size: var(--font-size-lg);
+      color: #1e293b !important;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+  }
+}
+
+.mission-section {
+  background: transparent;
+  position: relative;
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+  
+  // No dark overlays - let the gradient background show through
+}
+
+.section-header {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-3xl);
+
+  h2 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-description {
+    font-size: var(--font-size-lg);
+    color: #1e293b !important;
+    line-height: 1.7;
+    font-weight: 500;
+  }
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+
+  @media (max-width: 968px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.value-card {
+  text-align: center;
+  padding: var(--spacing-2xl);
+
+  .value-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: var(--accent-100);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-lg);
+
+    .material-symbols-outlined {
+      font-size: 32px;
+      color: var(--accent-600);
+    }
+  }
+
+  h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  p {
+    color: #1e293b !important;
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.about-section {
+  background: transparent;
+  position: relative;
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+  
+  // No dark overlays - let the gradient background show through
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-text {
+  h2 {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  p {
+    color: #1e293b !important;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+    font-weight: 500;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.about-image {
+  .image-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
+    border-radius: var(--border-radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+
+    .material-symbols-outlined {
+      font-size: 120px;
+      color: var(--primary-600);
+      opacity: 0.3;
+    }
+  }
+}
+
+.cta-section {
+  background: transparent;
+  position: relative;
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+  
+  // No dark overlays - let the gradient background show through
+}
+
+.cta-card {
+  padding: var(--spacing-3xl);
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
+  border: none;
+
+  h2 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  p {
+    font-size: var(--font-size-lg);
+    color: #1e293b !important;
+    margin-bottom: var(--spacing-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+  }
+}
+
+.cta-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+

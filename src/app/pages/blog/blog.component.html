@@ -1,0 +1,77 @@
+<div class="blog-page">
+  <!-- Hero Section -->
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content">
+        <h1>The Latest in HR, Straight from the Experts</h1>
+        <p class="hero-description">
+          Explore our collection of articles, guides, and webinars to stay ahead in the world of human resources.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filters -->
+  <section class="filters-section">
+    <div class="container">
+      <div class="category-filters">
+        <button
+          *ngFor="let category of categories"
+          [class.active]="selectedCategory === category.id"
+          (click)="selectCategory(category.id)"
+          class="filter-btn">
+          {{ category.label }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Posts Grid -->
+  <section class="posts-section section">
+    <div class="container">
+      <div class="posts-grid">
+        <app-card 
+          *ngFor="let post of filteredPosts" 
+          [hoverable]="true"
+          class="blog-card">
+          <div class="post-image">
+            <div class="image-placeholder">
+              <span class="material-symbols-outlined">article</span>
+            </div>
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-type">{{ post.type }}</span>
+              <span class="post-separator">•</span>
+              <span class="post-date">{{ post.date }}</span>
+            </div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section section-sm">
+    <div class="container">
+      <app-card [elevated]="true" class="newsletter-card">
+        <div class="newsletter-content">
+          <div class="newsletter-text">
+            <h3>Get HR Insights Delivered to Your Inbox</h3>
+            <p>Subscribe to our newsletter for the latest articles, guides, and industry news.</p>
+          </div>
+          <form class="newsletter-form">
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              class="newsletter-input">
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </app-card>
+    </div>
+  </section>
+</div>
+
