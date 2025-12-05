@@ -34,24 +34,18 @@ export class FeaturesComponent {
     },
     {
       id: '4',
-      title: 'Recruitment',
-      description: 'Streamline your hiring process from job posting to offer letter with our applicant tracking system.',
-      icon: 'groups'
-    },
-    {
-      id: '5',
       title: 'Timesheets',
       description: 'Log time against projects and tasks for better resource management and billing.',
       icon: 'hourglass_top'
     },
     {
-      id: '6',
+      id: '5',
       title: 'Self Service',
       description: 'Empower your employees with access to their own information, requests, and documents.',
       icon: 'account_circle'
     },
     {
-      id: '7',
+      id: '6',
       title: 'Analytics',
       description: 'Gain valuable, data-driven insights into your workforce to make strategic HR decisions.',
       icon: 'pie_chart'

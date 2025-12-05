@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { ChatService } from './core/services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,16 @@ import { FooterComponent } from './layout/footer/footer.component';
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'CodifiedHRMS';
+
+  constructor(private chatService: ChatService) {}
+
+  ngOnInit(): void {
+    // Load chat widget after a short delay to improve initial page load
+    setTimeout(() => {
+      this.chatService.loadTawkTo();
+    }, 1000);
+  }
 }
 
