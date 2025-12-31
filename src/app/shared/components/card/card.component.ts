@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
     }
 
     .card-hoverable {
-      cursor: pointer;
+      // cursor: pointer;
 
       &:hover {
         transform: translateY(-4px);
