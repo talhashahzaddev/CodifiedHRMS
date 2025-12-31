@@ -84,12 +84,21 @@
 .hero-image-placeholder {
   width: 100%;
   aspect-ratio: 16/10;
-  background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
-  border-radius: var(--border-radius-xl);
+  background: transparent;
+  // border-radius: var(--border-radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-xl);
+  // box-shadow: var(--shadow-xl);
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 
   .material-symbols-outlined {
     font-size: 120px;
@@ -138,6 +147,48 @@
   font-weight: 500;
   color: #334155 !important;
   padding: var(--spacing-md);
+}
+
+// Logo slider (replaces grid for Home social proof)
+.logo-slider {
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+.logo-track {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  width: max-content;
+  animation: logo-scroll 24s linear infinite;
+}
+
+.logo-slide img {
+  height: clamp(72px, 10vw, 120px);
+  width: auto;
+  display: block;
+  opacity: 1;
+  filter: none;
+  transition: var(--transition-base);
+  object-fit: contain;
+}
+
+.logo-slide img:hover {
+  opacity: 1;
+  filter: none;
+}
+
+.logo-slide {
+  flex: 0 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@keyframes logo-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 // Features Section
@@ -196,7 +247,6 @@
     justify-content: center;
     width: 64px;
     height: 64px;
-    background: var(--primary-100);
     border-radius: var(--border-radius-lg);
     margin-bottom: var(--spacing-lg);
 
