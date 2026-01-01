@@ -53,14 +53,14 @@
           <div class="pricing-actions">
             <a 
               *ngIf="!plan.isCustom"
-              routerLink="/demo-request" 
+              routerLink="/sign-up" 
               class="btn btn-primary"
               [class.btn-outline]="!plan.isPopular">
               Start Free Trial
             </a>
             <a 
               *ngIf="plan.isCustom"
-              routerLink="/demo-request" 
+              routerLink="/sign-up" 
               class="btn btn-outline">
               Contact Sales
             </a>
