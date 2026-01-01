@@ -1,0 +1,188 @@
+<div class="sign-up-page">
+  <!-- Hero Section -->
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Create Your Account</h1>
+          <p class="hero-description">
+            Join thousands of companies using our HRMS platform to streamline payroll, automate onboarding, 
+            and transform your HR operations. Get started today with a free account.
+          </p>
+          
+          <div class="benefits-list">
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">groups</span>
+              <div>
+                <h3>Complete HR Solution</h3>
+                <p>All-in-one platform for payroll, onboarding, and employee management.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">build_circle</span>
+              <div>
+                <h3>Easy Setup</h3>
+                <p>Get started in minutes with our intuitive setup process.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined">rocket_launch</span>
+              <div>
+                <h3>Streamline Operations</h3>
+                <p>Save time and reduce administrative overhead with automation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+          <app-card [elevated]="true">
+            <div class="form-header">
+              <h2>Sign Up</h2>
+            </div>
+
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="sign-up-form">
+              <!-- Success Message -->
+              <div *ngIf="submitSuccess" class="success-message">
+                <span class="material-symbols-outlined">check_circle</span>
+                <p>Account created successfully! You can now log in.</p>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName">First Name *</label>
+                  <input 
+                    id="firstName"
+                    type="text" 
+                    formControlName="firstName"
+                    [class.error]="submitted && signUpForm.get('firstName')?.invalid">
+                  <span *ngIf="submitted && signUpForm.get('firstName')?.invalid" class="error-message">
+                    {{ getErrorMessage('firstName') }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName">Last Name *</label>
+                  <input 
+                    id="lastName"
+                    type="text" 
+                    formControlName="lastName"
+                    [class.error]="submitted && signUpForm.get('lastName')?.invalid">
+                  <span *ngIf="submitted && signUpForm.get('lastName')?.invalid" class="error-message">
+                    {{ getErrorMessage('lastName') }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input 
+                  id="email"
+                  type="email" 
+                  formControlName="email"
+                  placeholder="name@company.com"
+                  [class.error]="submitted && signUpForm.get('email')?.invalid">
+                <span *ngIf="submitted && signUpForm.get('email')?.invalid" class="error-message">
+                  {{ getErrorMessage('email') }}
+                </span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="password">Password *</label>
+                  <input 
+                    id="password"
+                    type="password" 
+                    formControlName="password"
+                    [class.error]="submitted && signUpForm.get('password')?.invalid">
+                  <span *ngIf="submitted && signUpForm.get('password')?.invalid" class="error-message">
+                    {{ getErrorMessage('password') }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm Password *</label>
+                  <input 
+                    id="confirmPassword"
+                    type="password" 
+                    formControlName="confirmPassword"
+                    [class.error]="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))">
+                  <span *ngIf="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))" class="error-message">
+                    {{ getErrorMessage('confirmPassword') }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="companyName">Company Name *</label>
+                <input 
+                  id="companyName"
+                  type="text" 
+                  formControlName="companyName"
+                  [class.error]="submitted && signUpForm.get('companyName')?.invalid">
+                <span *ngIf="submitted && signUpForm.get('companyName')?.invalid" class="error-message">
+                  {{ getErrorMessage('companyName') }}
+                </span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="companySize">Company Size *</label>
+                  <select 
+                    id="companySize"
+                    formControlName="companySize"
+                    [class.error]="submitted && signUpForm.get('companySize')?.invalid">
+                    <option value="">Select company size</option>
+                    <option *ngFor="let size of companySizes" [value]="size">{{ size }}</option>
+                  </select>
+                  <span *ngIf="submitted && signUpForm.get('companySize')?.invalid" class="error-message">
+                    {{ getErrorMessage('companySize') }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label for="currency">Currency *</label>
+                  <select 
+                    id="currency"
+                    formControlName="currency"
+                    [class.error]="submitted && signUpForm.get('currency')?.invalid">
+                    <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }}</option>
+                  </select>
+                  <span *ngIf="submitted && signUpForm.get('currency')?.invalid" class="error-message">
+                    {{ getErrorMessage('currency') }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="website">Website or Domain *</label>
+                <input 
+                  id="website"
+                  type="url" 
+                  formControlName="website"
+                  placeholder="https://www.company.com"
+                  [class.error]="submitted && signUpForm.get('website')?.invalid">
+                <span *ngIf="submitted && signUpForm.get('website')?.invalid" class="error-message">
+                  {{ getErrorMessage('website') }}
+                </span>
+              </div>
+
+              <div class="form-actions">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary btn-lg"
+                  [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'Creating Account...' : 'Sign Up' }}
+                </button>
+                <p class="form-disclaimer">
+                  By signing up, you agree to our <a href="#">Privacy Policy</a>.
+                </p>
+              </div>
+            </form>
+          </app-card>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
