@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, A
 import { RouterModule } from '@angular/router';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { AuthService } from '../../core/services/auth.service';
-import { RegisterRequest } from '../../models/auth.models';
+import { RegisterRequest, AuthResponse } from '../../models/auth.models';
 
 @Component({
   selector: 'app-sign-up',
@@ -81,21 +81,30 @@ export class SignUpComponent {
       };
       
       this.authService.register(registerRequest).subscribe({
-        next: () => {
-          this.submitSuccess = true;
+        next: (response: AuthResponse) => {
           this.isSubmitting = false;
-          this.signUpForm.reset();
-          this.submitted = false;
+
+          // Extract subdomain identifier from domain for multi-tenant SaaS redirection
+          const subdomain = this.extractSubdomainIdentifier(response.domain, formValue.companyName);
           
-          // Reset success message after 5 seconds
-          setTimeout(() => {
-            this.submitSuccess = false;
-          }, 5000);
+          if (subdomain) {
+            // Redirect user to their HRMS app subdomain
+            window.location.href = `https://${subdomain}.briskpeople.com/login`;
+          } else {
+            // Fallback if no subdomain can be determined
+            this.submitSuccess = true;
+            this.signUpForm.reset();
+            this.submitted = false;
+
+            setTimeout(() => {
+              this.submitSuccess = false;
+            }, 5000);
+          }
         },
         error: (error) => {
           console.error('Error during sign up:', error);
           this.isSubmitting = false;
-          // You can add error handling UI here
+          // Optionally show error message in UI
         }
       });
     }
@@ -131,5 +140,52 @@ export class SignUpComponent {
       currency: 'Currency'
     };
     return labels[fieldName] || fieldName;
+  }
+
+  /**
+   * Extracts a clean subdomain identifier from a domain string
+   * Examples:
+   * - "example.com" -> "example"
+   * - "www.example.com" -> "example"
+   * - "subdomain.example.com" -> "subdomain"
+   * - "example" -> "example"
+   * Falls back to sanitized company name if domain is not available
+   */
+  private extractSubdomainIdentifier(domain: string | undefined, companyName: string): string | null {
+    if (domain) {
+      try {
+        // Remove protocol if present
+        let cleanDomain = domain.replace(/^https?:\/\//, '');
+        
+        // Remove www. prefix
+        cleanDomain = cleanDomain.replace(/^www\./, '');
+        
+        // Extract the first part before the first dot (subdomain or domain name)
+        const parts = cleanDomain.split('.');
+        const identifier = parts[0];
+        
+        // Sanitize: lowercase, remove special characters, keep only alphanumeric and hyphens
+        const sanitized = identifier
+          .toLowerCase()
+          .replace(/[^a-z0-9-]/g, '')
+          .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+        
+        return sanitized || null;
+      } catch (error) {
+        console.warn('Error extracting subdomain from domain:', error);
+      }
+    }
+    
+    // Fallback to sanitized company name
+    if (companyName) {
+      const sanitized = companyName
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      return sanitized || null;
+    }
+    
+    return null;
   }
 }
