@@ -129,7 +129,7 @@ export class SignUpComponent {
           
           if (subdomain) {
             // Redirect user to their HRMS app subdomain
-            window.location.href = `https://${subdomain}.briskpeople.com/login`;
+            window.location.href = `https://login.briskpeople.com`;
           } else {
             // Fallback if no subdomain can be determined
             this.submitSuccess = true;
