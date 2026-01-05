@@ -11,7 +11,8 @@
 
       <!-- Desktop Navigation -->
       <div class="nav-links" [class.mobile-open]="isMenuOpen">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+          (click)="closeMenu()">Home</a>
         <a routerLink="/features" routerLinkActive="active" (click)="closeMenu()">Features</a>
         <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
         <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
@@ -20,8 +21,9 @@
 
       <!-- CTA Button -->
       <div class="nav-actions">
+        <a href="https://login.briskpeople.com" class="btn btn-ghost login-btn">Login</a>
         <a routerLink="/sign-up" class="btn btn-primary">Sign Up</a>
-        
+
         <!-- Mobile Menu Toggle -->
         <button class="mobile-menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
           <span class="material-symbols-outlined">{{ isMenuOpen ? 'close' : 'menu' }}</span>
@@ -30,4 +32,3 @@
     </nav>
   </div>
 </header>
-
