@@ -142,6 +142,16 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
+
+  .login-btn {
+    color: var(--primary-600);
+    font-weight: 600;
+    
+    &:hover {
+      background: rgba(0, 113, 230, 0.08);
+      color: var(--primary-700);
+    }
+  }
 }
 
 .mobile-menu-toggle {
