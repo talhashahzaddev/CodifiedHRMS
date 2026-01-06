@@ -12,13 +12,13 @@
         <div class="billing-toggle">
           <button 
             [class.active]="billingCycle === 'monthly'"
-            (click)="billingCycle = 'monthly'"
+            (click)="onBillingCycleChange('monthly')"
             class="toggle-btn">
             Monthly
           </button>
           <button 
             [class.active]="billingCycle === 'annual'"
-            (click)="billingCycle = 'annual'"
+            (click)="onBillingCycleChange('annual')"
             class="toggle-btn">
             Annual <span class="save-badge">Save 20%</span>
           </button>
@@ -30,51 +30,100 @@
   <!-- Pricing Cards -->
   <section class="pricing-section section">
     <div class="container">
-      <div class="pricing-grid">
-        <app-card 
-          *ngFor="let plan of plans" 
-          [class.featured-plan]="plan.isPopular"
-          [elevated]="plan.isPopular || false"
-          class="pricing-card">
-          <div class="pricing-header">
-            <div class="plan-name-row">
-              <h3>{{ plan.name }}</h3>
-              <span *ngIf="plan.isPopular" class="popular-badge">Recommended</span>
-            </div>
-            <div class="plan-price">
-              <span class="price-amount">{{ getPriceLabel(plan) }}</span>
-              <span *ngIf="!plan.isCustom" class="price-period">
-                / user / {{ billingCycle === 'monthly' ? 'month' : 'year' }}
-              </span>
-            </div>
-            <p class="plan-description">{{ plan.description }}</p>
-          </div>
-          
-          <div class="pricing-actions">
-            <a 
-              *ngIf="!plan.isCustom"
-              routerLink="/sign-up" 
-              class="btn btn-primary"
-              [class.btn-outline]="!plan.isPopular">
-              Start Free Trial
-            </a>
-            <a 
-              *ngIf="plan.isCustom"
-              routerLink="/sign-up" 
-              class="btn btn-outline">
-              Contact Sales
-            </a>
-          </div>
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading subscription plans...</p>
+      </div>
 
-          <div class="plan-divider"></div>
+      <!-- Error State -->
+      <div *ngIf="error && !isLoading" class="error-container">
+        <p class="error-message">{{ error }}</p>
+      </div>
 
-          <div class="plan-features">
-            <div *ngFor="let feature of plan.features" class="feature-item">
-              <span class="material-symbols-outlined check-icon">check_circle</span>
-              <span>{{ feature }}</span>
-            </div>
+      <!-- Pricing Carousel -->
+      <div *ngIf="!isLoading && !error" class="pricing-carousel-container">
+        <!-- Navigation Arrow Left -->
+        <button 
+          *ngIf="allPlans.length > itemsPerPage"
+          (click)="previous()"
+          [disabled]="!canGoPrevious()"
+          class="carousel-nav-btn carousel-nav-left"
+          aria-label="Previous plans">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+
+        <!-- Carousel Content -->
+        <div class="pricing-carousel-wrapper">
+          <div class="pricing-grid">
+            <app-card 
+              *ngFor="let plan of displayedPlans; let i = index" 
+              [class.featured-plan]="plan.isPopular"
+              [class.center-card]="isCenterCard(i)"
+              [elevated]="plan.isPopular || false"
+              class="pricing-card carousel-item">
+              <div class="pricing-header">
+                <div class="plan-name-row">
+                  <h3>{{ plan.name }}</h3>
+                  <span *ngIf="plan.isPopular" class="popular-badge">Recommended</span>
+                </div>
+                <div class="plan-price">
+                  <span class="price-amount">{{ getPriceLabel(plan) }}</span>
+                  <span *ngIf="!plan.isCustom" class="price-period">
+                    / user / {{ billingCycle === 'monthly' ? 'month' : 'year' }}
+                  </span>
+                </div>
+                <p class="plan-description">{{ plan.description }}</p>
+              </div>
+              
+              <div class="pricing-actions">
+                <a 
+                  *ngIf="!plan.isCustom"
+                  routerLink="/sign-up" 
+                  class="btn btn-primary"
+                  [class.btn-outline]="!plan.isPopular">
+                  Start Free Trial
+                </a>
+                <a 
+                  *ngIf="plan.isCustom"
+                  routerLink="/sign-up" 
+                  class="btn btn-outline">
+                  Contact Sales
+                </a>
+              </div>
+
+              <div class="plan-divider"></div>
+
+              <div class="plan-features">
+                <div *ngFor="let feature of plan.features" class="feature-item">
+                  <span class="material-symbols-outlined check-icon">check_circle</span>
+                  <span>{{ feature }}</span>
+                </div>
+              </div>
+            </app-card>
           </div>
-        </app-card>
+        </div>
+
+        <!-- Navigation Arrow Right -->
+        <button 
+          *ngIf="allPlans.length > itemsPerPage"
+          (click)="next()"
+          [disabled]="!canGoNext()"
+          class="carousel-nav-btn carousel-nav-right"
+          aria-label="Next plans">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Carousel Indicators -->
+      <div *ngIf="!isLoading && !error && allPlans.length > itemsPerPage" class="carousel-indicators">
+        <button
+          *ngFor="let indicator of getCarouselIndicators(); let i = index"
+          (click)="goToPage(i)"
+          [class.active]="i === getCurrentPageIndex()"
+          class="carousel-indicator"
+          [attr.aria-label]="'Go to page ' + (i + 1)">
+        </button>
       </div>
     </div>
   </section>

@@ -26,6 +26,8 @@ import { CommonModule } from '@angular/common';
       border: 1px solid rgba(185, 223, 255, 0.4);
       // background: rgba(255, 255, 255, 0.9);
       background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
+          // box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+
     }
 
     .card-hoverable {
