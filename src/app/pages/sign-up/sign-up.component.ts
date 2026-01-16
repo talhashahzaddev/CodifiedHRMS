@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { AuthService } from '../../core/services/auth.service';
 import { DomainService } from '../../core/services/domain.service';
-import { RegisterRequest, AuthResponse } from '../../models/auth.models';
+import { RegisterRequest, ApiResponse, AuthResponse } from '../../models/auth.models';
 import { Observable, of } from 'rxjs';
 import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -21,6 +21,7 @@ export class SignUpComponent {
   submitted = false;
   isSubmitting = false;
   submitSuccess = false;
+  verificationEmailSent = false;
 
   companySizes = [
     '1-10 employees',
@@ -124,21 +125,28 @@ export class SignUpComponent {
         next: (response: AuthResponse) => {
           this.isSubmitting = false;
 
-          // Extract subdomain identifier from domain for multi-tenant SaaS redirection
-          const subdomain = this.extractSubdomainIdentifier(response.domain, formValue.companyName);
-          
-          if (subdomain) {
-            // Redirect user to their HRMS app subdomain
-            window.location.href = `https://login.briskpeople.com`;
-          } else {
-            // Fallback if no subdomain can be determined
-            this.submitSuccess = true;
-            this.signUpForm.reset();
+          // Check if the message indicates verification email was sent
+          if (response.token == null) {
+            // Show verification email sent message and keep user on the page
+            this.verificationEmailSent = true;
             this.submitted = false;
+          } else if (response) {
+            // Handle other success scenarios (e.g., direct login with token)
+            const subdomain = this.extractSubdomainIdentifier(response.domain, formValue.companyName);
+            
+            if (subdomain) {
+              // Redirect user to their HRMS app subdomain
+              window.location.href = `https://login.briskpeople.com`;
+            } else {
+              // Fallback if no subdomain can be determined
+              this.submitSuccess = true;
+              this.signUpForm.reset();
+              this.submitted = false;
 
-            setTimeout(() => {
-              this.submitSuccess = false;
-            }, 5000);
+              setTimeout(() => {
+                this.submitSuccess = false;
+              }, 5000);
+            }
           }
         },
         error: (error) => {

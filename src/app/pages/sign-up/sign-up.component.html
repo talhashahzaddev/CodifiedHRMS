@@ -38,158 +38,183 @@
         <!-- Form Section -->
         <div class="form-section">
           <app-card [elevated]="true">
-            <div class="form-header">
-              <h2>Sign Up</h2>
+            <!-- Email Verification Message (replaces form when verification email is sent) -->
+            <div *ngIf="verificationEmailSent" class="verification-container">
+              <div class="verification-icon">
+                <span class="material-symbols-outlined">mark_email_read</span>
+              </div>
+              <h2 class="verification-title">Check Your Email</h2>
+              <p class="verification-message">
+                Your signup was successful! To continue using BriskPeople, please check your email inbox 
+                and click the verification link we've sent you.
+              </p>
+              <div class="verification-info">
+                <div class="info-item">
+                  <span class="material-symbols-outlined">info</span>
+                  <p>The verification link will expire in 24 hours.</p>
+                </div>
+                <div class="info-item">
+                  <span class="material-symbols-outlined">help</span>
+                  <p>Didn't receive the email? Check your spam folder or contact support.</p>
+                </div>
+              </div>
             </div>
 
-            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="sign-up-form">
-              <!-- Success Message -->
-              <div *ngIf="submitSuccess" class="success-message">
-                <span class="material-symbols-outlined">check_circle</span>
-                <p>Account created successfully! You can now log in.</p>
+            <!-- Sign Up Form (hidden when verification email is sent) -->
+            <div *ngIf="!verificationEmailSent">
+              <div class="form-header">
+                <h2>Sign Up</h2>
               </div>
 
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="firstName">First Name *</label>
-                  <input 
-                    id="firstName"
-                    type="text" 
-                    formControlName="firstName"
-                    [class.error]="submitted && signUpForm.get('firstName')?.invalid">
-                  <span *ngIf="submitted && signUpForm.get('firstName')?.invalid" class="error-message">
-                    {{ getErrorMessage('firstName') }}
-                  </span>
+              <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="sign-up-form">
+                <!-- Success Message -->
+                <div *ngIf="submitSuccess" class="success-message">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  <p>Account created successfully! You can now log in.</p>
                 </div>
 
-                <div class="form-group">
-                  <label for="lastName">Last Name *</label>
-                  <input 
-                    id="lastName"
-                    type="text" 
-                    formControlName="lastName"
-                    [class.error]="submitted && signUpForm.get('lastName')?.invalid">
-                  <span *ngIf="submitted && signUpForm.get('lastName')?.invalid" class="error-message">
-                    {{ getErrorMessage('lastName') }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="email">Email *</label>
-                <input 
-                  id="email"
-                  type="email" 
-                  formControlName="email"
-                  placeholder="name@company.com"
-                  [class.error]="submitted && signUpForm.get('email')?.invalid">
-                <span *ngIf="submitted && signUpForm.get('email')?.invalid" class="error-message">
-                  {{ getErrorMessage('email') }}
-                </span>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="password">Password *</label>
-                  <input 
-                    id="password"
-                    type="password" 
-                    formControlName="password"
-                    [class.error]="submitted && signUpForm.get('password')?.invalid">
-                  <span *ngIf="submitted && signUpForm.get('password')?.invalid" class="error-message">
-                    {{ getErrorMessage('password') }}
-                  </span>
-                </div>
-
-                <div class="form-group">
-                  <label for="confirmPassword">Confirm Password *</label>
-                  <input 
-                    id="confirmPassword"
-                    type="password" 
-                    formControlName="confirmPassword"
-                    [class.error]="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))">
-                  <span *ngIf="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))" class="error-message">
-                    {{ getErrorMessage('confirmPassword') }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="companyName">Company Name *</label>
-                <input 
-                  id="companyName"
-                  type="text" 
-                  formControlName="companyName"
-                  [class.error]="submitted && signUpForm.get('companyName')?.invalid">
-                <span *ngIf="submitted && signUpForm.get('companyName')?.invalid" class="error-message">
-                  {{ getErrorMessage('companyName') }}
-                </span>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="companySize">Company Size *</label>
-                  <select 
-                    id="companySize"
-                    formControlName="companySize"
-                    [class.error]="submitted && signUpForm.get('companySize')?.invalid">
-                    <option value="">Select company size</option>
-                    <option *ngFor="let size of companySizes" [value]="size">{{ size }}</option>
-                  </select>
-                  <span *ngIf="submitted && signUpForm.get('companySize')?.invalid" class="error-message">
-                    {{ getErrorMessage('companySize') }}
-                  </span>
-                </div>
-
-                <div class="form-group">
-                  <label for="currency">Currency *</label>
-                  <select 
-                    id="currency"
-                    formControlName="currency"
-                    [class.error]="submitted && signUpForm.get('currency')?.invalid">
-                    <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }}</option>
-                  </select>
-                  <span *ngIf="submitted && signUpForm.get('currency')?.invalid" class="error-message">
-                    {{ getErrorMessage('currency') }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group domain-input-group">
-                  <label for="website">Domain *</label>
-                  <div class="domain-input-wrapper">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="firstName">First Name *</label>
                     <input 
-                      id="website"
+                      id="firstName"
                       type="text" 
-                      formControlName="website"
-                      placeholder="yourdomain"
-                      [class.error]="(submitted || signUpForm.get('website')?.touched) && signUpForm.get('website')?.invalid"
-                      (input)="onDomainInput($event)">
-                    <span class="domain-suffix">.briskpeople.com</span>
+                      formControlName="firstName"
+                      [class.error]="submitted && signUpForm.get('firstName')?.invalid">
+                    <span *ngIf="submitted && signUpForm.get('firstName')?.invalid" class="error-message">
+                      {{ getErrorMessage('firstName') }}
+                    </span>
                   </div>
-                  <span *ngIf="(submitted || signUpForm.get('website')?.touched) && signUpForm.get('website')?.invalid" class="error-message">
-                    {{ getErrorMessage('website') }}
-                  </span>
-                  <span *ngIf="signUpForm.get('website')?.pending" class="validating-message">
-                    Checking domain availability...
+
+                  <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input 
+                      id="lastName"
+                      type="text" 
+                      formControlName="lastName"
+                      [class.error]="submitted && signUpForm.get('lastName')?.invalid">
+                    <span *ngIf="submitted && signUpForm.get('lastName')?.invalid" class="error-message">
+                      {{ getErrorMessage('lastName') }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email *</label>
+                  <input 
+                    id="email"
+                    type="email" 
+                    formControlName="email"
+                    placeholder="name@company.com"
+                    [class.error]="submitted && signUpForm.get('email')?.invalid">
+                  <span *ngIf="submitted && signUpForm.get('email')?.invalid" class="error-message">
+                    {{ getErrorMessage('email') }}
                   </span>
                 </div>
-                <div class="form-group"></div>
-              </div>
 
-              <div class="form-actions">
-                <button 
-                  type="submit" 
-                  class="btn btn-primary btn-lg"
-                  [disabled]="isSubmitting">
-                  {{ isSubmitting ? 'Creating Account...' : 'Sign Up' }}
-                </button>
-                <p class="form-disclaimer">
-                  By signing up, you agree to our <a routerLink="/privacy-policy">Privacy Policy</a>.
-                </p>
-              </div>
-            </form>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input 
+                      id="password"
+                      type="password" 
+                      formControlName="password"
+                      [class.error]="submitted && signUpForm.get('password')?.invalid">
+                    <span *ngIf="submitted && signUpForm.get('password')?.invalid" class="error-message">
+                      {{ getErrorMessage('password') }}
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm Password *</label>
+                    <input 
+                      id="confirmPassword"
+                      type="password" 
+                      formControlName="confirmPassword"
+                      [class.error]="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))">
+                    <span *ngIf="submitted && (signUpForm.get('confirmPassword')?.invalid || signUpForm.hasError('passwordMismatch'))" class="error-message">
+                      {{ getErrorMessage('confirmPassword') }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="companyName">Company Name *</label>
+                  <input 
+                    id="companyName"
+                    type="text" 
+                    formControlName="companyName"
+                    [class.error]="submitted && signUpForm.get('companyName')?.invalid">
+                  <span *ngIf="submitted && signUpForm.get('companyName')?.invalid" class="error-message">
+                    {{ getErrorMessage('companyName') }}
+                  </span>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="companySize">Company Size *</label>
+                    <select 
+                      id="companySize"
+                      formControlName="companySize"
+                      [class.error]="submitted && signUpForm.get('companySize')?.invalid">
+                      <option value="">Select company size</option>
+                      <option *ngFor="let size of companySizes" [value]="size">{{ size }}</option>
+                    </select>
+                    <span *ngIf="submitted && signUpForm.get('companySize')?.invalid" class="error-message">
+                      {{ getErrorMessage('companySize') }}
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="currency">Currency *</label>
+                    <select 
+                      id="currency"
+                      formControlName="currency"
+                      [class.error]="submitted && signUpForm.get('currency')?.invalid">
+                      <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.name }}</option>
+                    </select>
+                    <span *ngIf="submitted && signUpForm.get('currency')?.invalid" class="error-message">
+                      {{ getErrorMessage('currency') }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group domain-input-group">
+                    <label for="website">Domain *</label>
+                    <div class="domain-input-wrapper">
+                      <input 
+                        id="website"
+                        type="text" 
+                        formControlName="website"
+                        placeholder="yourdomain"
+                        [class.error]="(submitted || signUpForm.get('website')?.touched) && signUpForm.get('website')?.invalid"
+                        (input)="onDomainInput($event)">
+                      <span class="domain-suffix">.briskpeople.com</span>
+                    </div>
+                    <span *ngIf="(submitted || signUpForm.get('website')?.touched) && signUpForm.get('website')?.invalid" class="error-message">
+                      {{ getErrorMessage('website') }}
+                    </span>
+                    <span *ngIf="signUpForm.get('website')?.pending" class="validating-message">
+                      Checking domain availability...
+                    </span>
+                  </div>
+                  <div class="form-group"></div>
+                </div>
+
+                <div class="form-actions">
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary btn-lg"
+                    [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'Creating Account...' : 'Sign Up' }}
+                  </button>
+                  <p class="form-disclaimer">
+                    By signing up, you agree to our <a routerLink="/privacy-policy">Privacy Policy</a>.
+                  </p>
+                </div>
+              </form>
+            </div>
           </app-card>
         </div>
       </div>
