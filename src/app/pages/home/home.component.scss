@@ -255,7 +255,7 @@
       color: var(--primary-600);
     }
   }
-
+  
   h3 {
     font-size: var(--font-size-xl);
     margin-bottom: var(--spacing-sm);
@@ -266,6 +266,26 @@
     line-height: 1.6;
     font-weight: 500;
   }
+}
+.btn-modules {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: var(--font-size-md);
+  // background-color: var(--primary-600);
+  color:#004e92;
+  // border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 2px solid #1377be;
+  transition: all 0.3s ease;
+  &:hover {
+    color:#004e92;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-xl);
+        // border-color: var(--primary-300);
+        // background: linear-gradient(360deg, var(--primary-200) 0%, var(--accent-200) 100%);
+      }
 }
 
 // CTA Section
