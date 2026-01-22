@@ -30,6 +30,38 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
   },
   {
+    path: 'ai-assistant',
+    loadComponent: () => import('./pages/ai-assistant/ai-assistant.component').then(m => m.AiAssistantComponent)
+  },
+  {
+    path: 'dashboard-onboarding',
+    loadComponent: () => import('./pages/dashboard-onboarding/dashboard-onboarding.component').then(m => m.DashboardOnboardingComponent)
+  },
+  {
+    path: 'payroll',
+    loadComponent: () => import('./pages/payroll/payroll.component').then(m => m.PayrollComponent)
+  },
+  {
+    path: 'attendance',
+    loadComponent: () => import('./pages/attendance/attendance.component').then(m => m.AttendanceComponent)
+  },
+  {
+    path: 'performance',
+    loadComponent: () => import('./pages/performance/performance.component').then(m => m.PerformanceComponent)
+  },
+  {
+    path: 'timesheet',
+    loadComponent: () => import('./pages/timesheet/timesheet.component').then(m => m.TimesheetComponent)
+  },
+  {
+    path: 'employee-management',
+    loadComponent: () => import('./pages/employee-management/employee-management.component').then(m => m.EmployeeManagementComponent)
+  },
+  {
+    path: 'leave-management',
+    loadComponent: () => import('./pages/leave-management/leave-management.component').then(m => m.LeaveManagementComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
