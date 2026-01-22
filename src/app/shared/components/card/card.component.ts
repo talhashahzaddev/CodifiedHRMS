@@ -19,6 +19,8 @@ import { CommonModule } from '@angular/common';
       border-radius: var(--border-radius-lg);
       padding: var(--spacing-xl);
       transition: all var(--transition-base);
+      width: 100%;
+      height: 100%;
     }
 
     .card-elevated {
@@ -36,7 +38,7 @@ import { CommonModule } from '@angular/common';
       &:hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow-lg);
-        border-color: var(--primary-300);
+        // border-color: var(--primary-300);
         background: linear-gradient(360deg, var(--primary-200) 0%, var(--accent-200) 100%);
       }
     }
