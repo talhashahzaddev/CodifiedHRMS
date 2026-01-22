@@ -68,11 +68,21 @@
   }
 }
 
+.feature-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .feature-card {
   padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  width: 100%;
+  height: 100%;
 
   .feature-inner {
     background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
