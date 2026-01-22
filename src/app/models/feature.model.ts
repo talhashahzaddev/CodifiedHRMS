@@ -4,5 +4,6 @@ export interface Feature {
   description: string;
   icon: string;
   category?: string;
+  route?: string;
 }
 
