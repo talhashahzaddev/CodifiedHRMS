@@ -66,7 +66,7 @@ export class FeaturesComponent {
     {
       id: '8',
       title: 'Leave Management',
-      description: 'Gain valuable, data-driven insights into your workforce to make strategic HR decisions.',
+      description: 'Streamline employee leave requests, approvals, and balance tracking with a transparent, easy-to-use system.',
       icon: 'event_available',
       route: '/leave-management'
     }

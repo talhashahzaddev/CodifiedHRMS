@@ -6,18 +6,32 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="'card ' + (hoverable ? 'card-hoverable' : '')" [class.card-elevated]="elevated">
-      <ng-content></ng-content>
-    </div>
+    <div 
+  [ngClass]="{
+    'card': true,
+    'card-hoverable': hoverable,
+    'card-elevated': elevated
+  }"
+  [ngStyle]="customStyle">
+  <ng-content></ng-content>
+</div>
+
   `,
   styles: [`
+  :host {
+      display: block;   /* ✅ This makes app-card behave like a block-level element for grid/flex */
+      width: 100%;
+      height: 100%;
+      min-width: 0;  /* prevents content overflow breaking grid */
+      min-height: 0;
+    }
     .card {
       // background: rgba(255, 255, 255, 0.8);
       background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(185, 223, 255, 0.3);
       border-radius: var(--border-radius-lg);
-      padding: var(--spacing-xl);
+      padding: var(--spacing-md);
       transition: all var(--transition-base);
       width: 100%;
       height: 100%;
@@ -47,5 +61,6 @@ import { CommonModule } from '@angular/common';
 export class CardComponent {
   @Input() hoverable: boolean = false;
   @Input() elevated: boolean = false;
+  @Input() customStyle: { [key: string]: string } = {};
 }
 
