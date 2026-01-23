@@ -20,7 +20,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
+    background-image:
       radial-gradient(circle at 20% 50%, rgba(0, 113, 230, 0.03) 0%, transparent 50%),
       radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
     pointer-events: none;
@@ -120,7 +120,7 @@
   font-weight: 600;
   color: #1e293b !important;
   margin-bottom: var(--spacing-xl);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -187,15 +187,20 @@
 }
 
 @keyframes logo-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 // Features Section
 .features-section {
   background: transparent;
   position: relative;
-  
+
   // Subtle gradient overlay
   &::before {
     content: '';
@@ -255,7 +260,7 @@
       color: var(--primary-600);
     }
   }
-  
+
   h3 {
     font-size: var(--font-size-xl);
     margin-bottom: var(--spacing-sm);
@@ -267,32 +272,42 @@
     font-weight: 500;
   }
 }
+
+.btn-center-dev {
+  align-items: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .btn-modules {
+  align-self: center;
   margin-top: 20px;
   padding: 10px 20px;
   font-size: var(--font-size-md);
   // background-color: var(--primary-600);
-  color:#004e92;
+  color: #004e92;
   // border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   border: 2px solid #1377be;
   transition: all 0.3s ease;
+
   &:hover {
-    color:#004e92;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-xl);
-        // border-color: var(--primary-300);
-        // background: linear-gradient(360deg, var(--primary-200) 0%, var(--accent-200) 100%);
-      }
+    color: #004e92;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xl);
+    // border-color: var(--primary-300);
+    // background: linear-gradient(360deg, var(--primary-200) 0%, var(--accent-200) 100%);
+  }
 }
 
 // CTA Section
 .cta-section {
   background: transparent;
   position: relative;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -334,4 +349,3 @@
   justify-content: center;
   flex-wrap: wrap;
 }
-
