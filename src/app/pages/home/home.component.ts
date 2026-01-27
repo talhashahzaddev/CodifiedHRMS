@@ -36,5 +36,32 @@ export class HomeComponent {
       route: '/payroll'
     }
   ];
+
+  HR_MANAGEMENT_SIMPLIFIED: string[] = [
+    'Easy access to documents and information.',
+    'An employee database that scales.',
+    'Smart HR workflows.',
+    'Automation of HR processes.'
+  ];
+
+  TIME_AND_ATTENDANCE: string[] = [
+    'Enhanced employee accountability',
+    'Accurate payroll processing',
+    'Flexible, instantaneous attendance recording',
+    'Attendance policies that are transparent and consistent'
+  ];
+
+  PAYROLL_MANAGEMENT: string[] = [
+    'Quickly determine payroll calculations and deductions',
+    'Generate accurate Payslips',
+    'Using payroll management to plan future costs',
+    'Secure Data’s and Privacy'
+  ];
+  PERFORMANCE_MANAGEMENT: string[] = [
+    '360 Performance reviews and templates',
+    'Management By Objectives',
+    'Self-Evaluation Tools',
+    'Performance reports'
+  ];
 }
 
