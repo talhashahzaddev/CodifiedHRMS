@@ -24,34 +24,6 @@
   </section>
 
   <!-- Social Proof Section -->
-  <section class="social-proof-section section-sm">
-    <div class="container">
-      <p class="social-proof-text">Trusted by the world's most innovative teams</p>
-      <div class="logo-slider" aria-label="Partner logos">
-        <div class="logo-track">
-          <div class="logo-slide">
-            <img src="/Codified.png" alt="Codified" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/railsware.png" alt="Railsware" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
-          </div>
-          <!-- duplicate for seamless loop -->
-          <div class="logo-slide">
-            <img src="/Codified.png" alt="Codified" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/railsware.png" alt="Railsware" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Features Section -->
   <section class="features-section section">
@@ -79,6 +51,132 @@
       </div>
       <div class="btn-center-dev">
         <button class="btn-modules" routerLink="/features">See All Modules</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+  <section class="sub-features-section section">
+    <div class="container">
+      <div class="sub-features-content">
+        <div class="sub-features-image">
+          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532263/Smiling_Person_p3xrjc.webp"
+            alt="time attendance management software" loading="lazy" />
+        </div>
+        <div class="sub-features-text">
+          <h2 class="sub-features-title">HR MANAGEMENT SIMPLIFIED</h2>
+          <p class="hero-description">
+            Adapt to new realities, work faster and smarter. Determine a defined future of work for your organization
+            with a strong, flexible, global HR solution.
+          </p>
+          <ul class="features-list">
+            <li *ngFor="let feature of HR_MANAGEMENT_SIMPLIFIED">
+              <span class="material-symbols-outlined">star</span>
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sub-features-section section">
+    <div class="container">
+      <div class="sub-features-content">
+        <div class="sub-features-text">
+          <h2 class="sub-features-title">TIME AND ATTENDANCE</h2>
+          <p class="hero-description">
+            Allow time for greatness and unlock higher productivity through our integrated and advanced time and
+            attendance management system. Similarly create a digitally seamless onboarding experience so that shortens
+            the new employee’s time to productivity.Then set them up for success and build delightful employee journeys
+            from day one.
+          </p>
+          <ul class="features-list">
+            <li *ngFor="let feature of TIME_AND_ATTENDANCE">
+              <span class="material-symbols-outlined">star</span>
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="sub-features-image">
+          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532505/Leave_Calender_k2w812.svg"
+            alt="Employees attendance management" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sub-features-section section">
+    <div class="container">
+      <div class="sub-features-content">
+        <div class="sub-features-image">
+          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532502/Payroll_Management_pjcczs.webp"
+            alt="employee attendance management system" loading="lazy" />
+        </div>
+        <div class="sub-features-text">
+          <h2 class="sub-features-title">PAYROLL MANAGEMENT</h2>
+          <p class="hero-description">
+            Simplify the complex processes of the payroll with RapidHR, also a powerful, secure, accurate, automated and
+            100% compliant system!Rapid HR provides quicker processing, precise payouts, any business that wants to
+            prevent potential financial and legal repercussions from non-compliance and guarantee that employees are
+            paid accurately and on time with precise payroll administration.
+          </p>
+          <ul class="features-list">
+            <li *ngFor="let feature of PAYROLL_MANAGEMENT">
+              <span class="material-symbols-outlined">star</span>
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sub-features-section section">
+    <div class="container">
+      <div class="sub-features-content">
+        <div class="sub-features-text">
+          <h2 class="sub-features-title">PERFORMANCE MANAGEMENT</h2>
+          <p class="hero-description">
+            Regular performance management with RapidHR encourages your employees to aim for excellence. Then, your
+            organization is set up for success and growth while.
+          </p>
+          <ul class="features-list">
+            <li *ngFor="let feature of PERFORMANCE_MANAGEMENT">
+              <span class="material-symbols-outlined">star</span>
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="sub-features-image">
+          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532501/Performance_mgmt_zoromd.webp"
+            alt="employee attendance management system" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="social-proof-section section-sm">
+    <div class="container">
+      <p class="social-proof-text">Trusted by the world's most innovative teams</p>
+      <div class="logo-slider" aria-label="Partner logos">
+        <div class="logo-track">
+          <div class="logo-slide">
+            <img src="/Codified.png" alt="Codified" loading="lazy" />
+          </div>
+          <div class="logo-slide">
+            <img src="/railsware.png" alt="Railsware" loading="lazy" />
+          </div>
+          <div class="logo-slide">
+            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
+          </div>
+          <!-- duplicate for seamless loop -->
+          <div class="logo-slide">
+            <img src="/Codified.png" alt="Codified" loading="lazy" />
+          </div>
+          <div class="logo-slide">
+            <img src="/railsware.png" alt="Railsware" loading="lazy" />
+          </div>
+          <div class="logo-slide">
+            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
