@@ -4,18 +4,17 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
-          <h1 class="hero-title">Leave Management</h1>
+          <h1 class="hero-title">Leave Management System</h1>
           <p class="hero-description">
-            Put your company's leave management on autopilot<br><br>
-            Leave management doesn't need to be time-consuming and difficult. Brisk People unique Leave Management
-            Module provides the ability to pre-load annual or sick leave. Leave application and approval can be done
-            online.
+            Automate and simplify your company's leave management. With Brisk People's unique
+            Leave Management System, employees can easily apply for pre-approved annual or sick
+            leave, and managers can process these requests efficiently online and in real-time.
           </p>
         </div>
         <div class="hero-image">
           <div class="hero-image-placeholder">
             <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769099992/Leave-Cover_vupfet.png"
-              alt="Leave Management System" loading="lazy" />
+              alt="employee leave management system" loading="lazy" />
           </div>
         </div>
       </div>
@@ -26,13 +25,13 @@
   <section class="features-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h2 class="section-title">Brisk People Leave Management Features</h2>
+        <h2 class="section-title">Brisk People Automated Leave Management Features</h2>
       </div>
 
       <div class="features-grid">
         <app-card *ngFor="let feature of features" class="feature-card">
           <div class="feature-image">
-            <img [src]="feature.image" loading="lazy" />
+            <img [src]="feature.image" [attr.alt]="feature.alt" loading="lazy" />
           </div>
 
           <h3>{{ feature.title }}</h3>
@@ -48,7 +47,7 @@
       <div class="sub-features-content">
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/general_dqgw1q.png"
-            alt="Intuitive Features" loading="lazy" />
+            alt="leave and attendance management system" loading="lazy" />
         </div>
         <div class="sub-features-text">
           <h2 class="sub-features-title">Intuitive Features</h2>
@@ -68,11 +67,11 @@
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h2 class="sub-features-title">Manager’s Decision Making</h2>
-          <p class="hero-description">
-            Managers can easily see who will be away, enabling them to make swift, smart decisions and avoid potential
-            scheduling conflicts. Leave management is automated email sent to relevant manager and the employee to
-            confirm the leave status.
-          </p>
+          <!-- <p class="hero-description">
+            Managers can view employee leave status, plan for potential shortages, and approve or deny leave
+            requests with a few clicks. Leave approvals automatically sync with payroll, and managers have access
+            to detailed leave reports for analysis and decision-making.
+          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of managersDecisionMaking">
               <span class="material-symbols-outlined">star</span>
@@ -82,7 +81,7 @@
         </div>
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769097851/managers-decision-making_rdbwdt.png"
-            alt="Manager Decision Making" loading="lazy" />
+            alt="hr leave management system" loading="lazy" />
         </div>
       </div>
     </div>
@@ -92,15 +91,14 @@
       <div class="sub-features-content">
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/employees_dhrvea.png"
-            alt="Manager Decision Making" loading="lazy" />
+            alt="automated leave management system" loading="lazy" />
         </div>
         <div class="sub-features-text">
-          <h2 class="sub-features-title">Employees</h2>
-          <p class="hero-description">
-            As the ones who request and use the leave entitlements offered by their employer, employees play a key part.
-            Maintaining a positive work-life balance, guaranteeing appropriate personnel, and preventing operational
-            delays due to unscheduled absences all depend on the efficient handling of employees’ leaves
-          </p>
+          <h2 class="sub-features-title">Employees' Features</h2>
+          <!-- <p class="hero-description">
+            Employees can view their leave balance and history for transparency, and submit leave applications
+            directly from the platform, making the process efficient and hassle-free.
+          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of employeesBenefits">
               <span class="material-symbols-outlined">star</span>
@@ -116,9 +114,10 @@
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h2 class="sub-features-title">Many Other Features</h2>
-          <p class="hero-description">
-            Some of the other features to help you leave management more efficiently are:
-          </p>
+          <!-- <p class="hero-description">
+            Public holiday integration, calendar syncing with Outlook and Google, and department-specific
+            approval workflows for flexible leave management.
+          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of otherFeatures">
               <span class="material-symbols-outlined">star</span>
@@ -127,8 +126,8 @@
           </ul>
         </div>
         <div class="sub-features-image">
-          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/employees_dhrvea.png"
-            alt="Manager Decision Making" loading="lazy" />
+          <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/many-other-features_e9ow5i.png"
+            alt="leave management system software" loading="lazy" />
         </div>
       </div>
     </div>
@@ -137,12 +136,12 @@
   <section class="sub-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h2 class="section-title">Self-service for employees and managers</h2>
+        <h2 class="section-title">Self-Service for Employees and Managers</h2>
       </div>
       <div class="features-explain-grid">
-        <app-card *ngFor="let service  of employeeService " class="features-explain-card">
+        <app-card *ngFor="let service of employeeService" class="features-explain-card">
           <div class="features-explain-image">
-            <img class="explain-image" [src]="service.image" loading="lazy" />
+            <img class="explain-image" [src]="service.image" [attr.alt]="service.alt" loading="lazy" />
           </div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
