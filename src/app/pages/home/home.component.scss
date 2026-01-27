@@ -65,7 +65,7 @@
   font-size: var(--font-size-lg);
   color: #1e293b !important;
   line-height: 1.7;
-  margin-bottom: var(--spacing-2xl);
+  // margin-bottom: var(--spacing-2xl);
   font-weight: 500;
 }
 
@@ -348,4 +348,101 @@
   gap: var(--spacing-md);
   justify-content: center;
   flex-wrap: wrap;
+}
+
+// Section divider (for sub-features block)
+.section-divider {
+  height: 0.6px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--primary-200) 0%, var(--accent-200) 100%);
+  // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+// Sub-features section (Intuitive Features, Manager's Decision Making, Employees, Many Other Features)
+.sub-features-section {
+  background: transparent;
+  position: relative;
+  padding: var(--spacing-2xl) 0;
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.sub-features-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.sub-features-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    border-radius: var(--border-radius-lg);
+  }
+}
+
+.sub-features-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.sub-features-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: #1e293b !important;
+    font-weight: 400;
+
+    .material-symbols-outlined {
+      color: var(--primary-600);
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    span:last-child {
+      flex: 1;
+    }
+  }
 }
