@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { RouterModule } from '@angular/router';
 
@@ -10,106 +11,148 @@ import { RouterModule } from '@angular/router';
   templateUrl: './payroll.component.html',
   styleUrls: ['./payroll.component.scss']
 })
+export class PayrollComponent implements OnInit, OnDestroy {
+  private readonly defaultTitle = 'Human Resource Management System | Affordable HRMS Software';
+  private readonly defaultDescription = 'Human Resource Management System (HRMS) designed to manage employees, payroll, onboarding, and performance from one simple platform.';
+  private readonly defaultKeywords = 'Human Resource Management System, HRIS software, People management software, attendance management system';
 
-export class PayrollComponent {
+  readonly seo = {
+    title: 'Payroll Management Software for Accurate Salary Processing | BriskPeople',
+    description: 'Automate payroll processing with accurate salary calculations, payslips, deductions, and employee self-service. Simple, secure payroll management with BriskPeople.',
+    focusKeyword: 'payroll management software',
+    altTags: ['Payroll Management', 'payroll management system', 'payroll management software', 'managed payroll services', 'payroll management services', 'payroll in human resource management'] as const
+  };
+
+  constructor(
+    private titleService: Title,
+    private meta: Meta
+  ) {}
+
+  ngOnInit(): void {
+    this.titleService.setTitle(this.seo.title);
+    this.meta.updateTag({ name: 'description', content: this.seo.description });
+    this.meta.updateTag({ name: 'keywords', content: this.seo.focusKeyword });
+    this.meta.updateTag({ property: 'og:title', content: this.seo.title });
+    this.meta.updateTag({ property: 'og:description', content: this.seo.description });
+    this.meta.updateTag({ name: 'twitter:title', content: this.seo.title });
+    this.meta.updateTag({ name: 'twitter:description', content: this.seo.description });
+  }
+
+  ngOnDestroy(): void {
+    this.titleService.setTitle(this.defaultTitle);
+    this.meta.updateTag({ name: 'description', content: this.defaultDescription });
+    this.meta.updateTag({ name: 'keywords', content: this.defaultKeywords });
+  }
+
   features = [
     {
       id: 1,
-      title: 'Leave Request',
+      title: 'Payroll Processing',
       description:
-        'A technology that enables managers or supervisors to oversee and accept or deny requests for leave made electronically by employees',
+        'Automate salary calculations using attendance, leave, and approved data. Run payroll software accurately each cycle with minimal manual effort.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/leave-request_gsphcw.png',
+      alt: 'Payroll Management'
     },
     {
       id: 2,
-      title: 'My Comp Off',
+      title: 'Payslips',
       description:
-        'Minimises administrative work and offers real-time visibility into comp off status and usage.',
+        'Generate and share digital payslips that clearly show earnings and deductions. Employees can access and download them anytime.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-comp-off_mazhar.png',
+      alt: 'payroll management system'
     },
     {
       id: 3,
-      title: 'My Leaves',
+      title: 'Tax & Compliance',
       description:
-        'Provides real-time visibility into leave status and helps employees plan their time off wisely.',
+        'Manage payroll taxes and statutory requirements in line with company policies. Keep payroll records consistent and organised.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-leaves_cdjvng.png',
+      alt: 'payroll management software'
     },
     {
       id: 4,
-      title: 'Leave History',
+      title: 'Deductions',
       description:
-        'Gives employees a complete and accurate record of their previous leave history.',
+        'Handle salary deductions such as loans, advances, or benefits accurately. All deductions are reflected clearly in payroll and payslips.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/leave-history_b1l34h.png',
+      alt: 'managed payroll services'
     },
     {
       id: 5,
-      title: 'Missed Punch Request',
+      title: 'Overtime',
       description:
-        'Allows employees to request corrections when attendance punch-in or punch-out is missed.',
+        'Calculate overtime pay based on approved extra working hours. Ensure overtime is included correctly in salary processing.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/missed-punch-request_dqzzm5.png',
+      alt: 'payroll management services'
     },
     {
       id: 6,
-      title: 'My Asset',
+      title: 'Salary History',
       description:
-        'Employees can view assigned assets including asset type, model, and serial number.',
+        'Maintain a complete record of past payroll cycles for reference. Employees and HR can review salary history whenever needed.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/my-asset_cjsz8x.png',
+      alt: 'payroll in human resource management'
     }
   ];
   intuitiveFeatures = [
-    'Customise the leave function to match company policies.',
-    'Manage advanced leave requirements.',
-    'Automatically monitor the sick leave rule.',
-    'Automatically track leave balances.',
-    'Set up advanced rules, e.g., long-service leave policies.',
-    'Include all leave types that comply with employment laws.',
-    'Set up additional leave types, such as study leave.',
-    'Access system anywhere, anytime, from the PC, smartphone, or tablet.'
+    'Configure payroll rules based on company policies and pay cycles',
+    'Automate salary calculations using attendance, leave, and overtime data',
+    'Define and manage different salary structures across teams or locations',
+    'Support multiple payroll policies for different countries or regions',
+    'Apply deductions, bonuses, and adjustments with clear approval controls',
+    'Control payroll access levels for HR, finance, and managers',
+    'Access payroll data securely from desktop, tablet, or mobile devices'
   ];
   managersDecisionMaking = [
-    'Plan to avoid staff shortages.',
-    'Immediate approval or decline of leave.',
-    'The updated leave is synced with payroll.',
-    'Line managers can access all leave management reports via ESS.'
+    'Review and approve payroll inputs with clear records and accountability',
+    'Reduce payroll errors through accurate, system-driven data',
+    'Save time by managing approvals and updates from a single, organised view'
   ];
   employeesBenefits = [
-    'Employee access to leave balance and history.',
-    'Apply for leave online or from the smartphone app.'
+    'View and download payslips with clear and accurate salary breakdowns',
+    'Understand deductions, taxes, and net pay in a simple, easy-to-follow format',
+    'Access complete payroll and salary history from previous pay cycles',
+    'Check payroll details securely from any device at any time',
+    'Use a straightforward self-service portal on desktop or mobile'
   ];
   otherFeatures = [
-    'ImageAutomatically take public holidays into account.',
-    'Star Icon ImageIntegrate your leave calendar with Outlook, Google or other calendars.',
-    'Star Icon ImageSet-up departments with different approvers.',
-    'Star Icon ImageComprehensive reporting with exports to Excel or CSV.'
+    'Calendar Integration',
+    'Payroll Reports Export',
+    'Custom Payroll Rules',
+    'Multi-Approver Setup'
   ];
   employeeService = [
     {
       id: 1,
-      title: 'Leave Calendar',
+      title: 'View Payslips',
       description:
-        'Visualise all leaves in a single calendar view. Managers and employees can easily identify upcoming leaves and plan accordingly.',
+        'Employees can view and download payslips with clear and accurate salary breakdowns, understanding deductions, taxes, and net pay in a simple format.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      alt: 'Payroll Management'
     },
     {
       id: 2,
-      title: 'Leave Request',
+      title: 'Salary History',
       description:
-        'Simplify the leave application process with an intuitive interface. Employees can submit leave requests, view their leave balance, and track the status of their applications.',
+        'Access complete payroll and salary history from previous pay cycles. Employees and HR can review records whenever needed.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      alt: 'payroll management system'
     },
     {
       id: 3,
-      title: 'Approval Workflow',
+      title: 'Payroll Approvals',
       description:
-        'Enable managers to efficiently review and approve leave requests. The system notifies managers of pending requests and allows them to approve or decline with just a few clicks.',
+        'Managers can review and approve payroll inputs with clear records and accountability, reducing errors through accurate, system-driven data.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      alt: 'payroll management software'
     },
     {
       id: 4,
-      title: 'Leave Balance Tracking',
+      title: 'Deductions & Tax',
       description:
-        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests, ensuring accuracy and transparency.',
+        'Handle salary deductions such as loans, advances, or benefits accurately. All deductions and tax details are reflected clearly in payroll and payslips.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      alt: 'managed payroll services'
     }
-  ]
+  ];
 }
