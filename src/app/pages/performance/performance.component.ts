@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { RouterModule } from '@angular/router';
 
@@ -10,106 +11,128 @@ import { RouterModule } from '@angular/router';
   templateUrl: './performance.component.html',
   styleUrls: ['./performance.component.scss']
 })
+export class PerformanceComponent implements OnInit, OnDestroy {
+  private readonly defaultTitle = 'Human Resource Management System | Affordable HRMS Software';
+  private readonly defaultDescription = 'Human Resource Management System (HRMS) designed to manage employees, payroll, onboarding, and performance from one simple platform.';
+  private readonly defaultKeywords = 'Human Resource Management System, HRIS software, People management software, attendance management system';
 
-export class PerformanceComponent {
+  readonly seo = {
+    title: 'Performance Management Software | Track Goals & Appraisals | BriskPeople',
+    description: 'Enhance employee performance with Brisk People\'s performance management software. Set goals, track progress, and streamline appraisals for better results.',
+    focusKeyword: 'Performance Management',
+    altTags: ['performance management systems', 'performance of management', 'performance manager', 'performance management software'] as const
+  };
+
+  constructor(
+    private titleService: Title,
+    private meta: Meta
+  ) { }
+
+  ngOnInit(): void {
+    this.titleService.setTitle(this.seo.title);
+    this.meta.updateTag({ name: 'description', content: this.seo.description });
+    this.meta.updateTag({ name: 'keywords', content: this.seo.focusKeyword });
+    this.meta.updateTag({ property: 'og:title', content: this.seo.title });
+    this.meta.updateTag({ property: 'og:description', content: this.seo.description });
+    this.meta.updateTag({ name: 'twitter:title', content: this.seo.title });
+    this.meta.updateTag({ name: 'twitter:description', content: this.seo.description });
+  }
+
+  ngOnDestroy(): void {
+    this.titleService.setTitle(this.defaultTitle);
+    this.meta.updateTag({ name: 'description', content: this.defaultDescription });
+    this.meta.updateTag({ name: 'keywords', content: this.defaultKeywords });
+  }
+
   features = [
     {
       id: 1,
-      title: 'Leave Request',
+      title: 'My Performance',
       description:
-        'A technology that enables managers or supervisors to oversee and accept or deny requests for leave made electronically by employees',
+        'Track your performance with detailed reports on key metrics and areas of improvement. The AI Assistant helps employees stay aligned with personal and organizational goals.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/leave-request_gsphcw.png',
+      alt: 'performance management systems'
     },
     {
       id: 2,
-      title: 'My Comp Off',
+      title: 'Appraisals',
       description:
-        'Minimises administrative work and offers real-time visibility into comp off status and usage.',
+        'Automate and streamline performance appraisals. The AI Assistant analyzes employee data, providing insightful feedback for fair evaluations and career development.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-comp-off_mazhar.png',
+      alt: 'performance management software'
     },
     {
       id: 3,
-      title: 'My Leaves',
+      title: 'Skills Matrix',
       description:
-        'Provides real-time visibility into leave status and helps employees plan their time off wisely.',
+        'Assess employees\' skills using the AI Assistant. Track growth in competencies and identify skill gaps, empowering you to focus on development areas for continuous improvement.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-leaves_cdjvng.png',
+      alt: 'performance manager'
     },
     {
       id: 4,
-      title: 'Leave History',
+      title: 'Goals & KRAs',
       description:
-        'Gives employees a complete and accurate record of their previous leave history.',
+        'Set clear performance goals and Key Result Areas (KRAs). The AI Assistant helps employees stay focused on achieving measurable results, adjusting targets based on ongoing performance.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/leave-history_b1l34h.png',
+      alt: 'performance of management'
     },
     {
       id: 5,
-      title: 'Missed Punch Request',
+      title: 'Performance Reports',
       description:
-        'Allows employees to request corrections when attendance punch-in or punch-out is missed.',
+        'Access comprehensive reports on individual and team performance. Track trends, identify top performers, and make data-driven decisions for talent development.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/missed-punch-request_dqzzm5.png',
+      alt: 'performance management systems'
     },
     {
       id: 6,
-      title: 'My Asset',
+      title: 'Development Plans',
       description:
-        'Employees can view assigned assets including asset type, model, and serial number.',
+        'Link performance reviews with training and development opportunities. Create tailored development plans to close skill gaps and support career growth.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/my-asset_cjsz8x.png',
+      alt: 'performance management software'
     }
   ];
   intuitiveFeatures = [
-    'Customise the leave function to match company policies.',
-    'Manage advanced leave requirements.',
-    'Automatically monitor the sick leave rule.',
-    'Automatically track leave balances.',
-    'Set up advanced rules, e.g., long-service leave policies.',
-    'Include all leave types that comply with employment laws.',
-    'Set up additional leave types, such as study leave.',
-    'Access system anywhere, anytime, from the PC, smartphone, or tablet.'
+    'Set Clear Goals & KRAs: Align individual performance with organizational strategy by defining clear, measurable goals. Track progress and adjust in real-time to meet targets.',
+    'Continuous Feedback: Create a culture of continuous improvement by integrating real-time feedback into your performance management system.',
+    'Customizable Appraisals: Tailor appraisals to match your organization\'s goals and values, ensuring that assessments align with both company and employee expectations.',
+    'Integrated Skills Matrix: Identify skill gaps and future leaders, enabling your HR team to plan targeted training and development initiatives.',
+    'Goal Tracking: Keep employees focused and aligned with company goals, allowing them to track their achievements and growth over time.'
   ];
   managersDecisionMaking = [
-    'Plan to avoid staff shortages.',
-    'Immediate approval or decline of leave.',
-    'The updated leave is synced with payroll.',
-    'Line managers can access all leave management reports via ESS.'
+    'Make Data-Driven Decisions: Use real-time performance data to guide talent management decisions.',
+    'Employee Feedback Loop: Foster a culture of continuous feedback to drive employee development and engagement.',
+    'Performance Trends: Track long-term performance trends to better understand employee growth.'
   ];
   employeesBenefits = [
-    'Employee access to leave balance and history.',
-    'Apply for leave online or from the smartphone app.'
+    'Track Performance: Stay updated on progress towards personal goals and organizational objectives.',
+    'Continuous Feedback: Access real-time feedback for ongoing personal and professional growth.',
+    'Access from Anywhere: Employees can view and update performance records from their desktop or mobile device.'
   ];
   otherFeatures = [
-    'ImageAutomatically take public holidays into account.',
-    'Star Icon ImageIntegrate your leave calendar with Outlook, Google or other calendars.',
-    'Star Icon ImageSet-up departments with different approvers.',
-    'Star Icon ImageComprehensive reporting with exports to Excel or CSV.'
+    'Advanced Reporting: Comprehensive reports on individual and team performance, available anytime.',
+    'Customizable Goals & KRAs: Tailor goals and KPIs based on team or department-specific needs.',
+    'Integrated Learning: Directly link performance reviews with training and development opportunities to close skill gaps.',
+    'Seamless Integration: Easily integrate performance management with your existing HR and payroll systems.'
   ];
   employeeService = [
     {
       id: 1,
-      title: 'Leave Calendar',
+      title: 'Employee Dashboard',
       description:
-        'Visualise all leaves in a single calendar view. Managers and employees can easily identify upcoming leaves and plan accordingly.',
+        'Employees can view their goals, performance reviews, appraisals, and skill development plans through their personalized dashboard.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      alt: 'performance management systems'
     },
     {
       id: 2,
-      title: 'Leave Request',
+      title: 'Manager Dashboard',
       description:
-        'Simplify the leave application process with an intuitive interface. Employees can submit leave requests, view their leave balance, and track the status of their applications.',
+        'Managers can quickly review employee performance, provide feedback, and track progress against KPIs and goals.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
-    },
-    {
-      id: 3,
-      title: 'Approval Workflow',
-      description:
-        'Enable managers to efficiently review and approve leave requests. The system notifies managers of pending requests and allows them to approve or decline with just a few clicks.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
-    },
-    {
-      id: 4,
-      title: 'Leave Balance Tracking',
-      description:
-        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests, ensuring accuracy and transparency.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      alt: 'performance management software'
     }
-  ]
+  ];
 }

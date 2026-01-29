@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { RouterModule } from '@angular/router';
 
@@ -10,106 +11,133 @@ import { RouterModule } from '@angular/router';
   templateUrl: './timesheet.component.html',
   styleUrls: ['./timesheet.component.scss']
 })
+export class TimesheetComponent implements OnInit, OnDestroy {
+  private readonly defaultTitle = 'Human Resource Management System | Affordable HRMS Software';
+  private readonly defaultDescription = 'Human Resource Management System (HRMS) designed to manage employees, payroll, onboarding, and performance from one simple platform.';
+  private readonly defaultKeywords = 'Human Resource Management System, HRIS software, People management software, attendance management system';
 
-export class TimesheetComponent {
+  readonly seo = {
+    title: 'Timesheet Management Software | Streamline Employee Time Tracking | BriskPeople',
+    description: 'Simplify employee time tracking and payroll with our Timesheet Management Software. Automate timesheet approvals, manage attendance, and reduce errors.',
+    focusKeyword: 'Timesheet Management Software',
+    altTags: ['employee timesheet management system', 'timesheet management systems', 'Employee Time Tracking', 'Time Tracking Software', 'Automated Timesheets'] as const
+  };
+
+  constructor(
+    private titleService: Title,
+    private meta: Meta
+  ) { }
+
+  ngOnInit(): void {
+    this.titleService.setTitle(this.seo.title);
+    this.meta.updateTag({ name: 'description', content: this.seo.description });
+    this.meta.updateTag({ name: 'keywords', content: this.seo.focusKeyword });
+    this.meta.updateTag({ property: 'og:title', content: this.seo.title });
+    this.meta.updateTag({ property: 'og:description', content: this.seo.description });
+    this.meta.updateTag({ name: 'twitter:title', content: this.seo.title });
+    this.meta.updateTag({ name: 'twitter:description', content: this.seo.description });
+  }
+
+  ngOnDestroy(): void {
+    this.titleService.setTitle(this.defaultTitle);
+    this.meta.updateTag({ name: 'description', content: this.defaultDescription });
+    this.meta.updateTag({ name: 'keywords', content: this.defaultKeywords });
+  }
+
   features = [
     {
       id: 1,
-      title: 'Leave Request',
+      title: 'Employee Time Tracking',
       description:
-        'A technology that enables managers or supervisors to oversee and accept or deny requests for leave made electronically by employees',
+        'Automatically capture and track employee work hours with an intuitive, user-friendly interface. Ensure accurate time data for better payroll management.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/leave-request_gsphcw.png',
+      alt: 'employee timesheet management system'
     },
     {
       id: 2,
-      title: 'My Comp Off',
+      title: 'Automated Time Entries',
       description:
-        'Minimises administrative work and offers real-time visibility into comp off status and usage.',
+        'Minimize errors and reduce manual work with automated time entries based on employee schedules or clock-ins, providing real-time updates.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-comp-off_mazhar.png',
+      alt: 'timesheet management systems'
     },
     {
       id: 3,
-      title: 'My Leaves',
+      title: 'Customizable Timesheet Templates',
       description:
-        'Provides real-time visibility into leave status and helps employees plan their time off wisely.',
+        'Tailor the timesheet to your company\'s needs whether you require daily, weekly, or project-based time reporting, it\'s all possible with our flexible system.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097850/my-leaves_cdjvng.png',
+      alt: 'Employee Time Tracking'
     },
     {
       id: 4,
-      title: 'Leave History',
+      title: 'Advanced Reporting',
       description:
-        'Gives employees a complete and accurate record of their previous leave history.',
+        'Generate detailed reports on employee time worked, overtime, absences, and more. Use data-driven insights to manage labor costs efficiently.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/leave-history_b1l34h.png',
+      alt: 'Time Tracking Software'
     },
     {
       id: 5,
-      title: 'Missed Punch Request',
+      title: 'Seamless Integration',
       description:
-        'Allows employees to request corrections when attendance punch-in or punch-out is missed.',
+        'Our software integrates with payroll, HR systems, and project management tools to streamline your operations and save valuable time.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/missed-punch-request_dqzzm5.png',
+      alt: 'Automated Timesheets'
     },
     {
       id: 6,
-      title: 'My Asset',
+      title: 'Mobile Time Tracking',
       description:
-        'Employees can view assigned assets including asset type, model, and serial number.',
+        'Allow employees to clock in and out via a mobile app, ensuring accurate time tracking whether they\'re in the office or working remotely.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769097849/my-asset_cjsz8x.png',
+      alt: 'employee timesheet management system'
     }
   ];
   intuitiveFeatures = [
-    'Customise the leave function to match company policies.',
-    'Manage advanced leave requirements.',
-    'Automatically monitor the sick leave rule.',
-    'Automatically track leave balances.',
-    'Set up advanced rules, e.g., long-service leave policies.',
-    'Include all leave types that comply with employment laws.',
-    'Set up additional leave types, such as study leave.',
-    'Access system anywhere, anytime, from the PC, smartphone, or tablet.'
+    'Simple Time Tracking: Easily track employee hours from any device, whether they\'re working in-office, remotely, or on the go.',
+    'Real-Time Monitoring: Get up-to-the-minute visibility into work hours, missed punch-ins, and overtime; manage discrepancies instantly.',
+    'Custom Alerts & Notifications: Set up automated reminders for employees to submit their timesheets, or notify managers when discrepancies arise.',
+    'Detailed Analytics: Use built-in analytics to monitor attendance trends, identify patterns, and make informed decisions to improve workforce management.'
   ];
   managersDecisionMaking = [
-    'Plan to avoid staff shortages.',
-    'Immediate approval or decline of leave.',
-    'The updated leave is synced with payroll.',
-    'Line managers can access all leave management reports via ESS.'
+    'Plan Work Hours & Scheduling.',
+    'Approval Workflow.',
+    'Payroll Integration.'
   ];
   employeesBenefits = [
-    'Employee access to leave balance and history.',
-    'Apply for leave online or from the smartphone app.'
+    'Employee Access to Leave Balance and History.',
+    'Apply for Leave Online or via Smartphone.'
   ];
   otherFeatures = [
-    'ImageAutomatically take public holidays into account.',
-    'Star Icon ImageIntegrate your leave calendar with Outlook, Google or other calendars.',
-    'Star Icon ImageSet-up departments with different approvers.',
-    'Star Icon ImageComprehensive reporting with exports to Excel or CSV.'
+    'Leave Management Integration: Track employee leave balances and integrate leave requests directly into the timesheet system.',
+    'Mobile Time Tracking: Allow employees to clock in and out via a mobile app, ensuring accurate time tracking whether they\'re in the office or working remotely.',
+    'Custom Work Rules: Set specific rules for different departments, projects, or employees to comply with organizational or legal requirements.'
   ];
   employeeService = [
     {
       id: 1,
-      title: 'Leave Calendar',
+      title: 'Timesheet Calendar View',
       description:
-        'Visualise all leaves in a single calendar view. Managers and employees can easily identify upcoming leaves and plan accordingly.',
+        'Managers and employees can view all time entries in a visual calendar layout for easy planning and reporting.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      alt: 'timesheet management systems'
     },
     {
       id: 2,
-      title: 'Leave Request',
+      title: 'Approval & Editing Workflow',
       description:
-        'Simplify the leave application process with an intuitive interface. Employees can submit leave requests, view their leave balance, and track the status of their applications.',
+        'Streamline approval processes with an easy-to-use interface for managers to quickly approve or adjust employee timesheets.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      alt: 'Time Tracking Software'
     },
     {
       id: 3,
-      title: 'Approval Workflow',
+      title: 'Comprehensive Reporting',
       description:
-        'Enable managers to efficiently review and approve leave requests. The system notifies managers of pending requests and allows them to approve or decline with just a few clicks.',
+        'Generate in-depth reports for payroll, budgeting, and compliance purposes, ensuring all data is easily accessible and actionable.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
-    },
-    {
-      id: 4,
-      title: 'Leave Balance Tracking',
-      description:
-        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests, ensuring accuracy and transparency.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      alt: 'Automated Timesheets'
     }
-  ]
+  ];
 }

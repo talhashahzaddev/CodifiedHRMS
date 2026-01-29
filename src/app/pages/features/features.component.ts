@@ -26,35 +26,35 @@ export class FeaturesComponent {
       title: 'Seamless Onboarding',
       description: 'Create a positive first-day experience for every new hire. Keep onboarding simple, structured, and stress-free for teams.',
       icon: 'rocket_launch',
-      route: '/dashboard-onboarding'
+      route: '/onboarding-software'
     },
     {
       id: '3',
       title: 'Automated Payroll',
       description: 'Simplify payroll processing with automated calculations and approvals. Pay employees on time while reducing errors and administrative effort.',
       icon: 'payments',
-      route: '/payroll'
+      route: '/payroll-management'
     },
     {
       id: '4',
       title: 'Attendance',
       description: 'Accurately track employee work hours, leaves, and overtime with our integrated system.',
       icon: 'schedule',
-      route: '/attendance'
+      route: '/attendance-management'
     },
     {
       id: '5',
       title: 'Performance',
       description: 'Manage employee reviews, set goals, and foster a culture of continuous improvement.',
       icon: 'trending_up',
-      route: '/performance'
+      route: '/performance-management'
     },
     {
       id: '6',
       title: 'Timesheets',
       description: 'Log time against projects and tasks for better resource management and billing.',
       icon: 'hourglass_top',
-      route: '/timesheet'
+      route: '/timesheet-management-software'
     },
     {
       id: '7',

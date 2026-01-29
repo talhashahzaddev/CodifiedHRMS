@@ -4,10 +4,11 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
-          <h1 class="hero-title">All-in-One HR Software on One Intuitive Platform</h1>
+          <h1 class="hero-title">HRMS Software to Manage Payroll and Attendance in One Place</h1>
           <p class="hero-description">
-            HRMS software that brings all your people management tools into one powerful platform, simplifying payroll,
-            attendance, performance tracking, and employee records so you can focus on building stronger teams.
+            BriskPeople is a Human Resource Management System designed to manage employee records, payroll, attendance,
+            and performance in one place. Our HRMS helps HR teams and managers stay organized, reduce manual work, and
+            handle daily people management with clarity.
           </p>
           <div class="hero-actions">
             <a routerLink="/sign-up" class="btn btn-primary btn-lg">Get Started for Free</a>
@@ -16,7 +17,7 @@
         </div>
         <div class="hero-image">
           <div class="hero-image-placeholder">
-            <img src="/main.png" alt="CodifiedHRMS dashboard preview" loading="lazy" />
+            <img src="/main.png" [alt]="seo.altTags[0]" loading="lazy" />
           </div>
         </div>
       </div>
@@ -61,13 +62,14 @@
       <div class="sub-features-content">
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532263/Smiling_Person_p3xrjc.webp"
-            alt="time attendance management software" loading="lazy" />
+            [alt]="seo.altTags[1]" loading="lazy" />
         </div>
         <div class="sub-features-text">
-          <h2 class="sub-features-title">HR MANAGEMENT SIMPLIFIED</h2>
+          <h2 class="sub-features-title">HR Management in One System</h2>
           <p class="hero-description">
-            Adapt to new realities, work faster and smarter. Determine a defined future of work for your organization
-            with a strong, flexible, global HR solution.
+            BriskPeople is a Human Resource Management System that helps businesses manage everyday HR work with less
+            effort and more clarity. From employee records to approvals and documents, our HRMS keeps everything
+            organized so HR teams and managers can focus on people, not paperwork.
           </p>
           <ul class="features-list">
             <li *ngFor="let feature of HR_MANAGEMENT_SIMPLIFIED">
@@ -83,12 +85,11 @@
     <div class="container">
       <div class="sub-features-content">
         <div class="sub-features-text">
-          <h2 class="sub-features-title">TIME AND ATTENDANCE</h2>
+          <h2 class="sub-features-title">Time and Attendance Managemen</h2>
           <p class="hero-description">
-            Allow time for greatness and unlock higher productivity through our integrated and advanced time and
-            attendance management system. Similarly create a digitally seamless onboarding experience so that shortens
-            the new employee’s time to productivity.Then set them up for success and build delightful employee journeys
-            from day one.
+            HRMS provides a time and attendance management system that helps businesses record working hours, track
+            attendance, and manage leave in one place. This module reduces manual tracking and keeps attendance data
+            clear for HR teams, managers, and payroll processing.
           </p>
           <ul class="features-list">
             <li *ngFor="let feature of TIME_AND_ATTENDANCE">
@@ -99,7 +100,7 @@
         </div>
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532505/Leave_Calender_k2w812.svg"
-            alt="Employees attendance management" loading="lazy" />
+            [alt]="seo.altTags[2]" loading="lazy" />
         </div>
       </div>
     </div>
@@ -109,15 +110,14 @@
       <div class="sub-features-content">
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532502/Payroll_Management_pjcczs.webp"
-            alt="employee attendance management system" loading="lazy" />
+            [alt]="seo.altTags[3]" loading="lazy" />
         </div>
         <div class="sub-features-text">
-          <h2 class="sub-features-title">PAYROLL MANAGEMENT</h2>
+          <h3 class="sub-features-title">Payroll Management System</h3>
           <p class="hero-description">
-            Simplify the complex processes of the payroll with RapidHR, also a powerful, secure, accurate, automated and
-            100% compliant system!Rapid HR provides quicker processing, precise payouts, any business that wants to
-            prevent potential financial and legal repercussions from non-compliance and guarantee that employees are
-            paid accurately and on time with precise payroll administration.
+            BriskPeople offers a payroll management system that helps businesses calculate salaries, manage deductions,
+            and keep payroll records accurate. This payroll module works alongside attendance data to support timely
+            salary processing and reduce payroll errors.
           </p>
           <ul class="features-list">
             <li *ngFor="let feature of PAYROLL_MANAGEMENT">
@@ -133,10 +133,11 @@
     <div class="container">
       <div class="sub-features-content">
         <div class="sub-features-text">
-          <h2 class="sub-features-title">PERFORMANCE MANAGEMENT</h2>
+          <h2 class="sub-features-title">Performance Management Systems</h2>
           <p class="hero-description">
-            Regular performance management with RapidHR encourages your employees to aim for excellence. Then, your
-            organization is set up for success and growth while.
+            BriskPeople offers performance management systems with in its Human Resource Management System to help
+            businesses track employee progress, set clear goals, and review performance over time. This module supports
+            fair employee reviews, structured feedback, and better visibility into individual and team performance
           </p>
           <ul class="features-list">
             <li *ngFor="let feature of PERFORMANCE_MANAGEMENT">
@@ -147,7 +148,7 @@
         </div>
         <div class="sub-features-image">
           <img src="https://res.cloudinary.com/dn7o89asj/image/upload/v1769532501/Performance_mgmt_zoromd.webp"
-            alt="employee attendance management system" loading="lazy" />
+            [alt]="seo.altTags[4]" loading="lazy" />
         </div>
       </div>
     </div>
