@@ -34,23 +34,23 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/ai-assistant/ai-assistant.component').then(m => m.AiAssistantComponent)
   },
   {
-    path: 'dashboard-onboarding',
+    path: 'onboarding-software',
     loadComponent: () => import('./pages/dashboard-onboarding/dashboard-onboarding.component').then(m => m.DashboardOnboardingComponent)
   },
   {
-    path: 'payroll',
+    path: 'payroll-management',
     loadComponent: () => import('./pages/payroll/payroll.component').then(m => m.PayrollComponent)
   },
   {
-    path: 'attendance',
+    path: 'attendance-management',
     loadComponent: () => import('./pages/attendance/attendance.component').then(m => m.AttendanceComponent)
   },
   {
-    path: 'performance',
+    path: 'performance-management',
     loadComponent: () => import('./pages/performance/performance.component').then(m => m.PerformanceComponent)
   },
   {
-    path: 'timesheet',
+    path: 'timesheet-management-software',
     loadComponent: () => import('./pages/timesheet/timesheet.component').then(m => m.TimesheetComponent)
   },
   {

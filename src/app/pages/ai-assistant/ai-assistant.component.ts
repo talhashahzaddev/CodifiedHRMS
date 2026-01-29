@@ -26,7 +26,7 @@ export class AiAssistantComponent implements OnInit, OnDestroy {
   constructor(
     private titleService: Title,
     private meta: Meta
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.titleService.setTitle(this.seo.title);
@@ -139,14 +139,6 @@ export class AiAssistantComponent implements OnInit, OnDestroy {
         'The AI Assistant ensures that employees always have accurate information on their leave balance, with automatic updates after each approved leave.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
       alt: 'AI Assistant'
-    },
-    {
-      id: 4,
-      title: 'Leave Balance Tracking',
-      description:
-        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests, ensuring accuracy and transparency.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
-      alt: 'ai assistant software'
     }
   ];
 }
