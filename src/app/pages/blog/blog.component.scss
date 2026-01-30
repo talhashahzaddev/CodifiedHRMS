@@ -46,9 +46,6 @@
   border-bottom: 1px solid rgba(185, 223, 255, 0.3);
   border-top: 1px solid rgba(185, 223, 255, 0.3);
   padding: var(--spacing-lg) 0;
-  position: sticky;
-  top: 72px;
-  z-index: 100;
 }
 
 .category-filters {
@@ -108,6 +105,13 @@
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
   }
+}
+
+.blog-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
 }
 
 .blog-card {
