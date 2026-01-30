@@ -25,8 +25,8 @@ export class BlogComponent {
   blogPosts = [
     {
       id: '1',
-      title: 'Mastering the Art of Employee Onboarding',
-      excerpt: 'A comprehensive guide to creating a seamless and effective onboarding experience for new hires.',
+      title: 'Why Switch to HRMS from Old Spreadsheets?',
+      excerpt: 'Learn why growing businesses switch from Excel to HRMS for accurate payroll, attendance tracking, compliance control, and smoother daily HR operations.',
       category: 'culture',
       date: 'May 21, 2024',
       type: 'BLOG',
@@ -35,8 +35,8 @@ export class BlogComponent {
     },
     {
       id: '2',
-      title: 'The Future of Remote Work: Trends for 2024',
-      excerpt: 'Explore the key trends shaping remote and hybrid work environments in the coming year.',
+      title: 'How HRMS Payroll Simplifies Salary, Attendance, and Compliance Together',
+      excerpt: 'Discover how HRMS payroll brings salary, attendance, and compliance into one streamlined system, reducing errors, manual work, and payroll stress for HR teams.',
       category: 'culture',
       date: 'May 18, 2024',
       type: 'ARTICLE',
