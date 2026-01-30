@@ -30,7 +30,8 @@ export class BlogComponent {
       category: 'culture',
       date: 'May 21, 2024',
       type: 'BLOG',
-      image: 'onboarding'
+      image: 'onboarding',
+      route: '/switch-to-hrms'
     },
     {
       id: '2',
@@ -39,43 +40,8 @@ export class BlogComponent {
       category: 'culture',
       date: 'May 18, 2024',
       type: 'ARTICLE',
-      image: 'remote'
-    },
-    {
-      id: '3',
-      title: 'Navigating HR Compliance with Confidence',
-      excerpt: 'Stay up-to-date with the latest regulations and avoid costly legal pitfalls.',
-      category: 'compliance',
-      date: 'May 15, 2024',
-      type: 'WHITEPAPER',
-      image: 'compliance'
-    },
-    {
-      id: '4',
-      title: 'How to Build a Thriving Company Culture',
-      excerpt: 'Learn actionable steps to foster a positive and productive workplace for everyone.',
-      category: 'culture',
-      date: 'May 12, 2024',
-      type: 'BLOG',
-      image: 'culture'
-    },
-    {
-      id: '5',
-      title: 'Simplifying Your Payroll Processes',
-      excerpt: 'Discover tools and techniques to make your payroll more efficient and accurate.',
-      category: 'payroll',
-      date: 'May 9, 2024',
-      type: 'GUIDE',
-      image: 'payroll'
-    },
-    {
-      id: '6',
-      title: 'Top 5 Recruitment Strategies That Actually Work',
-      excerpt: 'Attract top talent with these proven methods for modern recruitment.',
-      category: 'recruiting',
-      date: 'May 6, 2024',
-      type: 'BLOG',
-      image: 'recruiting'
+      image: 'remote',
+      route: '/simplify-features'
     }
   ];
 

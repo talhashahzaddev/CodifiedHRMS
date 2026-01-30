@@ -62,6 +62,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/leave-management/leave-management.component').then(m => m.LeaveManagementComponent)
   },
   {
+    path: 'simplify-features',
+    loadComponent: () => import('./pages/blog/simplifies-featuer/simplifies-featuer.component').then(m => m.SimplifiesFeatuerComponent)
+  },
+  {
+    path: 'switch-to-hrms',
+    loadComponent: () => import('./pages/blog/switch-hrms/switch-hrms.component').then(m => m.SwitchHrmsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
