@@ -30,25 +30,45 @@
   <section class="posts-section section">
     <div class="container">
       <div class="posts-grid">
-        <app-card 
-          *ngFor="let post of filteredPosts" 
-          [hoverable]="true"
-          class="blog-card">
-          <div class="post-image">
-            <div class="image-placeholder">
-              <span class="material-symbols-outlined">article</span>
+        <ng-container *ngFor="let post of filteredPosts">
+          <a *ngIf="post.route" [routerLink]="post.route" class="blog-card-link">
+            <app-card [hoverable]="true" class="blog-card">
+              <div class="post-image">
+                <div class="image-placeholder">
+                  <span class="material-symbols-outlined">article</span>
+                </div>
+              </div>
+              <div class="post-content">
+                <div class="post-meta">
+                  <span class="post-type">{{ post.type }}</span>
+                  <span class="post-separator">•</span>
+                  <span class="post-date">{{ post.date }}</span>
+                </div>
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+              </div>
+            </app-card>
+          </a>
+          <app-card
+            *ngIf="!post.route"
+            [hoverable]="true"
+            class="blog-card">
+            <div class="post-image">
+              <div class="image-placeholder">
+                <span class="material-symbols-outlined">article</span>
+              </div>
             </div>
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <span class="post-type">{{ post.type }}</span>
-              <span class="post-separator">•</span>
-              <span class="post-date">{{ post.date }}</span>
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="post-type">{{ post.type }}</span>
+                <span class="post-separator">•</span>
+                <span class="post-date">{{ post.date }}</span>
+              </div>
+              <h3 class="post-title">{{ post.title }}</h3>
+              <p class="post-excerpt">{{ post.excerpt }}</p>
             </div>
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-excerpt">{{ post.excerpt }}</p>
-          </div>
-        </app-card>
+          </app-card>
+        </ng-container>
       </div>
     </div>
   </section>
