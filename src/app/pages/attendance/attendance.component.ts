@@ -122,7 +122,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       title: 'Track Your Attendance in Real-Time',
       description:
         'Employees can easily track their own attendance, including clock-ins, clock-outs, and breaks, in real-time. This feature provides instant access to attendance history, making it simple for employees to review their own records and ensure accuracy.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770046696/Time_Tracker_rrxsdz.png',
       alt: 'attendance management software'
     },
     {
@@ -130,7 +130,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       title: 'Request and Manage Leave Easily',
       description:
         'Employees can request leave directly through the self-service portal, whether for vacation, sick days, or personal time off. The system automatically checks for any conflicts and notifies both the employee and manager once the request is approved or declined, streamlining the entire process.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039802/Self_Service_Employee_Attendance_View_Shift_pl9rfj.png',
       alt: 'time attendance management software'
     },
     {
@@ -138,7 +138,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       title: 'View Attendance History and Balances',
       description:
         'Employees can view their full attendance history, including total hours worked, leave balances, and upcoming scheduled time off. This transparency helps employees stay informed about their work schedule and avoid scheduling conflicts.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039792/Self_Service_Employee_Attendance_Summary-2_z0osqq.png',
       alt: 'employee attendance management system'
     },
     {
@@ -146,7 +146,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       title: 'Manager Approval and Monitoring',
       description:
         'Managers can effortlessly monitor and approve attendance records, including leave requests, clock-in times, and overtime. The manager\'s self-service portal ensures they can access the most up-to-date attendance data and make informed decisions quickly, all within a single interface.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039817/Self_Service_Manager_Team_Attendance_zjkl5j.png',
       alt: 'leave and attendance management system'
     }
   ];

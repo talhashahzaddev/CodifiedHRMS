@@ -128,7 +128,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Approval Workflow',
       description:
         'Streamline the approval process with automated notifications, allowing managers to approve or deny leave with just a few clicks.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
       alt: 'leave and attendance management system'
     },
     {
@@ -136,7 +136,15 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Leave Balance Tracking',
       description:
         'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      alt: 'hr leave management system'
+    },
+    {
+      id: 4,
+      title: 'Leave Apply',
+      description:
+        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests.',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039644/Self_Service_Employee_Leave_Apply_rpprmv.png',
       alt: 'hr leave management system'
     }
   ];
