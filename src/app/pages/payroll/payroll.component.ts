@@ -127,7 +127,7 @@ export class PayrollComponent implements OnInit, OnDestroy {
       title: 'View Payslips',
       description:
         'Employees can view and download payslips with clear and accurate salary breakdowns, understanding deductions, taxes, and net pay in a simple format.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770053015/salary_slips_slccwg.png',
       alt: 'Payroll Management'
     },
     {
@@ -135,7 +135,7 @@ export class PayrollComponent implements OnInit, OnDestroy {
       title: 'Salary History',
       description:
         'Access complete payroll and salary history from previous pay cycles. Employees and HR can review records whenever needed.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770052925/salary_reports_spqt1q.png',
       alt: 'payroll management system'
     },
     {
@@ -143,7 +143,7 @@ export class PayrollComponent implements OnInit, OnDestroy {
       title: 'Payroll Approvals',
       description:
         'Managers can review and approve payroll inputs with clear records and accountability, reducing errors through accurate, system-driven data.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770117918/process_payroll_zujfpl.png',
       alt: 'payroll management software'
     },
     {
@@ -151,7 +151,7 @@ export class PayrollComponent implements OnInit, OnDestroy {
       title: 'Deductions & Tax',
       description:
         'Handle salary deductions such as loans, advances, or benefits accurately. All deductions and tax details are reflected clearly in payroll and payslips.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770117765/salary_component_v6heph.png',
       alt: 'managed payroll services'
     }
   ];

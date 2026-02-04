@@ -35,6 +35,7 @@ import { filter } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'BriskPeople';
+  private baseUrl = 'https://www.briskpeople.com'; // your live domain
 
   constructor(
     private chatService: ChatService,
@@ -47,22 +48,23 @@ export class AppComponent implements OnInit {
     
     // Set favicon
     this.setFavicon();
-    
-    // Ensure favicon persists on navigation
+
+    // Ensure favicon and canonical URL persist on navigation
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe((event: NavigationEnd) => {
         this.setFavicon();
+        this.setCanonical(event.urlAfterRedirects);
       });
     
-    // Load chat widget after a short delay to improve initial page load
+    // Load chat widget after a short delay
     setTimeout(() => {
       this.chatService.loadTawkTo();
     }, 1000);
   }
 
   private setFavicon(): void {
-    // Remove ALL existing favicon links
+  // Remove ALL existing favicon links
     const existingLinks = document.querySelectorAll('link[rel*="icon"], link[rel*="shortcut"]');
     existingLinks.forEach(link => {
       const href = link.getAttribute('href');
@@ -70,7 +72,6 @@ export class AppComponent implements OnInit {
         link.remove();
       }
     });
-
     // Get base href to construct correct path
     const baseHref = document.querySelector('base')?.getAttribute('href') || '/';
     const faviconPath = `${baseHref}hub.png`;
@@ -95,5 +96,16 @@ export class AppComponent implements OnInit {
     }
     shortcutLink.href = faviconPath;
   }
-}
+  // Canonical Tag Handler
+  private setCanonical(url: string): void {
+    const canonicalUrl = this.baseUrl + url;
 
+    const oldLink = document.querySelector("link[rel='canonical']");
+    if (oldLink) oldLink.remove();
+
+    const link: HTMLLinkElement = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', canonicalUrl);
+    document.head.appendChild(link);
+  }
+}
