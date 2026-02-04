@@ -121,7 +121,7 @@ export class AiAssistantComponent implements OnInit, OnDestroy {
       title: 'AI Leave Calendar',
       description:
         'The AI Assistant presents leave data in a calendar view, making it easy for both employees and managers to visualize and plan for time off.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769515059/Checkin_Out_txleqc.jpg',
       alt: 'AI HR Assistant'
     },
     {
@@ -129,16 +129,8 @@ export class AiAssistantComponent implements OnInit, OnDestroy {
       title: 'Leave Approval Workflow',
       description:
         'Managers receive AI-powered notifications on pending leave requests and can approve or decline them with a single click.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/pending-leave-request_mswhgd.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769515060/Leave_Request_wszrvp.png',
       alt: 'Best ai assistant for hrms'
     },
-    {
-      id: 3,
-      title: 'Leave Balance Tracking',
-      description:
-        'The AI Assistant ensures that employees always have accurate information on their leave balance, with automatic updates after each approved leave.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
-      alt: 'AI Assistant'
-    }
   ];
 }
