@@ -125,7 +125,7 @@ export class EmployeeManagementComponent implements OnInit, OnDestroy {
       title: 'Employee Directory',
       description:
         'Browse and search all employees in one place. View department, position, and contact details for easier collaboration.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039877/Self_Service_All_Employees_View_auyp7f.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206963/no9mpsictyspz1pizwvi.png',
       alt: 'HR employee management'
     },
     {
@@ -133,7 +133,7 @@ export class EmployeeManagementComponent implements OnInit, OnDestroy {
       title: 'Department & Position Setup',
       description:
         'Create and maintain departments and positions. Assign employees during onboarding or when roles change.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770050945/PositionDep_Collage_fvqp2e.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206863/egxmpgp6nbqikyxzdg1x.png',
       alt: 'employee records management'
     },
     {
@@ -141,7 +141,7 @@ export class EmployeeManagementComponent implements OnInit, OnDestroy {
       title: 'Approval Workflow',
       description:
         'Submit and track employee-related requests. Managers receive notifications and can approve or decline with a few clicks.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770049386/Add_Employee_aanaij.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207486/gna8bn9xzidfteoduyp2.png',
       alt: 'Employee Management'
     },
     {
@@ -149,7 +149,7 @@ export class EmployeeManagementComponent implements OnInit, OnDestroy {
       title: 'Employee Records & History',
       description:
         'Keep employee records up to date. Track changes over time and ensure accuracy for payroll and compliance.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770049230/All_employee_ubhbax.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207564/n2flmfri67gcrovvryy3.png',
       alt: 'employee management software'
     }
   ];

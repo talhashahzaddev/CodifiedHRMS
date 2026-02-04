@@ -120,7 +120,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Leave Calendar',
       description:
         'Visualize all leave requests in a calendar format, helping managers and employees plan effectively.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770205814/wrgxdskg7qybh4hq8l2j.png',
       alt: 'employee leave management system'
     },
     {
@@ -128,7 +128,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Approval Workflow',
       description:
         'Streamline the approval process with automated notifications, allowing managers to approve or deny leave with just a few clicks.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206183/gztjhag0roan5zotx9ve.png',
       alt: 'leave and attendance management system'
     },
     {
@@ -136,7 +136,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Leave Balance Tracking',
       description:
         'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769174261/leave-balance_hchqzn.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206397/vlobncfd6poql1e5ovra.png',
       alt: 'hr leave management system'
     },
     {
@@ -144,7 +144,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       title: 'Leave Apply',
       description:
         'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770039644/Self_Service_Employee_Leave_Apply_rpprmv.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206578/kxz6wsxrz5kw84ngqmu9.png',
       alt: 'hr leave management system'
     }
   ];
