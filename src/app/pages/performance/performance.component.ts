@@ -123,7 +123,7 @@ export class PerformanceComponent implements OnInit, OnDestroy {
       title: 'Employee Dashboard',
       description:
         'Employees can view their goals, performance reviews, appraisals, and skill development plans through their personalized dashboard.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770050749/Collage_performance_kndyve.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770208892/kgpmckb2qdbtszrmwznn.png',
       alt: 'performance management systems'
     },
     {
@@ -131,8 +131,8 @@ export class PerformanceComponent implements OnInit, OnDestroy {
       title: 'Manager Dashboard',
       description:
         'Managers can quickly review employee performance, provide feedback, and track progress against KPIs and goals.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770040161/Self_Service_Employee_Performance_Dashboard_g5zwyw.png',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770208874/ucp4psuw99richk1df36.png',
       alt: 'performance management software'
-    }
+    },
   ];
 }
