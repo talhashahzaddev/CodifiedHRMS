@@ -120,7 +120,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
       title: 'Timesheet Calendar View',
       description:
         'Managers and employees can view all time entries in a visual calendar layout for easy planning and reporting.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770205814/wrgxdskg7qybh4hq8l2j.png',
       alt: 'timesheet management systems'
     },
     {
@@ -136,7 +136,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
       title: 'Comprehensive Reporting',
       description:
         'Generate in-depth reports for payroll, budgeting, and compliance purposes, ensuring all data is easily accessible and actionable.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770205476/f5byefgysx1auknkinfu.png',
       alt: 'Automated Timesheets'
     }
   ];
