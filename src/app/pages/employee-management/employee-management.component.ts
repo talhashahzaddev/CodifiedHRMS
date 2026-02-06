@@ -122,33 +122,33 @@ export class EmployeeManagementComponent implements OnInit, OnDestroy {
   employeeService = [
     {
       id: 1,
-      title: 'Employee Directory',
+      title: 'Employee Management',
       description:
-        'Browse and search all employees in one place. View department, position, and contact details for easier collaboration.',
+        'Browse, search, and filter employee records by department, position, and status. Add new employees quickly and manage their details in a single system for streamlined HR operations.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206963/no9mpsictyspz1pizwvi.png',
       alt: 'HR employee management'
     },
     {
       id: 2,
-      title: 'Department & Position Setup',
+      title: 'Manage Departments',
       description:
-        'Create and maintain departments and positions. Assign employees during onboarding or when roles change.',
+        'Quickly set up and manage departments with the ability to assign managers. Streamline the onboarding process by organizing roles and departments, ensuring a seamless workflow.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206863/egxmpgp6nbqikyxzdg1x.png',
       alt: 'employee records management'
     },
     {
       id: 3,
-      title: 'Approval Workflow',
+      title: 'Seamless Employee Onboarding',
       description:
-        'Submit and track employee-related requests. Managers receive notifications and can approve or decline with a few clicks.',
+        'Easily add new employees to the system by entering their basic information, such as name, contact details, and other personal data. Simplify the onboarding process and ensure accurate records from day one.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207486/gna8bn9xzidfteoduyp2.png',
       alt: 'Employee Management'
     },
     {
       id: 4,
-      title: 'Employee Records & History',
+      title: 'Manage Employee Data Efficiently',
       description:
-        'Keep employee records up to date. Track changes over time and ensure accuracy for payroll and compliance.',
+        'Easily search and filter employee records by department, position, and status. View key details such as hire date, department, and position, and take actions with just a few clicks for streamlined workforce management.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207564/n2flmfri67gcrovvryy3.png',
       alt: 'employee management software'
     }

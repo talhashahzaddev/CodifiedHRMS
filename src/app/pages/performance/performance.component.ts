@@ -120,17 +120,17 @@ export class PerformanceComponent implements OnInit, OnDestroy {
   employeeService = [
     {
       id: 1,
-      title: 'Employee Dashboard',
+      title: 'KRA Managements',
       description:
-        'Employees can view their goals, performance reviews, appraisals, and skill development plans through their personalized dashboard.',
+        'Easily define and track Key Result Areas (KRAs) for different positions, ensuring alignment with organizational goals. Monitor employee performance based on position, status, and KRA weight to drive success.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770208892/kgpmckb2qdbtszrmwznn.png',
       alt: 'performance management systems'
     },
     {
       id: 2,
-      title: 'Manager Dashboard',
+      title: 'My Performance',
       description:
-        'Managers can quickly review employee performance, provide feedback, and track progress against KPIs and goals.',
+        'The My Performance section provides a clear overview of your performance metrics, including your current rating, overall performance score, and assessed skills. Keep track of your progress and see where you stand against set targets to drive your personal development.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770208874/ucp4psuw99richk1df36.png',
       alt: 'performance management software'
     },
