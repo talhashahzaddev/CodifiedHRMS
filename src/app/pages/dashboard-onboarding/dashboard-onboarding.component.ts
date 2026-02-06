@@ -121,7 +121,7 @@ export class DashboardOnboardingComponent implements OnInit, OnDestroy {
       title: 'Onboarding Checklist',
       description:
         'Employees can easily track their onboarding progress with a checklist that shows completed tasks and upcoming actions.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769171079/leave-calander_xbxzb8.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207564/n2flmfri67gcrovvryy3.png',
       alt: 'hr onboarding software'
     },
     {
@@ -137,7 +137,7 @@ export class DashboardOnboardingComponent implements OnInit, OnDestroy {
       title: 'Automated Workflow',
       description:
         'Simplify the process with automated workflows that guide employees through all the necessary steps from document signing to team introductions.',
-      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1769173706/recieved-leave-request_l7iivv.jpg',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770207486/gna8bn9xzidfteoduyp2.png',
       alt: 'best employee onboarding software'
     }
   ];
