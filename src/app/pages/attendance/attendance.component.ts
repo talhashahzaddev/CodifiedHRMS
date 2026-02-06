@@ -127,9 +127,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     },
     {
       id: 2,
-      title: 'Request and Manage Leave Easily',
+      title: 'Shift Management',
       description:
-        'Employees can request leave directly through the self-service portal, whether for vacation, sick days, or personal time off. The system automatically checks for any conflicts and notifies both the employee and manager once the request is approved or declined, streamlining the entire process.',
+        'Quickly request shift swaps or changes with colleagues using the intuitive self-service portal. Easily track your requests in real-time and manage shifts more efficiently, ensuring smooth coordination at work.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770218388/uoabwizuush5sd37y352.png',
       alt: 'time attendance management software'
     },

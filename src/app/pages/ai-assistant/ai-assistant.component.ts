@@ -118,17 +118,17 @@ export class AiAssistantComponent implements OnInit, OnDestroy {
   employeeService = [
     {
       id: 1,
-      title: 'AI Leave Calendar',
+      title: 'Clock In & Clock Out',
       description:
-        'The AI Assistant presents leave data in a calendar view, making it easy for both employees and managers to visualize and plan for time off.',
+        'Effortlessly manage your attendance with BriskPeople’s AI Assistant. Simply ask the AI if you’re clocked in or out, and it will update your status in real-time',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770210020/hxh4zelrzwtk4id5icp0.jpg',
       alt: 'AI HR Assistant'
     },
     {
       id: 2,
-      title: 'Leave Approval Workflow',
+      title: 'Leave Balance',
       description:
-        'Managers receive AI-powered notifications on pending leave requests and can approve or decline them with a single click.',
+        'The AI Assistant provides employees with real-time visibility into their leave balance, allowing them to easily track available days for various leave types (annual, sick, unpaid).',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770210026/ejt4x7mvznoklvajsb8u.jpg',
       alt: 'Best ai assistant for hrms'
     },
