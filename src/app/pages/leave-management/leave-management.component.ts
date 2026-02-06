@@ -119,7 +119,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       id: 1,
       title: 'Leave Calendar',
       description:
-        'Visualize all leave requests in a calendar format, helping managers and employees plan effectively.',
+        'Visualize all leave requests in a calendar format, helping managers and employees plan effectively',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770205814/wrgxdskg7qybh4hq8l2j.png',
       alt: 'employee leave management system'
     },
@@ -127,7 +127,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       id: 2,
       title: 'Approval Workflow',
       description:
-        'Streamline the approval process with automated notifications, allowing managers to approve or deny leave with just a few clicks.',
+        ' Streamline the approval process with automated notifications, allowing managers to approve or deny leave with just a few clicks',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206183/gztjhag0roan5zotx9ve.png',
       alt: 'leave and attendance management system'
     },
@@ -143,7 +143,7 @@ export class LeaveManagementComponent implements OnInit, OnDestroy {
       id: 4,
       title: 'Leave Apply',
       description:
-        'Keep employees informed about their available leave balance. The system automatically updates leave balances based on approved requests.',
+        'Employees can easily apply for leave while staying updated on their available balance, with the system automatically adjusting balances after approval.',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1770206578/kxz6wsxrz5kw84ngqmu9.png',
       alt: 'hr leave management system'
     }
