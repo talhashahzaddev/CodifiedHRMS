@@ -25,7 +25,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   error: string | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(private paymentService: PaymentService) {}
+  constructor(private paymentService: PaymentService) { }
 
   ngOnInit(): void {
     this.loadSubscriptionPlans();
@@ -46,22 +46,23 @@ export class PricingComponent implements OnInit, OnDestroy {
         next: (apiPlans) => {
           // Transform API plans to PricingPlan format
           this.allPlans = apiPlans.map(plan => this.transformToPricingPlan(plan));
-          
+
           // Add custom plan template at the end if it doesn't exist
           const hasCustomPlan = this.allPlans.some(p => p.isCustom);
           if (!hasCustomPlan) {
             this.allPlans.push({
               id: 'custom',
-              name: 'Enterprise',
+              name: 'Custom HRMS Software',
               price: 0,
               pricePeriod: 'month',
               description: 'Custom solutions for large organizations',
               features: [
-                'All Business features',
-                'Single Sign-On (SSO)',
-                'Custom Integrations',
-                'Dedicated Account Manager',
-                '24/7 Premium Support'
+                'AI Assistant',
+                'Attendance Management',
+                'Leave Management System',
+                'Employee Management',
+                'Timesheet Management',
+                'Performance Management'
               ],
               isPopular: false,
               isCustom: true
@@ -81,7 +82,7 @@ export class PricingComponent implements OnInit, OnDestroy {
           console.error('Error loading subscription plans:', err);
           this.error = err.message || 'Failed to load subscription plans';
           this.isLoading = false;
-          
+
           // Fallback to default plans on error
           this.loadDefaultPlans();
         }
@@ -145,7 +146,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       features = this.getDefaultFeatures(apiPlan.name, apiPlan.maxUsers);
     }
 
-    const price = this.billingCycle === 'monthly' 
+    const price = this.billingCycle === 'monthly'
       ? (apiPlan.monthlyPrice || 0)
       : (apiPlan.annualPrice || 0);
 
@@ -167,21 +168,21 @@ export class PricingComponent implements OnInit, OnDestroy {
     if (plan.isCustom) {
       return 'Custom solutions for large organizations';
     }
-    
+
     if (plan.maxUsers) {
       return `Perfect for teams up to ${plan.maxUsers} users`;
     }
-    
+
     return `Flexible pricing plan for your business needs`;
   }
 
   getDefaultFeatures(planName: string, maxUsers?: number): string[] {
     const baseFeatures = ['Employee Directory', 'Leave Management', 'Basic Reporting'];
-    
+
     if (maxUsers) {
       baseFeatures.unshift(`Up to ${maxUsers} users`);
     }
-    
+
     if (planName.toLowerCase().includes('starter') || planName.toLowerCase().includes('basic')) {
       return [...baseFeatures, 'Standard Support'];
     } else if (planName.toLowerCase().includes('business') || planName.toLowerCase().includes('professional')) {
@@ -189,7 +190,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     } else if (planName.toLowerCase().includes('enterprise') || planName.toLowerCase().includes('custom')) {
       return [...baseFeatures, 'Performance Management', 'Single Sign-On (SSO)', 'Custom Integrations', 'Dedicated Support'];
     }
-    
+
     return baseFeatures;
   }
 
@@ -236,7 +237,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   getDisplayPrice(plan: PricingPlan): number {
     if (plan.isCustom) return 0;
     // Use current billingCycle to get the correct price
-    return this.billingCycle === 'monthly' 
+    return this.billingCycle === 'monthly'
       ? (plan.monthlyPrice || 0)
       : (plan.annualPrice || 0);
   }
@@ -264,7 +265,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   isCenterCard(index: number): boolean {
     // Check if index is valid (not negative, within displayed range)
     if (index < 0) return false;
-    
+
     // When showing 3 cards, the middle one (index 1) is the center
     if (this.itemsPerPage === 3) {
       return index === 1;
