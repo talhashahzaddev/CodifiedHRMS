@@ -163,19 +163,43 @@ export class PricingComponent implements OnInit, OnDestroy {
       isCustom: apiPlan.isCustom
     };
   }
-
-  getDescription(plan: SubscriptionPlanDto): string {
-    if (plan.isCustom) {
-      return 'Custom solutions for large organizations';
-    }
-
-    if (plan.maxUsers) {
-      return `Perfect for teams up to ${plan.maxUsers} users`;
-    }
-
-    return `Flexible pricing plan for your business needs`;
+getDescription(plan: SubscriptionPlanDto): string {
+  // 1️⃣ Custom plans
+  if (plan.isCustom) {
+    return 'Custom solutions for large organizations';
   }
 
+  // 2️⃣ Base description lines
+  const lines: string[] = [];
+
+  if (plan.maxUsers) {
+    lines.push(`Perfect for teams up to ${plan.maxUsers} users`);
+  } else {
+    lines.push('Flexible pricing plan for your business needs');
+  }
+
+  // 3️⃣ Add status line (bold)
+  const price = this.billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
+  const planNameLower = plan.name.toLowerCase();
+
+  if ((!price || price === 0) || planNameLower.includes('starter')) {
+    lines.push('<strong>Active + Inactive</strong>'); // Starter / free
+  } else {
+    lines.push('<strong>Active Only</strong>'); // Paid plans
+  }
+
+  // Join lines with <br> so it renders properly in HTML
+  return lines.join('<br>');
+}
+
+
+
+formatDescription(description: string): string {
+  return description.split('\n').join('<br>');
+}
+
+
+  
   getDefaultFeatures(planName: string, maxUsers?: number): string[] {
     const baseFeatures = ['Employee Directory', 'Leave Management', 'Basic Reporting'];
 
