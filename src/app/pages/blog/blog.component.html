@@ -34,7 +34,12 @@
           <a *ngIf="post.route" [routerLink]="post.route" class="blog-card-link">
             <app-card [hoverable]="true" class="blog-card">
               <div class="post-image">
-                <div class="image-placeholder">
+                <img *ngIf="post.image && post.image.startsWith('http')" 
+                     [src]="post.image" 
+                     [alt]="post.title"
+                     loading="lazy"
+                     class="post-image-img">
+                <div *ngIf="!post.image || !post.image.startsWith('http')" class="image-placeholder">
                   <span class="material-symbols-outlined">article</span>
                 </div>
               </div>
@@ -54,7 +59,12 @@
             [hoverable]="true"
             class="blog-card">
             <div class="post-image">
-              <div class="image-placeholder">
+              <img *ngIf="post.image && post.image.startsWith('http')" 
+                   [src]="post.image" 
+                   [alt]="post.title"
+                   loading="lazy"
+                   class="post-image-img">
+              <div *ngIf="!post.image || !post.image.startsWith('http')" class="image-placeholder">
                 <span class="material-symbols-outlined">article</span>
               </div>
             </div>
