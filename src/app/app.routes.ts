@@ -70,6 +70,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/blog/switch-hrms/switch-hrms.component').then(m => m.SwitchHrmsComponent)
   },
   {
+    path: 'attendance-tracker',
+    loadComponent: () => import('./pages/blog/attendance-tracker/attendance-tracker.component').then(m => m.AttendanceTrackerComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

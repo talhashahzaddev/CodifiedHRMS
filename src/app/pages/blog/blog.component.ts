@@ -30,7 +30,7 @@ export class BlogComponent {
       category: 'culture',
       date: 'May 21, 2024',
       type: 'BLOG',
-      image: 'onboarding',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771424575/y7li6e4nbmkeca9vsjvr.png',
       route: '/switch-to-hrms'
     },
     {
@@ -40,8 +40,18 @@ export class BlogComponent {
       category: 'culture',
       date: 'May 18, 2024',
       type: 'ARTICLE',
-      image: 'remote',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771498169/jpcs34yfj6ltegzjbdz6.png',
       route: '/simplify-features'
+    },
+    {
+      id: '3',
+      title: 'How to Choose the Best Employee Attendance Tracker for Small Teams',
+      excerpt: 'Discover how HRMS payroll brings salary, attendance, and compliance into one streamlined system, reducing errors, manual work, and payroll stress for HR teams.',
+      category: 'attendance',
+      date: 'May 18, 2024',
+      type: 'ARTICLE',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771484129/g7bkuxk3bcd1gjwqrpcu.png',
+      route: '/attendance-tracker'
     }
   ];
 
