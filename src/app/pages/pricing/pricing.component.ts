@@ -6,6 +6,7 @@ import { ButtonComponent } from '../../shared/components/button/button.component
 import { PricingPlan } from '../../models/pricing.model';
 import { PaymentService, SubscriptionPlanDto } from '../../core/services/payment.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pricing',
@@ -15,6 +16,19 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./pricing.component.scss']
 })
 export class PricingComponent implements OnInit, OnDestroy {
+
+private readonly defaultTitle = 'Human Resource Management System | Affordable HRMS Software';
+private readonly defaultDescription = 'Human Resource Management System (HRMS) designed to manage employees, payroll, onboarding, and performance from one simple platform.';
+private readonly defaultKeywords = 'Human Resource Management System, HRIS software, People management software, attendance management system';
+
+readonly seo = {
+  title: 'Affordable HRMS Software Price Plans | BriskPeople',
+  description: 'Explore BriskPeople HRMS software price plans. Choose the right plan based on your team size and manage attendance, payroll, and performance in one system.',
+  focusKeyword: 'hrms software price'
+};
+
+
+
   billingCycle: 'monthly' | 'annual' = 'monthly';
   plans: PricingPlan[] = [];
   allPlans: PricingPlan[] = [];
@@ -25,13 +39,26 @@ export class PricingComponent implements OnInit, OnDestroy {
   error: string | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(private paymentService: PaymentService) { }
+  constructor(private paymentService: PaymentService,
+     private titleService: Title,
+    private meta: Meta
+  ) { }
 
   ngOnInit(): void {
     this.loadSubscriptionPlans();
+    this.titleService.setTitle(this.seo.title);
+    this.meta.updateTag({ name: 'description', content: this.seo.description });
+    this.meta.updateTag({ name: 'keywords', content: this.seo.focusKeyword });
+    this.meta.updateTag({ property: 'og:title', content: this.seo.title });
+    this.meta.updateTag({ property: 'og:description', content: this.seo.description });
+    this.meta.updateTag({ name: 'twitter:title', content: this.seo.title });
+    this.meta.updateTag({ name: 'twitter:description', content: this.seo.description });
   }
 
   ngOnDestroy(): void {
+    this.titleService.setTitle(this.defaultTitle);
+    this.meta.updateTag({ name: 'description', content: this.defaultDescription });
+    this.meta.updateTag({ name: 'keywords', content: this.defaultKeywords });
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -300,4 +327,3 @@ formatDescription(description: string): string {
     }
   }
 }
-
