@@ -1,15 +1,111 @@
+// ── Top Info Bar ──────────────────────────────────────────────
+.top-bar {
+  background: #1e293b;
+  color: rgba(255, 255, 255, 0.85);
+  height: 36px;
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+
+  &.hidden {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .top-bar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .top-bar-contact {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .top-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+
+  .top-bar-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+  }
+
+  .top-bar-socials {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.15s ease;
+    text-decoration: none;
+
+    &:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  // Hide contact text on small screens, keep socials
+  @media (max-width: 640px) {
+    .top-bar-contact {
+      display: none;
+    }
+
+    .top-bar-inner {
+      justify-content: center;
+    }
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────
 .header {
   background: linear-gradient(135deg, rgba(240, 247, 255, 0.98) 0%, rgba(250, 245, 255, 0.98) 100%);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(185, 223, 255, 0.3);
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 36px;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  transition: all var(--transition-base);
+  transition: top 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 1px 3px rgba(0, 113, 230, 0.08);
 
-  &:hover {
+  &.scrolled {
+    top: 0;
     box-shadow: 0 4px 12px rgba(0, 113, 230, 0.12);
   }
 
@@ -44,7 +140,7 @@
     display: flex;
     align-items: center;
     color: var(--primary-600);
-    
+
     .material-symbols-outlined {
       font-size: 32px;
     }
@@ -146,7 +242,7 @@
   .login-btn {
     color: var(--primary-600);
     font-weight: 600;
-    
+
     &:hover {
       background: rgba(0, 113, 230, 0.08);
       color: var(--primary-700);
@@ -182,3 +278,13 @@
   }
 }
 
+// ── Page Spacer ───────────────────────────────────────────────
+// Prevents page content from hiding under the fixed header
+.header-spacer {
+  height: 108px; // 36px top bar + 72px header
+  transition: height 0.3s ease;
+
+  &.scrolled {
+    height: 72px; // just header height once top bar is gone
+  }
+}
