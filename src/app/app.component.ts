@@ -3,13 +3,14 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { FloatingActionsComponent } from './shared/components/floating-actions/floating-actions.component';
 import { ChatService } from './core/services/chat.service';
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, FloatingActionsComponent],
   template: `
     <div class="app-container">
       <app-header></app-header>
@@ -18,6 +19,9 @@ import { filter } from 'rxjs';
       </main>
       <app-footer></app-footer>
     </div>
+
+    <!-- Floating FAB + Scroll-to-top (self-contained component) -->
+    <app-floating-actions></app-floating-actions>
   `,
   styles: [`
     .app-container {
