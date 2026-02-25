@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
@@ -39,13 +40,16 @@ export class AppComponent implements OnInit {
 
   constructor(
     private chatService: ChatService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     // Set page title
     document.title = 'BriskPeople';
-    
+
     // Set favicon
     this.setFavicon();
 
@@ -56,7 +60,7 @@ export class AppComponent implements OnInit {
         this.setFavicon();
         this.setCanonical(event.urlAfterRedirects);
       });
-    
+
     // Load chat widget after a short delay
     setTimeout(() => {
       this.chatService.loadTawkTo();
@@ -64,7 +68,8 @@ export class AppComponent implements OnInit {
   }
 
   private setFavicon(): void {
-  // Remove ALL existing favicon links
+    if (!isPlatformBrowser(this.platformId)) return;
+    // Remove ALL existing favicon links
     const existingLinks = document.querySelectorAll('link[rel*="icon"], link[rel*="shortcut"]');
     existingLinks.forEach(link => {
       const href = link.getAttribute('href');
@@ -98,6 +103,7 @@ export class AppComponent implements OnInit {
   }
   // Canonical Tag Handler
   private setCanonical(url: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     const canonicalUrl = this.baseUrl + url;
 
     const oldLink = document.querySelector("link[rel='canonical']");
