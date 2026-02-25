@@ -16,7 +16,7 @@ const angularApp = new AngularNodeAppEngine({
     '127.0.0.1',
     'codified-hrms.vercel.app',
     'briskpeople.com',
-    'www.briskpeople.com'
+     'www.briskpeople.com'
   ],
 });
 
