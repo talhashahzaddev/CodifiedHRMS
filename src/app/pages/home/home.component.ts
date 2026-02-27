@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { CardComponent } from '../../shared/components/card/card.component';
-import { ButtonComponent } from '../../shared/components/button/button.component';
 import { Feature } from '../../models/feature.model';
 
 @Component({
@@ -28,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private titleService: Title,
     private meta: Meta
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.titleService.setTitle(this.seo.title);
@@ -46,6 +45,102 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ name: 'keywords', content: this.defaultKeywords });
   }
 
+  // ── All 8 features — used in the modules grid ──────────────
+  allFeatures: Feature[] = [
+    {
+      id: '1',
+      title: 'Employee Management',
+      description: 'Manage employees, managers, and HR roles with department positions in one centralized system.',
+      icon: 'groups',
+      route: '/employee-management'
+    },
+    {
+      id: '2',
+      title: 'Attendance',
+      description: 'Accurately track employee work hours, leaves, and overtime with our integrated system.',
+      icon: 'schedule',
+      route: '/attendance-management'
+    },
+    {
+      id: '3',
+      title: 'Leave Management',
+      description: 'Streamline employee leave requests, approvals, and balance tracking easily.',
+      icon: 'event_available',
+      route: '/leave-management'
+    },
+    {
+      id: '4',
+      title: 'Timesheets',
+      description: 'Log time against projects and tasks for better resource management and billing.',
+      icon: 'hourglass_top',
+      route: '/timesheet-management-software'
+    },
+    {
+      id: '5',
+      title: 'Performance',
+      description: 'Manage employee reviews, set goals, and foster a culture of continuous improvement.',
+      icon: 'trending_up',
+      route: '/performance-management'
+    },
+    {
+      id: '6',
+      title: 'Automated Payroll',
+      description: 'Simplify payroll processing with automated calculations and approvals.',
+      icon: 'payments',
+      route: '/payroll-management'
+    },
+    {
+      id: '7',
+      title: 'AI Assistant',
+      description: 'Track goals and reviews with intelligent AI support for smarter employee growth.',
+      icon: 'smart_toy',
+      route: '/ai-assistant'
+    },
+    {
+      id: '8',
+      title: 'Seamless Onboarding',
+      description: 'Create a positive first-day experience. Keep onboarding simple and stress-free.',
+      icon: 'rocket_launch',
+      route: '/onboarding-software'
+    }
+  ];
+
+  // ── 3 latest blogs — used in the blog section ──────────────
+  latestBlogs = [
+    {
+      id: '1',
+      title: 'Why Switch to HRMS from Old Spreadsheets?',
+      excerpt: 'Learn why growing businesses switch from Excel to HRMS for accurate payroll, attendance tracking, compliance control, and smoother daily HR operations.',
+      category: 'culture',
+      date: 'May 21, 2024',
+      type: 'BLOG',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771424575/y7li6e4nbmkeca9vsjvr.png',
+      route: '/hrms-vs-spreadsheets-for-hr-management'
+    },
+    {
+      id: '2',
+      title: 'How HRMS Payroll Simplifies Salary, Attendance, and Compliance Together',
+      excerpt: 'Discover how HRMS payroll brings salary, attendance, and compliance into one streamlined system, reducing errors, manual work, and payroll stress for HR teams.',
+      category: 'culture',
+      date: 'May 18, 2024',
+      type: 'ARTICLE',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771498169/jpcs34yfj6ltegzjbdz6.png',
+      route: '/hrms-payroll-salary-attendance-compliance'
+    },
+    {
+      id: '3',
+      title: 'How to Choose the Best Employee Attendance Tracker for Small Teams',
+      excerpt: 'Discover how to pick the right attendance tracker that fits your team size, budget, and HR workflow without overcomplicating daily operations.',
+      category: 'attendance',
+      date: 'May 18, 2024',
+      type: 'ARTICLE',
+      image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771484129/g7bkuxk3bcd1gjwqrpcu.png',
+      route: '/choose-best-employee-attendance-tracker'
+    }
+  ];
+
+  // ── Old 3-item features kept for backward compatibility ─────
+  // (used nowhere in the new template but kept so nothing breaks)
   features: Feature[] = [
     {
       id: '1',
@@ -75,7 +170,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     'A centralized employee database that grows with your team',
     'Clear HR workflows for daily tasks and approvals',
     'Organized HR processes for consistent people management'
-
   ];
 
   TIME_AND_ATTENDANCE: string[] = [
@@ -83,21 +177,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     'Attendance records that support accurate payroll processing',
     'Real-time check-in and check-out entries',
     'Consistent attendance rules and policies across teams'
-
   ];
 
   PAYROLL_MANAGEMENT: string[] = [
     'Salary calculations based on attendance and work hours',
     'Clear payslips with earnings and deductions details',
     'Payroll records that support planning and audits'
-
   ];
+
   PERFORMANCE_MANAGEMENT: string[] = [
     'Self-review tools for employees and managers',
     'Performance reports stored inside the HR system',
     'Goal tracking linked to team and individual targets',
     '360 performance reviews with defined review formats'
-
   ];
 }
-
