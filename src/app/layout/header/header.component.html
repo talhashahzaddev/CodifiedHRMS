@@ -1,4 +1,4 @@
-<!-- ── Top Info Bar (hides on scroll) ─────────────────────── -->
+<!-- ── Top Info Bar ─────────────────────────────────────────── -->
 <div class="top-bar" [class.hidden]="isScrolled">
   <div class="top-bar-inner">
     <div class="top-bar-contact">
@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<!-- ── Main Header (always sticky) ───────────────────────────── -->
+<!-- ── Main Header ─────────────────────────────────────────── -->
 <header class="header" [class.scrolled]="isScrolled">
   <div class="container">
     <nav class="nav">
@@ -43,28 +43,134 @@
         </span>
         <span class="logo-text">BriskPeople</span>
       </a>
-      <!-- Desktop Navigation -->
-      <div class="nav-links" [class.mobile-open]="isMenuOpen">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-          (click)="closeMenu()">Home</a>
-        <a routerLink="/features" routerLinkActive="active" (click)="closeMenu()">Features</a>
-        <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
-        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
-        <a routerLink="/blog" routerLinkActive="active" (click)="closeMenu()">Blog</a>
+
+      <!-- ── Desktop nav (hidden on mobile) ──────────────── -->
+      <div class="nav-links desktop-nav">
+        <a routerLink="/" routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}">Home</a>
+
+        <!-- Desktop Features trigger only -->
+        <button class="features-trigger"
+                [class.active]="isDropdownOpen"
+                (mouseenter)="openDropdown()"
+                (click)="toggleDropdown()">
+          Features
+          <svg class="chevron" [class.open]="isDropdownOpen"
+               width="13" height="13" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <a routerLink="/pricing" routerLinkActive="active">Pricing</a>
+        <a routerLink="/about"   routerLinkActive="active">About</a>
+        <a routerLink="/blog"    routerLinkActive="active">Blog</a>
       </div>
-      <!-- CTA Button -->
+
+      <!-- CTA + Hamburger -->
       <div class="nav-actions">
         <a href="https://login.briskpeople.com" class="btn btn-ghost login-btn">Login</a>
         <a routerLink="/sign-up" class="btn btn-primary">Sign Up</a>
-        <!-- Mobile Menu Toggle -->
         <button class="mobile-menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
           <span class="material-symbols-outlined">{{ isMenuOpen ? 'close' : 'menu' }}</span>
         </button>
       </div>
+
     </nav>
   </div>
 </header>
 
-<!-- Spacer so page content doesn't hide under fixed header+topbar -->
-<!-- Height = 36px (top bar) + 72px (header) = 108px; collapses to 72px when scrolled -->
+<!-- ── Desktop Mega Dropdown (outside header, no clipping) ──── -->
+<div class="mega-overlay"
+     [class.open]="isDropdownOpen"
+     [style.top.px]="isScrolled ? 72 : 108"
+     (mouseenter)="openDropdown()"
+     (mouseleave)="closeDropdown()">
+  <div class="mega-panel-inner">
+    <div class="mega-features">
+      <a *ngFor="let f of features"
+         [routerLink]="f.route"
+         class="mega-feature-item"
+         (click)="closeDropdown()">
+        <span class="mfi-icon">
+          <span class="material-symbols-outlined">{{ f.icon }}</span>
+        </span>
+        <span class="mfi-body">
+          <span class="mfi-title">{{ f.title }}</span>
+          <span class="mfi-desc">{{ f.description }}</span>
+        </span>
+      </a>
+    </div>
+    <div class="mega-cta">
+      <span class="mega-cta-logo-icon material-symbols-outlined">hub</span>
+      <h4>BriskPeople</h4>
+      <p>Pakistan's modern HR platform — manage your entire workforce in one place.</p>
+      <a routerLink="/features" class="mega-cta-btn" (click)="closeDropdown()">
+        View All Features
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="mega-cta-stats">
+        <div class="mcs"><span class="mcs-n">500+</span><span class="mcs-l">Companies</span></div>
+        <div class="mcs-div"></div>
+        <div class="mcs"><span class="mcs-n">8</span><span class="mcs-l">Modules</span></div>
+        <div class="mcs-div"></div>
+        <div class="mcs"><span class="mcs-n">99%</span><span class="mcs-l">Uptime</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MOBILE MENU — separate full-screen drawer
+     Opens on hamburger click, has its own Features accordion
+     ══════════════════════════════════════════════════════════ -->
+<div class="mobile-menu" [class.open]="isMenuOpen">
+
+  <!-- Home -->
+  <a routerLink="/" routerLinkActive="mob-active"
+     [routerLinkActiveOptions]="{exact: true}"
+     class="mob-link" (click)="closeMenu()">
+    Home
+  </a>
+
+  <!-- Features accordion row -->
+  <div class="mob-accordion">
+    <button class="mob-accordion-trigger"
+            [class.open]="isMobileDropdownOpen"
+            (click)="isMobileDropdownOpen = !isMobileDropdownOpen">
+      <span>Features</span>
+      <span class="mob-plus">{{ isMobileDropdownOpen ? '−' : '+' }}</span>
+    </button>
+
+    <!-- Accordion body — list like FlowHCM reference -->
+    <div class="mob-accordion-body" [class.open]="isMobileDropdownOpen">
+      <a *ngFor="let f of features"
+         [routerLink]="f.route"
+         class="mob-feature-link"
+         (click)="closeMenu(); isMobileDropdownOpen = false">
+        <span class="mob-feature-icon material-symbols-outlined">{{ f.icon }}</span>
+        <span>{{ f.title }}</span>
+      </a>
+    </div>
+  </div>
+
+  <a routerLink="/pricing" routerLinkActive="mob-active" class="mob-link" (click)="closeMenu()">Pricing</a>
+  <a routerLink="/about"   routerLinkActive="mob-active" class="mob-link" (click)="closeMenu()">About</a>
+  <a routerLink="/blog"    routerLinkActive="mob-active" class="mob-link" (click)="closeMenu()">Blog</a>
+
+  <!-- Mobile CTAs -->
+  <div class="mob-cta-row">
+    <a href="https://login.briskpeople.com" class="mob-cta-login">Login</a>
+    <a routerLink="/sign-up" class="mob-cta-signup" (click)="closeMenu()">Sign Up</a>
+  </div>
+
+</div>
+
+<!-- Spacer -->
 <div class="header-spacer" [class.scrolled]="isScrolled"></div>

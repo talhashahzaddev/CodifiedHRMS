@@ -201,6 +201,7 @@
 .newsletter-section {
   background: transparent;
   position: relative;
+  padding: 30px 0;
   
   .container {
     position: relative;
@@ -211,14 +212,14 @@
 }
 
 .newsletter-card {
-  padding: var(--spacing-3xl);
+  padding: 20px 30px;
 }
 
 .newsletter-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-md);
 
   @media (max-width: 768px) {
     flex-direction: column;

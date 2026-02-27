@@ -31,7 +31,7 @@ export class BlogComponent {
       date: 'May 21, 2024',
       type: 'BLOG',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771424575/y7li6e4nbmkeca9vsjvr.png',
-      route: '/switch-to-hrms'
+      route: '/hrms-vs-spreadsheets-for-hr-management'
     },
     {
       id: '2',
@@ -41,7 +41,7 @@ export class BlogComponent {
       date: 'May 18, 2024',
       type: 'ARTICLE',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771498169/jpcs34yfj6ltegzjbdz6.png',
-      route: '/simplify-features'
+      route: '/hrms-payroll-salary-attendance-compliance'
     },
     {
       id: '3',
@@ -51,7 +51,7 @@ export class BlogComponent {
       date: 'May 18, 2024',
       type: 'ARTICLE',
       image: 'https://res.cloudinary.com/dn7o89asj/image/upload/v1771484129/g7bkuxk3bcd1gjwqrpcu.png',
-      route: '/attendance-tracker'
+      route: '/choose-best-employee-attendance-tracker'
     }
   ];
 
