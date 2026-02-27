@@ -1,5 +1,5 @@
 <div class="home-page">
-  <!-- Hero Section -->
+  <!-- Hero Section — UNCHANGED -->
   <section class="hero-section">
     <div class="container">
       <div class="hero-content">
@@ -12,7 +12,6 @@
           </p>
           <div class="hero-actions">
             <a routerLink="/sign-up" class="btn btn-primary btn-lg">Get Started for Free</a>
-            <!-- <a routerLink="/features" class="btn btn-outline btn-lg">Explore Features</a> -->
           </div>
         </div>
         <div class="hero-image">
@@ -24,39 +23,50 @@
     </div>
   </section>
 
-  <!-- Social Proof Section -->
-
-  <!-- Features Section -->
-  <section class="features-section section">
+  <!-- ══════════════════════════════════════════════════════════
+       MODULES SECTION — redesigned like FlowHCM reference
+       4-col grid, solid blue cards, icon + title + description
+       ══════════════════════════════════════════════════════════ -->
+  <section class="modules-section section">
     <div class="container">
+
       <div class="section-header text-center">
-        <h2>Everything You Need with Complete HRMS Solutions</h2>
+        <span class="section-eyebrow">Complete HRMS Solution</span>
+        <h2 class="modules-title">Everything You Need with Complete HRMS Solutions</h2>
         <p class="section-description">
           Human Resource Management System software built to simplify how businesses manage their people. Our platform
           brings clarity, structure, and consistency to everyday HR operations, helping teams work smarter, reduce
           administrative effort, and create a better experience for both HR managers and employees.
         </p>
       </div>
-      <div class="features-grid">
-        <a *ngFor="let feature of features" [routerLink]="feature.route" class="feature-link">
-          <app-card [hoverable]="true" [elevated]="true" class="feature-card">
-            <!-- <div class="feature-inner"> -->
-            <div class="feature-icon">
-              <span class="material-symbols-outlined">{{ feature.icon }}</span>
-            </div>
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
-            <!-- </div> -->
-          </app-card>
+      <div class="modules-grid">
+        <a *ngFor="let feature of allFeatures" [routerLink]="feature.route" class="module-card">
+          <div class="module-card-icon">
+            <span class="material-symbols-outlined">{{ feature.icon }}</span>
+          </div>
+          <div class="module-card-body">
+            <h3 class="module-card-title">{{ feature.title }}</h3>
+            <p class="module-card-desc">{{ feature.description }}</p>
+          </div>
+          <div class="module-card-arrow">
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </div>
         </a>
       </div>
+
       <div class="btn-center-dev">
-        <button class="btn-modules" routerLink="/features">See All Modules</button>
+        <a routerLink="/features" class="btn-modules">
+          <span class="material-symbols-outlined">grid_view</span>
+          View All Modules
+        </a>
       </div>
+
     </div>
   </section>
 
   <div class="section-divider"></div>
+
+  <!-- Sub-features sections — UNCHANGED -->
   <section class="sub-features-section section">
     <div class="container">
       <div class="sub-features-content">
@@ -81,6 +91,7 @@
       </div>
     </div>
   </section>
+
   <section class="sub-features-section section">
     <div class="container">
       <div class="sub-features-content">
@@ -105,6 +116,7 @@
       </div>
     </div>
   </section>
+
   <section class="sub-features-section section">
     <div class="container">
       <div class="sub-features-content">
@@ -129,15 +141,15 @@
       </div>
     </div>
   </section>
+
   <section class="sub-features-section section">
     <div class="container">
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h2 class="sub-features-title">Performance Management Systems</h2>
           <p class="hero-description">
-            BriskPeople offers performance management systems with in its Human Resource Management System to help
-            businesses track employee progress, set clear goals, and review performance over time. This module supports
-            fair employee reviews, structured feedback, and better visibility into individual and team performance
+            BriskPeople offers performance management systems within its Human Resource Management System to help
+            businesses track employee progress, set clear goals, and review performance over time.
           </p>
           <ul class="features-list">
             <li *ngFor="let feature of PERFORMANCE_MANAGEMENT">
@@ -153,36 +165,75 @@
       </div>
     </div>
   </section>
+
+  <!-- Social Proof — UNCHANGED -->
   <section class="social-proof-section section-sm">
     <div class="container">
       <p class="social-proof-text">Trusted by the world's most innovative teams</p>
       <div class="logo-slider" aria-label="Partner logos">
         <div class="logo-track">
-          <div class="logo-slide">
-            <img src="/Codified.png" alt="Codified" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/railsware.png" alt="Railsware" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
-          </div>
-          <!-- duplicate for seamless loop -->
-          <div class="logo-slide">
-            <img src="/Codified.png" alt="Codified" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/railsware.png" alt="Railsware" loading="lazy" />
-          </div>
-          <div class="logo-slide">
-            <img src="/Zivtech.png" alt="Zivtech" loading="lazy" />
-          </div>
+          <div class="logo-slide"><img src="/Codified.png" alt="Codified" loading="lazy" /></div>
+          <div class="logo-slide"><img src="/railsware.png" alt="Railsware" loading="lazy" /></div>
+          <div class="logo-slide"><img src="/Zivtech.png" alt="Zivtech" loading="lazy" /></div>
+          <div class="logo-slide"><img src="/Codified.png" alt="Codified" loading="lazy" /></div>
+          <div class="logo-slide"><img src="/railsware.png" alt="Railsware" loading="lazy" /></div>
+          <div class="logo-slide"><img src="/Zivtech.png" alt="Zivtech" loading="lazy" /></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- ══════════════════════════════════════════════════════════
+       BLOG SECTION — like FlowHCM reference
+       3-col cards: top image, blue bottom with title + excerpt + Read More
+       ══════════════════════════════════════════════════════════ -->
+  <section class="blogs-section section">
+    <div class="container">
+
+      <div class="section-header text-center">
+        <span class="section-eyebrow">Insights & Resources</span>
+        <h2 class="blogs-title">Latest Blogs</h2>
+        <p class="section-description">
+          Stay up to date with the latest HR trends, best practices, and product updates from the BriskPeople team.
+        </p>
+      </div>
+
+      <div class="blogs-grid">
+        <a *ngFor="let blog of latestBlogs" [routerLink]="blog.route" class="blog-card">
+          <!-- Top: image -->
+          <div class="blog-card-image">
+            <img [src]="blog.image" [alt]="blog.title" loading="lazy" />
+            <span class="blog-type-badge">{{ blog.type }}</span>
+          </div>
+          <!-- Bottom: blue content -->
+          <div class="blog-card-body">
+            <h3 class="blog-card-title">{{ blog.title }}</h3>
+            <p class="blog-card-excerpt">{{ blog.excerpt }}</p>
+            <div class="blog-card-footer">
+              <span class="blog-date">
+                <span class="material-symbols-outlined">calendar_today</span>
+                {{ blog.date }}
+              </span>
+              <span class="blog-read-more">
+                Read More
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="btn-center-dev">
+        <a routerLink="/blog" class="btn-modules">
+          <span class="material-symbols-outlined">article</span>
+          View All Blogs
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA Section — UNCHANGED -->
   <section class="cta-section section-sm">
     <div class="container">
       <app-card [elevated]="true" class="cta-card">
@@ -199,4 +250,5 @@
       </app-card>
     </div>
   </section>
+
 </div>

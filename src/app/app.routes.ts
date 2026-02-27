@@ -62,15 +62,15 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/leave-management/leave-management.component').then(m => m.LeaveManagementComponent)
   },
   {
-    path: 'simplify-features',
+    path: 'hrms-payroll-salary-attendance-compliance',
     loadComponent: () => import('./pages/blog/simplifies-featuer/simplifies-featuer.component').then(m => m.SimplifiesFeatuerComponent)
   },
   {
-    path: 'switch-to-hrms',
+    path: 'hrms-vs-spreadsheets-for-hr-management',
     loadComponent: () => import('./pages/blog/switch-hrms/switch-hrms.component').then(m => m.SwitchHrmsComponent)
   },
   {
-    path: 'attendance-tracker',
+    path: 'choose-best-employee-attendance-tracker',
     loadComponent: () => import('./pages/blog/attendance-tracker/attendance-tracker.component').then(m => m.AttendanceTrackerComponent)
   },
   {

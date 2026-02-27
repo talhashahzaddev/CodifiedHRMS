@@ -198,7 +198,7 @@ a {
 /* ===== Utility Classes ===== */
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 100%px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 }
@@ -208,7 +208,7 @@ a {
 }
 
 .section-sm {
-  padding: var(--spacing-2xl) 0;
+  padding: 30px 0;
 }
 
 .text-center {
