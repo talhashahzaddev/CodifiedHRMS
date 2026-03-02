@@ -11,7 +11,7 @@ import { Title, Meta } from '@angular/platform-browser';
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
@@ -79,7 +79,7 @@ readonly seo = {
           if (!hasCustomPlan) {
             this.allPlans.push({
               id: 'custom',
-              name: 'Custom HRMS Software',
+              name: 'Custom HRMS',
               price: 0,
               pricePeriod: 'month',
               description: 'Custom solutions for large organizations',
@@ -326,4 +326,27 @@ formatDescription(description: string): string {
       return index === 0;
     }
   }
+  openFaqIndex: number | null = null;
+
+faqs = [
+  { question: 'Can I change my plan later?', answer: 'Yes, you can upgrade or downgrade your plan at any time from your account settings. Prorated charges or credits will be applied automatically to your account.' },
+  { question: 'What is your cancellation policy?', answer: 'You can cancel your subscription at any time. Your subscription will remain active until the end of the current billing cycle, and you will not be charged again.' },
+  { question: 'Do you offer a free trial?', answer: 'Yes, we offer a 14-day free trial on our Starter and Business plans. No credit card is required to get started. You can explore all the features and decide which plan is right for you.' },
+  { question: 'What payment methods do you accept?', answer: 'We accept all major credit cards, including Visa, Mastercard, and American Express. For Enterprise plans, we also support invoicing and bank transfers.' },
+  { question: 'What is an HRMS and what does it do?', answer: 'An HRMS (Human Resource Management System) is software used to manage employee records, attendance, payroll, leave, and performance in one place. It helps businesses organize HR work and reduce manual tasks.' },
+  { question: 'Is HRMS suitable for small businesses?', answer: 'Yes. HRMS is useful for small businesses as well as large organizations. Small teams use it to keep employee data organized, while growing businesses use it to manage HR processes more efficiently.' },
+  { question: 'What problems does HRMS solve?', answer: 'HRMS helps reduce paperwork, manual tracking, and data errors. It centralizes employee information, improves attendance tracking, supports payroll processing, and keeps HR records consistent.' },
+  { question: 'Do I need technical knowledge to use HRMS?', answer: 'No. Most HRMS platforms are designed to be user-friendly. HR teams and managers can use the system without technical expertise after basic setup and guidance.' },
+  { question: 'Can HRMS handle payroll and attendance together?', answer: 'Yes. HRMS systems usually connect attendance data with payroll, making it easier to calculate salaries, deductions, and work hours accurately.' },
+  { question: 'Is employee data secure in an HRMS?', answer: 'HRMS platforms use controlled access and data protection practices to keep employee information secure. Access is usually limited based on user roles and permissions.' },
+  { question: 'Can HRMS grow as my company grows?', answer: 'Yes. HRMS is built to scale. You can add more employees, enable more features, or upgrade plans as your business and workforce expand.' },
+  { question: 'How long does it take to start using an HRMS?', answer: 'Most businesses can start using an HRMS within a short time after setup. Basic employee data can be added quickly, and features can be enabled step by step.' },
+  { question: 'Will HRMS replace my HR team?', answer: 'No. HRMS supports HR teams by handling repetitive tasks and organizing data. It does not replace human decision-making or people management.' },
+  { question: 'What should I check before purchasing an HRMS?', answer: 'Before choosing an HRMS, check if it supports your team size, payroll needs, attendance tracking, performance management, data security, and future growth requirements.' },
+];
+
+// 2. Add this method to your component class:
+toggleFaq(index: number): void {
+  this.openFaqIndex = this.openFaqIndex === index ? null : index;
+}
 }

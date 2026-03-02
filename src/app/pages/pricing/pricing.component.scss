@@ -1,7 +1,11 @@
+// Pricing Page — reference image redesign
+// Keeps original color scheme (--primary-600, var tokens), redesigns layout
+
 .pricing-page {
   width: 100%;
 }
 
+// ── Hero ───────────────────────────────────────────────────────
 .page-hero {
   background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
   padding: var(--spacing-3xl) 0;
@@ -10,11 +14,8 @@
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
+    inset: 0;
+    background-image:
       radial-gradient(circle at 20% 50%, rgba(0, 113, 230, 0.03) 0%, transparent 50%),
       radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
     pointer-events: none;
@@ -46,7 +47,6 @@
   border: 1px solid rgba(185, 223, 255, 0.4);
   border-radius: var(--border-radius-lg);
   padding: 4px;
-  gap: 0;
 
   .toggle-btn {
     padding: var(--spacing-sm) var(--spacing-lg);
@@ -54,7 +54,6 @@
     font-weight: 500;
     color: #1e293b !important;
     transition: all var(--transition-fast);
-    position: relative;
 
     &.active {
       background: rgba(255, 255, 255, 0.95);
@@ -74,24 +73,9 @@
   }
 }
 
-.pricing-section {
-  background: transparent;
-  position: relative;
-  overflow: visible; // Allow scaled cards to show
-  
-  .container {
-    position: relative;
-    z-index: 1;
-    overflow: visible; // Allow scaled cards to show
-    max-width: 1600px; // Increased from 1400px to allow even wider cards
-    padding: 0 var(--spacing-lg); // Reduced padding to maximize card width
-  }
-  
-  // No dark overlays - let the gradient background show through
-}
-
-// Loading and Error States
-.loading-container, .error-container {
+// ── Loading / Error ────────────────────────────────────────────
+.loading-container,
+.error-container {
   text-align: center;
   padding: var(--spacing-4xl) 0;
   
@@ -120,363 +104,262 @@
   to { transform: rotate(360deg); }
 }
 
-// Carousel Container
-.pricing-carousel-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-3xl);
-  overflow: visible;
+// ── Pricing Section ────────────────────────────────────────────
+.pricing-section {
+  background: transparent;
+
+  .container {
+    max-width: 1600px;
+    padding: 0 var(--spacing-xl);
+  }
 }
 
-.pricing-carousel-wrapper {
-  flex: 1;
-  overflow: visible;
-  padding: var(--spacing-xl) 0;
-  min-height: 100%;
-  width: 100%;
-  max-width: 100%;
-}
-
+// ── Pricing Grid — all plans in ONE row ───────────────────────
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(320px, 1fr));
-  // gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-3xl);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-bottom: 0;               // No extra spacing before FAQ
+  align-items: stretch;
 
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-    max-width: 450px;
-    margin: 0 auto var(--spacing-3xl);
-  }
+  @media (max-width: 1200px) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 780px)  { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 500px)  { grid-template-columns: 1fr; }
 }
 
-
+// ── Pricing Card ───────────────────────────────────────────────
 .pricing-card {
-  padding: var(--spacing-2xl);
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-right: none;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+
+  &:last-child {
+    border-right: 1px solid #e2e8f0;
+  }
 
   &.featured-plan {
-    transform: scale(1.05);
-
-    @media (max-width: 968px) {
-      transform: scale(1);
-    }
-  }
-
-  // Center card styling - bigger and more prominent
-  &.center-card {
-    transform: scale(1.15);
+    box-shadow: 0 0 0 2px var(--primary-600);
     z-index: 2;
-    padding: calc(var(--spacing-2xl) * 1.3);
-    margin: var(--spacing-lg) auto;
-    transform-origin: center center;
-    width: 100%;
-
-    @media (max-width: 968px) {
-      transform: scale(1.08);
-      padding: calc(var(--spacing-2xl) * 1.15);
-      margin: var(--spacing-md) auto;
-    }
-
-    &.featured-plan {
-      padding: calc(var(--spacing-2xl) * 1.3);
-      box-sizing: border-box;
-      width: 100%;
-    }
+    border-color: var(--primary-600);
   }
 
-  // Side cards - slightly smaller and shifted down
-  &:not(.center-card) {
-    transform: scale(0.95) translateY(60px);
-    opacity: 0.85;
-    z-index: 1;
-    transform-origin: center; // Scale from center
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out;
+  // ── Badge slot: fixed-height on EVERY card ─────────────────
+  // Non-featured = invisible spacer. Featured = green bar.
+  // This is the KEY fix — all card content starts at same Y position.
+  .badge-slot {
+    height: 40px;
+    flex-shrink: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    @media (max-width: 968px) {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
+  &.featured-plan .badge-slot {
+    background: #22c55e;
+  }
 
-    &:hover {
-      transform: scale(0.98) translateY(55px);
-      opacity: 0.9;
-    }
+  .card-inner {
+    padding: var(--spacing-xl) var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 }
 
-.pricing-header {
-  margin-bottom: var(--spacing-xl);
+// ── Recommended text inside the green badge slot ───────────────
+.recommended-bar {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
-  .plan-name-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-md);
+// ── Card Content ───────────────────────────────────────────────
+.plan-name-row {
+  margin-bottom: var(--spacing-sm);
 
-    h3 {
-      margin: 0;
-      font-size: var(--font-size-xl);
-    }
-
-    .popular-badge {
-      font-size: var(--font-size-xs);
-      font-weight: 600;
-      background: var(--primary-600);
-      color: var(--text-inverse);
-      padding: 4px 12px;
-      border-radius: var(--border-radius-full);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-  }
-
-  .plan-price {
-    margin-bottom: var(--spacing-md);
-
-    .price-amount {
-      font-size: var(--font-size-5xl);
-      font-weight: 800;
-      color: var(--text-primary);
-      letter-spacing: -0.02em;
-    }
-
-    .price-period {
-      font-size: var(--font-size-base);
-      color: #1e293b !important;
-      margin-left: var(--spacing-xs);
-      font-weight: 500;
-    }
-  }
-
-  .plan-description {
-    color: #1e293b !important;
+  h3 {
     margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+  }
+}
+
+.plan-description {
+  color: #475569;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-lg);
+  text-align: center;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+.plan-price {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+
+  .price-amount {
+    font-size: var(--font-size-5xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .price-period {
+    font-size: var(--font-size-sm);
+    color: #64748b;
     font-weight: 500;
   }
 }
 
+// ── CTA Button ─────────────────────────────────────────────────
 .pricing-actions {
   margin-bottom: var(--spacing-xl);
 
   .btn {
+    display: block;
     width: 100%;
-    justify-content: center;
+    text-align: center;
+    padding: 14px var(--spacing-lg);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    background: var(--primary-600);
+    color: #ffffff;
+    text-decoration: none;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+    border: none;
+
+    &:hover {
+      background: var(--primary-700, #0057b3);
+      box-shadow: 0 4px 12px rgba(0, 113, 230, 0.3);
+    }
+
+    // Non-popular cards use same solid button per reference image
+    &.btn-outline {
+      background: var(--primary-600);
+      color: #ffffff;
+      border: none;
+    }
   }
 }
 
+// ── Divider ────────────────────────────────────────────────────
 .plan-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(185, 223, 255, 0.5), transparent);
-  margin: var(--spacing-xl) 0;
+  background: #e2e8f0;
+  margin: 0 0 var(--spacing-xl);
 }
 
+// ── Features ───────────────────────────────────────────────────
 .plan-features {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 12px;
   flex: 1;
 
   .feature-item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: 8px;
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    line-height: 1.4;
 
     .check-icon {
       color: var(--primary-600);
-      font-size: 20px;
+      font-size: 16px;
+      flex-shrink: 0;
+      font-variation-settings: 'FILL' 1;
     }
   }
 }
 
+// ── FAQ Section ────────────────────────────────────────────────
 .faq-section {
   background: transparent;
-  position: relative;
-  
+  padding-top: var(--spacing-3xl);   // consistent top spacing, no extra gap
+
   .container {
-    position: relative;
-    z-index: 1;
+    max-width: 900px;
   }
-  
-  // No dark overlays - let the gradient background show through
 }
 
 .section-title {
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-3xl);
+  font-size: 28px;
   font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-2xl);
+  // Left-aligned like reference image — not centered
+  text-align: left;
 }
 
 .faq-list {
-  max-width: 800px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-// Carousel Navigation Buttons
-.carousel-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 113, 230, 0.2);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  z-index: 10;
-  flex-shrink: 0;
-
-  .material-symbols-outlined {
-    font-size: 28px;
-    color: var(--primary-600);
-    transition: transform var(--transition-fast);
-  }
-
-  &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 1);
-    border-color: var(--primary-600);
-    box-shadow: 0 4px 12px rgba(0, 113, 230, 0.15);
-    transform: translateY(-50%) scale(1.05);
-
-    .material-symbols-outlined {
-      transform: scale(1.1);
-    }
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(-50%) scale(0.95);
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    
-    .material-symbols-outlined {
-      color: #94a3b8;
-    }
-  }
-
-  @media (max-width: 968px) {
-    width: 40px;
-    height: 40px;
-
-    .material-symbols-outlined {
-      font-size: 24px;
-    }
-  }
-}
-
-.carousel-nav-left {
-  left: -24px; // Position to the left of the cards (half button width + some spacing)
-  
-  @media (max-width: 968px) {
-    left: -20px;
-  }
-}
-
-.carousel-nav-right {
-  right: -24px; // Position to the right of the cards (half button width + some spacing)
-  
-  @media (max-width: 968px) {
-    right: -20px;
-  }
-}
-
-// Carousel Indicators
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
-
-  .carousel-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 113, 230, 0.3);
-    background: transparent;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    padding: 0;
-    flex-shrink: 0;
-
-    &:hover {
-      border-color: var(--primary-600);
-      transform: scale(1.2);
-    }
-
-    &.active {
-      background: var(--primary-600);
-      border-color: var(--primary-600);
-      width: 32px;
-      border-radius: var(--border-radius-full);
-    }
-  }
-}
-
+// ── FAQ Item — reference image: clean rows with chevron ────────
 .faq-item {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(185, 223, 255, 0.3);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  transition: all var(--transition-base);
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: background 0.15s ease;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(185, 223, 255, 0.5);
+  &:last-child { border-bottom: none; }
+
+  &:hover { background: #f8fafc; }
+
+  &.open {
+    background: #ffffff;
   }
 
-  summary {
-    font-weight: 600;
-    font-size: var(--font-size-lg);
-    color: var(--text-primary);
-    cursor: pointer;
-    list-style: none;
-    position: relative;
-    padding-right: var(--spacing-xl);
+  .faq-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
 
-    &::-webkit-details-marker {
-      display: none;
+    .faq-chevron {
+      font-size: 20px;
+      color: #64748b;
+      flex-shrink: 0;
+      transition: color 0.15s ease;
     }
 
-    &::after {
-      content: 'expand_more';
-      font-family: 'Material Symbols Outlined';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      transition: transform var(--transition-base);
+    .faq-question {
+      font-weight: 600;
+      font-size: var(--font-size-base);
+      color: var(--text-primary);
+      line-height: 1.4;
     }
   }
 
-  &[open] summary::after {
-    transform: translateY(-50%) rotate(180deg);
+  &.open .faq-summary .faq-chevron {
+    color: var(--primary-600);
   }
 
-  p {
-    margin-top: var(--spacing-md);
-    color: #1e293b !important;
-    line-height: 1.7;
-    padding-right: var(--spacing-xl);
-    font-weight: 500;
+  .faq-body {
+    padding: 0 20px 18px 52px;   // 52px = 20px left + 20px icon + 12px gap
+
+    p {
+      margin: 0;
+      color: #475569;
+      font-size: var(--font-size-sm);
+      line-height: 1.7;
+      font-weight: 400;
+    }
   }
 }
-
