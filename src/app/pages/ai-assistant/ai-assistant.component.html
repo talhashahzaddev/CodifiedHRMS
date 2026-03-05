@@ -25,18 +25,19 @@
   <section class="features-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h2 class="section-title">Brisk People AI Assistant Features</h2>
+        <span class="section-eyebrow">AI-Powered HR</span>
+        <h2 class="features-title">Brisk People AI Assistant Features</h2>
       </div>
-
       <div class="features-grid">
-        <app-card *ngFor="let feature of features" class="feature-card">
-          <div class="feature-image">
+        <div *ngFor="let feature of features" class="feature-card">
+          <div class="feature-card-image">
             <img [src]="feature.image" [attr.alt]="feature.alt" loading="lazy" />
           </div>
-
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
-        </app-card>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">{{ feature.title }}</h3>
+            <p class="feature-card-desc">{{ feature.description }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -67,12 +68,6 @@
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h3 class="sub-features-title">AI Assistant for Improved Manager Decision-Making</h3>
-          <!-- <p class="hero-description">
-            The AI Assistant presents insightful reports on employee attendance and leave trends, enabling swift and
-            informed decision-making. It automatically detects potential conflicts in leave requests, helping managers
-            avoid disruptions in operations. The AI Assistant generates detailed leave reports, assisting managers in
-            planning workforce availability.
-          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of managersDecisionMaking">
               <span class="material-symbols-outlined">star</span>
@@ -116,12 +111,6 @@
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h3 class="sub-features-title">Many Other AI Assistant Features</h3>
-          <!-- <p class="hero-description">
-            The AI Assistant integrates with other tools like Outlook, Google Calendar, and other HR software. It takes
-            public holidays into account and ensures they're reflected in leave balances and schedules. AI-driven
-            reporting tools export data to Excel or CSV, making it easy for managers to analyze and take action on
-            leave trends.
-          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of otherFeatures">
               <span class="material-symbols-outlined">star</span>
@@ -140,16 +129,16 @@
   <section class="sub-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h3 class="section-title">Self-Service for Employees & Managers</h3>
+        <h3 class="features-title">Self-Service for Employees & Managers</h3>
       </div>
       <div class="features-explain-grid">
-        <app-card *ngFor="let service of employeeService" class="features-explain-card">
+        <div *ngFor="let service of employeeService" class="features-explain-card">
           <div class="features-explain-image">
             <img class="explain-image" [src]="service.image" [attr.alt]="service.alt" loading="lazy" />
           </div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
-        </app-card>
+        </div>
       </div>
     </div>
   </section>

@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { AuthService } from '../../core/services/auth.service';
 import { DomainService } from '../../core/services/domain.service';
 import { RegisterRequest, ApiResponse, AuthResponse } from '../../models/auth.models';
 import { Observable, of } from 'rxjs';
 import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+interface CurrencyOption {
+  code: string;    // e.g. "usd"
+  name: string;    // e.g. "US Dollar"
+  label: string;   // e.g. "US Dollar (USD)"
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -16,12 +23,28 @@ import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from '
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
   submitted = false;
   isSubmitting = false;
   submitSuccess = false;
   verificationEmailSent = false;
+
+  @ViewChild('currencyInput') currencyInputRef?: ElementRef<HTMLInputElement>;
+
+  // ── Currency dropdown state ──────────────────────────────────
+  currencies: CurrencyOption[] = [];
+  filteredCurrencies: CurrencyOption[] = [];
+  currencySearch = '';
+  currencyDropdownOpen = false;
+  currencyLoading = false;
+  currencyLoadError = false;
+
+  /** The currently selected currency option (for display) */
+  get selectedCurrency(): CurrencyOption | null {
+    const code = this.signUpForm.get('currency')?.value;
+    return code ? (this.currencies.find(c => c.code === code) ?? null) : null;
+  }
 
   companySizes = [
     '1-10 employees',
@@ -31,17 +54,12 @@ export class SignUpComponent {
     '500+ employees'
   ];
 
-  currencies = [
-    { code: 'USD', name: 'US Dollar (USD)' },
-    { code: 'PKR', name: 'Pakistani Rupee (PKR)' },
-    { code: 'EUR', name: 'Euro (EUR)' },
-    { code: 'GBP', name: 'British Pound (GBP)' }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private domainService: DomainService
+    private domainService: DomainService,
+    private http: HttpClient,
+    private elRef: ElementRef
   ) {
     this.signUpForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -60,8 +78,114 @@ export class SignUpComponent {
           this.domainExistsValidator()
         ]
       ],
-      currency: ['USD', [Validators.required]]
+      currency: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+  }
+
+  ngOnInit(): void {
+    this.loadCurrencies();
+  }
+
+  // ── Load currencies from open API ────────────────────────────
+  loadCurrencies(): void {
+    this.currencyLoading = true;
+    this.currencyLoadError = false;
+
+    this.http.get<Record<string, string>>(
+      'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json'
+    ).subscribe({
+      next: (data) => {
+        // Filter out entries with empty names, sort alphabetically by name
+        this.currencies = Object.entries(data)
+          .filter(([code, name]) => name && name.trim() !== '')
+          .map(([code, name]) => ({
+            code: code.toUpperCase(),
+            name,
+            label: `${name} (${code.toUpperCase()})`
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        this.filteredCurrencies = [...this.currencies];
+        this.currencyLoading = false;
+        // No default — user must explicitly select
+      },
+      error: () => {
+        // Fallback to 4 hardcoded currencies if API fails
+        this.currencies = [
+          { code: 'USD', name: 'US Dollar',       label: 'US Dollar (USD)' },
+          { code: 'PKR', name: 'Pakistani Rupee', label: 'Pakistani Rupee (PKR)' },
+          { code: 'EUR', name: 'Euro',             label: 'Euro (EUR)' },
+          { code: 'GBP', name: 'British Pound',    label: 'British Pound (GBP)' }
+        ];
+        this.filteredCurrencies = [...this.currencies];
+        this.currencyLoadError = true;
+        this.currencyLoading = false;
+        // No default — user must explicitly select
+      }
+    });
+  }
+
+  // ── Dropdown interaction ──────────────────────────────────────
+  openCurrencyDropdown(): void {
+    if (this.currencyLoading || this.currencyDropdownOpen) return;
+    this.currencyDropdownOpen = true;
+    this.currencySearch = '';
+    this.filteredCurrencies = [...this.currencies];
+    // Make input editable and focus it after open
+    setTimeout(() => {
+      const input = this.currencyInputRef?.nativeElement;
+      if (input) {
+        input.removeAttribute('readonly');
+        input.value = '';
+        input.focus();
+      }
+    }, 0);
+  }
+
+  closeCurrencyDropdown(): void {
+    this.currencyDropdownOpen = false;
+    this.currencySearch = '';
+    this.filteredCurrencies = [...this.currencies];
+    // Restore readonly so it can't be typed into while closed
+    const input = this.currencyInputRef?.nativeElement;
+    if (input) {
+      input.setAttribute('readonly', 'true');
+      // Show selected value or empty
+      input.value = this.selectedCurrency?.label || '';
+    }
+  }
+
+  toggleCurrencyDropdown(): void {
+    if (this.currencyDropdownOpen) {
+      this.closeCurrencyDropdown();
+    } else {
+      this.openCurrencyDropdown();
+    }
+  }
+
+  onCurrencySearch(value: string): void {
+    this.currencySearch = value;
+    const q = value.toLowerCase().trim();
+    this.filteredCurrencies = q
+      ? this.currencies.filter(c =>
+          c.name.toLowerCase().includes(q) ||
+          c.code.toLowerCase().includes(q)
+        )
+      : [...this.currencies];
+  }
+
+  selectCurrency(currency: CurrencyOption): void {
+    this.signUpForm.patchValue({ currency: currency.code });
+    this.signUpForm.get('currency')?.markAsTouched();
+    this.closeCurrencyDropdown();
+  }
+
+  /** Close dropdown when clicking outside */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.closeCurrencyDropdown();
+    }
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
