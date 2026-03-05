@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-dashboard-onboarding',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-onboarding.component.html',
   styleUrls: ['./dashboard-onboarding.component.scss']
 })

@@ -15,18 +15,22 @@
   <!-- Features Grid -->
   <section class="features-section section">
     <div class="container">
-      <h2 class="section-title text-center">Our Core Modules</h2>
+      <div class="section-header text-center">
+        <span class="section-eyebrow">Complete HRMS Solution</span>
+        <h2 class="features-title">Our Core Modules</h2>
+      </div>
       <div class="features-grid">
-        <a *ngFor="let feature of features" [routerLink]="feature.route" class="feature-link">
-          <app-card [hoverable]="true" [elevated]="true" class="feature-card">
-            <!-- <div class="feature-inner"> -->
-              <div class="feature-icon">
-                <span class="material-symbols-outlined">{{ feature.icon }}</span>
-              </div>
-              <h3>{{ feature.title }}</h3>
-              <p>{{ feature.description }}</p>
-            <!-- </div> -->
-          </app-card>
+        <a *ngFor="let feature of features" [routerLink]="feature.route" class="feature-card">
+          <div class="feature-card-icon">
+            <span class="material-symbols-outlined">{{ feature.icon }}</span>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">{{ feature.title }}</h3>
+            <p class="feature-card-desc">{{ feature.description }}</p>
+          </div>
+          <div class="feature-card-arrow">
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </div>
         </a>
       </div>
     </div>
@@ -35,13 +39,15 @@
   <!-- CTA Section -->
   <section class="cta-section section-sm">
     <div class="container">
-      <app-card [elevated]="true" class="cta-card text-center">
-        <h2>Ready to Transform Your HR?</h2>
-        <p>
-          See how our all-in-one platform can streamline your processes and empower your team.
-        </p>
-        <div class="cta-actions">
-          <a routerLink="/sign-up" class="btn btn-primary btn-lg">Sign Up</a>
+      <app-card [elevated]="true" class="cta-card">
+        <div class="cta-content text-center">
+          <h2>Ready to Transform Your HR?</h2>
+          <p>
+            See how our all-in-one platform can streamline your processes and empower your team.
+          </p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary btn-lg">Sign Up</a>
+          </div>
         </div>
       </app-card>
     </div>

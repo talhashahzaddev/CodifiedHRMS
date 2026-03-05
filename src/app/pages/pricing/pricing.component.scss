@@ -4,11 +4,15 @@
 .pricing-page {
   width: 100%;
 }
+.pricing-page .section {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
 
 // ── Hero ───────────────────────────────────────────────────────
 .page-hero {
   background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
-  padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-xs) 0;
   position: relative;
 
   &::before {
@@ -22,19 +26,19 @@
   }
 
   .hero-content {
-    max-width: 800px;
+    max-width: 1600px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
 
     h1 {
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--spacing-xs);
     }
 
     .hero-description {
       font-size: var(--font-size-lg);
       color: #1e293b !important;
-      margin-bottom: var(--spacing-2xl);
+      margin-bottom: var(--spacing-xs);
       font-weight: 500;
     }
   }
@@ -287,7 +291,8 @@
 // ── FAQ Section ────────────────────────────────────────────────
 .faq-section {
   background: transparent;
-  padding-top: var(--spacing-3xl);   // consistent top spacing, no extra gap
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
 
   .container {
     max-width: 900px;

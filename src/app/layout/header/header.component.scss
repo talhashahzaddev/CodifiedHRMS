@@ -81,16 +81,26 @@
 
 // ── Logo ──────────────────────────────────────────────────────
 .logo {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 2px;
   font-size: 18px; font-weight: 700;
   color: var(--text-primary); text-decoration: none;
-  transition: color 0.15s ease; flex-shrink: 0;
+  transition: opacity 0.15s ease; flex-shrink: 0;
 
-  &:hover { color: var(--primary-600); }
+  &:hover { opacity: 0.85; }
 
-  .logo-icon {
-    display: flex; align-items: center; color: var(--primary-600);
-    .material-symbols-outlined { font-size: 32px; }
+  .logo-img {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+    margin-top: 10px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
   }
 
   @media (max-width: 640px) {
@@ -283,30 +293,39 @@
 
 .mega-cta {
   width: 220px; flex-shrink: 0;
-  background: linear-gradient(160deg, #0ea5e9 0%, #6366f1 100%);
+  background: #fff;
+  border-left: 1px solid rgba(185,223,255,0.5);
   padding: 28px 22px;
   display: flex; flex-direction: column; gap: 10px;
 
   @media (max-width: 1024px) { display: none; }
 
-  .mega-cta-logo-icon {
-    font-size: 28px; color: white;
-    width: 48px; height: 48px;
-    background: rgba(255,255,255,0.15); border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 10px; box-sizing: border-box;
+  .mega-cta-logo-img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
-  h4 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
-  p  { margin: 0; font-size: 12px; color: rgba(255,255,255,0.82); line-height: 1.5; }
+  .mega-cta-brand {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 4px;
+
+    h4 { margin: 0; font-size: 16px; font-weight: 700; color: #1e293b; }
+  }
+
+  p  { margin: 0; font-size: 12px; color: #64748b; line-height: 1.5; }
 
   .mega-cta-btn {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 16px; background: #fff;
-    color: var(--primary-600); border-radius: 8px;
+    padding: 9px 16px;
+    background: var(--primary-600);
+    color: #fff; border-radius: 8px;
     font-size: 13px; font-weight: 600; text-decoration: none;
     width: fit-content; margin-top: 4px; transition: all 0.15s ease;
-    &:hover { background: #f0f9ff; }
+    &:hover { background: var(--primary-700); }
     &:hover svg { transform: translateX(2px); }
     svg { transition: transform 0.15s ease; flex-shrink: 0; }
   }
@@ -314,16 +333,16 @@
   .mega-cta-stats {
     display: flex; align-items: center; gap: 10px;
     margin-top: 6px; padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    border-top: 1px solid #e2e8f0;
   }
 
   .mcs {
     display: flex; flex-direction: column; gap: 1px;
-    .mcs-n { font-size: 15px; font-weight: 700; color: #fff; }
-    .mcs-l { font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 500; white-space: nowrap; }
+    .mcs-n { font-size: 15px; font-weight: 700; color: var(--primary-600); }
+    .mcs-l { font-size: 10px; color: #94a3b8; font-weight: 500; white-space: nowrap; }
   }
 
-  .mcs-div { width: 1px; height: 26px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+  .mcs-div { width: 1px; height: 26px; background: #e2e8f0; flex-shrink: 0; }
 }
 
 
