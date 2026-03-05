@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-leave-management',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './leave-management.component.html',
   styleUrls: ['./leave-management.component.scss']
 })

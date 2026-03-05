@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-performance',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './performance.component.html',
   styleUrls: ['./performance.component.scss']
 })

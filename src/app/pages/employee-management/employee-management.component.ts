@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-employee-management',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './employee-management.component.html',
   styleUrls: ['./employee-management.component.scss']
 })

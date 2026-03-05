@@ -42,20 +42,29 @@
   .logo {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: 0px;
     font-size: var(--font-size-lg);
     font-weight: 700;
     color: var(--text-primary);
     text-decoration: none;
     margin-bottom: var(--spacing-md);
     width: fit-content;
+    transition: opacity 0.15s ease;
 
-    .logo-icon {
-      display: flex;
-      align-items: center;
-      color: var(--primary-600);
+    &:hover { opacity: 0.85; }
 
-      .material-symbols-outlined { font-size: 28px; }
+    .logo-img {
+      height: 80px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--text-primary);
     }
   }
 

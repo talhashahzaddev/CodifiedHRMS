@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-payroll',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './payroll.component.html',
   styleUrls: ['./payroll.component.scss']
 })

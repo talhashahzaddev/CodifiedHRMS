@@ -4,7 +4,7 @@
 
 .page-hero {
   background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
-  padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-xs) 0;
   position: relative;
 
   &::before {
@@ -348,4 +348,135 @@
       text-decoration: underline;
     }
   }
+}
+// ── Currency Dropdown — seamless single-input design ──────────
+
+.currency-dropdown {
+  position: relative;
+  width: 100%;
+
+  &.error .currency-input {
+    border-color: var(--error) !important;
+    box-shadow: none !important;
+  }
+}
+
+// The single input — looks exactly like every other field
+.currency-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  padding-right: 40px;            // room for chevron
+  border: 2px solid rgba(185, 223, 255, 0.4);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-sizing: border-box;
+
+  &::placeholder { color: #000000; }
+
+  // When open — same focus ring as other inputs
+  .currency-dropdown.open & {
+    border-color: var(--primary-600);
+    box-shadow: 0 0 0 3px var(--primary-100);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: text;
+  }
+
+  &:focus { outline: none; }
+}
+
+// Chevron overlay — positioned inside the input on the right
+.currency-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #000000;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: all;
+  z-index: 2;
+}
+
+// Dropdown list — seamlessly attached to bottom of input
+.currency-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+  background: #ffffff;
+  border: 2px solid var(--primary-600);
+  border-top: 1px solid #dbeafe;
+  border-bottom-left-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  z-index: 999;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: dropdownFadeIn 0.12s ease;
+
+  &::-webkit-scrollbar       { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.currency-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+
+  &:hover { background: #f0f7ff; }
+
+  &.currency-active {
+    background: var(--primary-50);
+    .currency-code { color: var(--primary-600); background: #dbeafe; }
+    .currency-name { color: var(--primary-700, #0057b3); font-weight: 600; }
+  }
+
+  .currency-code {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    min-width: 38px;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .currency-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.currency-empty {
+  padding: 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: var(--font-size-sm);
 }

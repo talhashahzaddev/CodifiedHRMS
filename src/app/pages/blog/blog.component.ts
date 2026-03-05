@@ -6,7 +6,7 @@ import { CardComponent } from '../../shared/components/card/card.component';
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss']
 })

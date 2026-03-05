@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-timesheet',
   standalone: true,
-  imports: [CommonModule, CardComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './timesheet.component.html',
   styleUrls: ['./timesheet.component.scss']
 })

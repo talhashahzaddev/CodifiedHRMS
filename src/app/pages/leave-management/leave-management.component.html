@@ -25,18 +25,19 @@
   <section class="features-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h2 class="section-title">Brisk People Automated Leave Management Features</h2>
+        <span class="section-eyebrow">Automated Leave Tracking</span>
+        <h2 class="features-title">Brisk People Automated Leave Management Features</h2>
       </div>
-
       <div class="features-grid">
-        <app-card *ngFor="let feature of features" class="feature-card">
-          <div class="feature-image">
+        <div *ngFor="let feature of features" class="feature-card">
+          <div class="feature-card-image">
             <img [src]="feature.image" [attr.alt]="feature.alt" loading="lazy" />
           </div>
-
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
-        </app-card>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">{{ feature.title }}</h3>
+            <p class="feature-card-desc">{{ feature.description }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -66,12 +67,7 @@
     <div class="container">
       <div class="sub-features-content">
         <div class="sub-features-text">
-          <h3 class="sub-features-title">Manager’s Decision Making</h3>
-          <!-- <p class="hero-description">
-            Managers can view employee leave status, plan for potential shortages, and approve or deny leave
-            requests with a few clicks. Leave approvals automatically sync with payroll, and managers have access
-            to detailed leave reports for analysis and decision-making.
-          </p> -->
+          <h3 class="sub-features-title">Manager's Decision Making</h3>
           <ul class="features-list">
             <li *ngFor="let feature of managersDecisionMaking">
               <span class="material-symbols-outlined">star</span>
@@ -95,10 +91,6 @@
         </div>
         <div class="sub-features-text">
           <h3 class="sub-features-title">Features for Employees</h3>
-          <!-- <p class="hero-description">
-            Employees can view their leave balance and history for transparency, and submit leave applications
-            directly from the platform, making the process efficient and hassle-free.
-          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of employeesBenefits">
               <span class="material-symbols-outlined">star</span>
@@ -114,10 +106,6 @@
       <div class="sub-features-content">
         <div class="sub-features-text">
           <h3 class="sub-features-title">Many Other Features</h3>
-          <!-- <p class="hero-description">
-            Public holiday integration, calendar syncing with Outlook and Google, and department-specific
-            approval workflows for flexible leave management.
-          </p> -->
           <ul class="features-list">
             <li *ngFor="let feature of otherFeatures">
               <span class="material-symbols-outlined">star</span>
@@ -136,16 +124,16 @@
   <section class="sub-section section">
     <div class="container">
       <div class="section-header text-center">
-        <h3 class="section-title">Self-Service for Employees and Managers</h3>
+        <h3 class="features-title">Self-Service for Employees and Managers</h3>
       </div>
       <div class="features-explain-grid">
-        <app-card *ngFor="let service of employeeService" class="features-explain-card">
+        <div *ngFor="let service of employeeService" class="features-explain-card">
           <div class="features-explain-image">
             <img class="explain-image" [src]="service.image" [attr.alt]="service.alt" loading="lazy" />
           </div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
-        </app-card>
+        </div>
       </div>
     </div>
   </section>
