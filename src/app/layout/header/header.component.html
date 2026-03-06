@@ -70,6 +70,7 @@
       <div class="nav-actions">
         <a href="https://login.briskpeople.com" class="btn btn-ghost login-btn">Login</a>
         <a routerLink="/sign-up" class="btn btn-primary">Sign Up</a>
+        <a routerLink="/book-demo" class="btn btn-book-demo">Book Demo</a>
         <button class="mobile-menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
           <span class="material-symbols-outlined">{{ isMenuOpen ? 'close' : 'menu' }}</span>
         </button>
@@ -168,6 +169,7 @@
   <div class="mob-cta-row">
     <a href="https://login.briskpeople.com" class="mob-cta-login">Login</a>
     <a routerLink="/sign-up" class="mob-cta-signup" (click)="closeMenu()">Sign Up</a>
+    <a routerLink="/book-demo" class="mob-cta-book-demo" (click)="closeMenu()">Book Demo</a>
   </div>
 
 </div>

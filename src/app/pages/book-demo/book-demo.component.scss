@@ -1,0 +1,401 @@
+.book-demo-page {
+  width: 100%;
+}
+
+.page-hero {
+  background: #f0f7ff;
+  min-height: 100vh;
+  padding: var(--spacing-xs) 0;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl, 32px);
+}
+
+// ── Two-column layout ─────────────────────────────────────────
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 60px;
+  align-items: start;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+// ── Left side ─────────────────────────────────────────────────
+
+.hero-text {
+  padding-top: 32px;
+
+  h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 0 0 var(--spacing-md, 16px);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-lg, 17px);
+    color: #1e293b;
+    line-height: 1.7;
+    margin: 0 0 var(--spacing-2xl, 40px);
+    font-weight: 500;
+  }
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 20px);
+
+  .benefit-item {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+    padding: var(--spacing-lg, 20px);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-lg, 12px);
+    border: 1px solid rgba(185, 223, 255, 0.3);
+
+    .benefit-icon {
+      font-size: 32px;
+      color: var(--primary-600, #2563eb);
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: var(--font-size-base, 15px);
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: #0f172a;
+    }
+
+    p {
+      font-size: var(--font-size-sm, 14px);
+      color: #1e293b;
+      margin: 0;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+  }
+}
+
+// ── Right side — Form card ────────────────────────────────────
+
+.form-section {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 40px 36px;
+
+  @media (max-width: 640px) {
+    padding: 24px 20px;
+  }
+}
+
+.form-header {
+  margin-bottom: 28px;
+  text-align: center;
+
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 800;
+    color: #dc2626;
+    margin: 0;
+  }
+}
+
+.demo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+
+  .material-symbols-outlined { font-size: 20px; }
+  p { margin: 0; font-weight: 500; font-size: 14px; }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 10px 14px;
+    border: 2px solid rgba(185, 223, 255, 0.4);
+    border-radius: var(--border-radius-md, 8px);
+    font-size: var(--font-size-base, 15px);
+    font-family: inherit;
+    color: var(--text-primary, #1e293b);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &::placeholder { color: #64748b; }
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-600, #2563eb);
+      box-shadow: 0 0 0 3px var(--primary-100, #dbeafe);
+    }
+
+    &.error { border-color: var(--error, #dc2626); }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .error-message {
+    font-size: 12px;
+    color: var(--error, #dc2626);
+  }
+}
+
+// ── Phone row ─────────────────────────────────────────────────
+
+.phone-input-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.phone-number-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .dial-code-prefix {
+    position: absolute;
+    left: 12px;
+    font-size: 15px;
+    color: #475569;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    &.has-prefix { padding-left: 52px; }
+  }
+}
+
+// ── Custom searchable dropdown ────────────────────────────────
+// Mirrors sign-up currency dropdown exactly:
+// single input, readonly when closed, editable when open.
+
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+
+  &.error .dropdown-input {
+    border-color: var(--error, #dc2626) !important;
+    box-shadow: none !important;
+  }
+}
+
+.dropdown-input {
+  width: 100%;
+  padding: var(--spacing-md, 10px);
+  padding-right: 40px;
+  border: 2px solid rgba(185, 223, 255, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  font-size: var(--font-size-base, 15px);
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary, #1e293b);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+
+  &::placeholder { color: #64748b; }
+  &:focus { outline: none; }
+
+  // When dropdown is open — same focus ring as other inputs
+  .custom-dropdown.open & {
+    border-color: var(--primary-600, #2563eb);
+    box-shadow: 0 0 0 3px var(--primary-100, #dbeafe);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: text;
+  }
+}
+
+// Chevron overlay — inside input on the right
+.dropdown-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #64748b;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: all;
+  z-index: 2;
+}
+
+// Dropdown list — attached to bottom of input
+.dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+  background: #ffffff;
+  border: 2px solid var(--primary-600, #2563eb);
+  border-top: 1px solid #dbeafe;
+  border-bottom-left-radius: var(--border-radius-md, 8px);
+  border-bottom-right-radius: var(--border-radius-md, 8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  z-index: 999;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: dropdownFadeIn 0.12s ease;
+
+  &::-webkit-scrollbar       { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover { background: #f0f7ff; }
+
+  &.active {
+    background: var(--primary-50, #eff6ff);
+    .option-badge { color: var(--primary-600, #2563eb); background: #dbeafe; }
+    .option-label { color: var(--primary-700, #1d4ed8); font-weight: 600; }
+  }
+
+  .option-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    min-width: 42px;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+
+  .option-label {
+    font-size: 14px;
+    color: var(--text-primary, #1e293b);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.dropdown-empty {
+  padding: 18px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+// ── Submit button ─────────────────────────────────────────────
+
+.form-actions { margin-top: 4px; }
+
+.btn-request-demo {
+  width: 100%;
+  padding: 14px;
+  background: #f59e0b;
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 800;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.1s;
+
+  &:hover:not(:disabled)  { background: #d97706; }
+  &:active:not(:disabled) { transform: scale(0.99); }
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+}
+
+// ── Calendly state ────────────────────────────────────────────
+
+.calendly-container {
+  text-align: center;
+
+  .calendly-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #dc2626;
+    margin: 0 0 8px;
+  }
+
+  .calendly-subtitle {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0 0 24px;
+  }
+
+  .calendly-inline-widget {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
