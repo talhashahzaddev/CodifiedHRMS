@@ -1,0 +1,238 @@
+<div class="book-demo-page">
+  <section class="page-hero section-sm">
+    <div class="container">
+      <div class="hero-content">
+
+        <!-- Left: Benefits -->
+        <div class="hero-text">
+          <h1>See BriskPeople in Action</h1>
+          <p class="hero-description">
+            Discover how thousands of companies use our HRMS platform to streamline
+            payroll, automate onboarding, and transform their HR operations. Book a
+            personalised demo with our team today.
+          </p>
+
+          <div class="benefits-list">
+            <div class="benefit-item">
+              <span class="material-symbols-outlined benefit-icon">groups</span>
+              <div>
+                <h3>Complete HR Solution</h3>
+                <p>All-in-one platform for payroll, onboarding, and employee management.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined benefit-icon">build_circle</span>
+              <div>
+                <h3>Easy Setup</h3>
+                <p>Get started in minutes with our intuitive setup process.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="material-symbols-outlined benefit-icon">rocket_launch</span>
+              <div>
+                <h3>Streamline Operations</h3>
+                <p>Save time and reduce administrative overhead with automation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="form-section">
+
+          <!-- Calendly (shown after successful submit) -->
+          <div *ngIf="showCalendly" class="calendly-container">
+            <h2 class="calendly-title">Schedule Your Demo</h2>
+            <p class="calendly-subtitle">Pick a time that works best for you.</p>
+            <div id="calendly-embed"
+                 class="calendly-inline-widget"
+                 style="min-width:320px;height:630px;">
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div *ngIf="!showCalendly" class="form-card">
+            <div class="form-header">
+              <h2>Request For Demo</h2>
+            </div>
+
+            <form [formGroup]="demoForm" (ngSubmit)="onSubmit()" class="demo-form">
+
+              <div *ngIf="submitError" class="error-banner">
+                <span class="material-symbols-outlined">error</span>
+                <p>{{ submitError }}</p>
+              </div>
+
+              <!-- Full Name + Email -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fullName">Full Name *</label>
+                  <input id="fullName" type="text" formControlName="fullName"
+                    placeholder="Enter name"
+                    [class.error]="submitted && demoForm.get('fullName')?.invalid">
+                  <span *ngIf="submitted && demoForm.get('fullName')?.invalid" class="error-message">
+                    {{ getErrorMessage('fullName') }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label for="emailAddress">Email Address *</label>
+                  <input id="emailAddress" type="email" formControlName="emailAddress"
+                    placeholder="Enter organization email address"
+                    [class.error]="submitted && demoForm.get('emailAddress')?.invalid">
+                  <span *ngIf="submitted && demoForm.get('emailAddress')?.invalid" class="error-message">
+                    {{ getErrorMessage('emailAddress') }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Company Size -->
+              <div class="form-group">
+                <label for="companySize">Company Size *</label>
+                <select id="companySize" formControlName="companySize"
+                  [class.error]="submitted && demoForm.get('companySize')?.invalid">
+                  <option value="">Company Size</option>
+                  <option *ngFor="let size of companySizes" [value]="size">{{ size }}</option>
+                </select>
+                <span *ngIf="submitted && demoForm.get('companySize')?.invalid" class="error-message">
+                  {{ getErrorMessage('companySize') }}
+                </span>
+              </div>
+
+              <!-- Phone Number -->
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <div class="phone-input-row">
+
+                  <!-- ── Country dropdown — mirrors sign-up currency dropdown exactly ── -->
+                  <div class="custom-dropdown"
+                       [class.open]="countryDropdownOpen"
+                       [class.error]="submitted && demoForm.get('country')?.invalid">
+
+                    <!-- Single input always visible — readonly when closed, editable when open -->
+                    <input #countryInput
+                      class="dropdown-input"
+                      type="text"
+                      [placeholder]="countryLoading ? 'Loading...' : 'Select country'"
+                      [value]="countryDropdownOpen ? countrySearch : (selectedCountry?.name || '')"
+                      (focus)="openCountryDropdown()"
+                      (blur)="onCountryBlur()"
+                      (input)="onCountrySearch($any($event.target).value)"
+                      autocomplete="off"
+                      readonly>
+
+                    <!-- Chevron toggles open/close -->
+                    <span class="dropdown-chevron material-symbols-outlined"
+                          (click)="toggleCountryDropdown()">
+                      {{ countryDropdownOpen ? 'expand_less' : 'expand_more' }}
+                    </span>
+
+                    <ul class="dropdown-list" *ngIf="countryDropdownOpen">
+                      <li *ngIf="filteredCountries.length === 0" class="dropdown-empty">No countries found</li>
+                      <li *ngFor="let c of filteredCountries"
+                          class="dropdown-option"
+                          [class.active]="selectedCountry?.code === c.code"
+                          (mousedown)="selectCountry(c)">
+                        <span class="option-badge">{{ c.dialCode }}</span>
+                        <span class="option-label">{{ c.name }}</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Phone number input with dial code prefix -->
+                  <div class="phone-number-wrapper">
+                    <span class="dial-code-prefix" *ngIf="selectedCountry">{{ selectedCountry.dialCode }}</span>
+                    <input id="phoneNumber" type="tel" formControlName="phoneNumber"
+                      placeholder="Enter phone number"
+                      [class.error]="submitted && demoForm.get('phoneNumber')?.invalid"
+                      [class.has-prefix]="!!selectedCountry"
+                      (keypress)="onPhoneKeypress($event)"
+                      (input)="onPhoneInput($event)">
+                  </div>
+                </div>
+
+                <span *ngIf="submitted && demoForm.get('country')?.invalid" class="error-message">
+                  Please select a country
+                </span>
+                <span *ngIf="submitted && demoForm.get('country')?.valid && demoForm.get('phoneNumber')?.invalid" class="error-message">
+                  {{ getErrorMessage('phoneNumber') }}
+                </span>
+              </div>
+
+              <!-- Organization Name -->
+              <div class="form-group">
+                <label for="companyName">Organization Name *</label>
+                <input id="companyName" type="text" formControlName="companyName"
+                  placeholder="Enter your organization name"
+                  [class.error]="submitted && demoForm.get('companyName')?.invalid">
+                <span *ngIf="submitted && demoForm.get('companyName')?.invalid" class="error-message">
+                  {{ getErrorMessage('companyName') }}
+                </span>
+              </div>
+
+              <!-- ── Industry dropdown — mirrors sign-up currency dropdown exactly ── -->
+              <div class="form-group">
+                <label>Industry *</label>
+                <input type="hidden" formControlName="industry">
+
+                <div class="custom-dropdown"
+                     [class.open]="industryDropdownOpen"
+                     [class.error]="submitted && demoForm.get('industry')?.invalid">
+
+                  <!-- Single input always visible — readonly when closed, editable when open -->
+                  <input #industryInput
+                    class="dropdown-input"
+                    type="text"
+                    placeholder="Select industry"
+                    [value]="industryDropdownOpen ? industrySearch : (demoForm.get('industry')?.value || '')"
+                    (focus)="openIndustryDropdown()"
+                    (blur)="onIndustryBlur()"
+                    (input)="onIndustrySearch($any($event.target).value)"
+                    autocomplete="off"
+                    readonly>
+
+                  <!-- Chevron toggles open/close -->
+                  <span class="dropdown-chevron material-symbols-outlined"
+                        (click)="toggleIndustryDropdown()">
+                    {{ industryDropdownOpen ? 'expand_less' : 'expand_more' }}
+                  </span>
+
+                  <ul class="dropdown-list" *ngIf="industryDropdownOpen">
+                    <li *ngIf="filteredIndustries.length === 0" class="dropdown-empty">No industries found</li>
+                    <li *ngFor="let ind of filteredIndustries"
+                        class="dropdown-option"
+                        [class.active]="demoForm.get('industry')?.value === ind"
+                        (mousedown)="selectIndustry(ind)">
+                      <span class="option-label">{{ ind }}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <span *ngIf="submitted && demoForm.get('industry')?.invalid" class="error-message">
+                  {{ getErrorMessage('industry') }}
+                </span>
+              </div>
+
+              <!-- Additional Information -->
+              <div class="form-group">
+                <label for="message">Additional Information</label>
+                <textarea id="message" formControlName="message"
+                  placeholder="Enter information here" rows="3">
+                </textarea>
+              </div>
+
+              <!-- Submit -->
+              <div class="form-actions">
+                <button type="submit" class="btn-request-demo" [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'Submitting...' : 'Request Demo' }}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>

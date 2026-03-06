@@ -200,6 +200,26 @@
   .material-symbols-outlined { font-size: 28px; }
 }
 
+// ── Book Demo button (green) ──────────────────────────────────
+.btn-book-demo {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: #16a34a;
+  color: #fff !important;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+
+  &:hover  { background: #15803d; }
+  &:active { transform: scale(0.97); }
+
+  @media (max-width: 768px) { display: none; }
+}
+
 // ── Page spacer ───────────────────────────────────────────────
 .header-spacer {
   height: 108px; transition: height 0.3s ease;
@@ -512,5 +532,20 @@
     text-decoration: none;
     transition: all 0.15s ease;
     &:hover { background: var(--primary-700); }
+  }
+
+  // ── Mobile Book Demo (green) ──────────────────────────────
+  .mob-cta-book-demo {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    background: #16a34a;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    &:hover { background: #15803d; }
   }
 }
