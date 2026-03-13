@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ContactFabService {
-  readonly phone = '+923094085085';
+  readonly phone = '+12244615308';
   readonly whatsappUrl = `https://wa.me/923295757737`;
-  readonly phoneUrl = `tel:+923094085085`;
+  readonly phoneUrl = `tel:+12244615308`;
 
   openWhatsApp(): void {
     window.open(this.whatsappUrl, '_blank', 'noopener,noreferrer');
