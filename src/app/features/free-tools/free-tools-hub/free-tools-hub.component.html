@@ -1,0 +1,286 @@
+<!-- ── Breadcrumb ──────────────────────────────────────────── -->
+<nav class="hub-breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol class="breadcrumb-list">
+      <li><a routerLink="/">Home</a></li>
+      <li><span class="breadcrumb-sep material-symbols-outlined">chevron_right</span></li>
+      <li aria-current="page">Free Tools</li>
+    </ol>
+  </div>
+</nav>
+
+<!-- ── Hero Section ───────────────────────────────────────── -->
+<section class="hub-hero">
+  <div class="hub-hero-bg"></div>
+  <div class="container">
+    <div class="hub-hero-content">
+      <div class="hub-hero-badge">
+        <span class="material-symbols-outlined">build</span>
+        14 Free Utility Tools — No Sign-Up Required
+      </div>
+      <h1 class="hub-hero-title">
+        Free Online Tools for<br>
+        <span class="gradient-text">Teams &amp; Developers</span>
+      </h1>
+      <p class="hub-hero-desc">
+        Calendar link generators, QR code creators, time zone converters, Unix timestamp
+        tools, age calculators, and more. All run in your browser — instant, private, free.
+      </p>
+      <div class="hub-hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">14</span>
+          <span class="hero-stat-label">Utility Tools</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">100%</span>
+          <span class="hero-stat-label">Browser-Based</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">0</span>
+          <span class="hero-stat-label">Data Collected</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tools Grid ─────────────────────────────────────────── -->
+<section class="hub-tools section-sm" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <h2>All 14 Free Utility & Dev Tools</h2>
+      <p>Click any tool to open it instantly — no account or download required.</p>
+    </div>
+
+    <div class="tools-grid">
+      @for (tool of tools; track tool.slug) {
+        <a
+          class="tool-card"
+          [routerLink]="['/free-tools', tool.slug]"
+          [attr.aria-label]="'Open ' + tool.title">
+          <div class="tool-card-icon">
+            <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          </div>
+          <div class="tool-card-body">
+            <h3 class="tool-card-title">{{ tool.title }}</h3>
+            <p class="tool-card-desc">{{ tool.description }}</p>
+          </div>
+          <div class="tool-card-footer">
+            <span class="tool-card-cta">
+              Open Tool
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Category Spotlight ─────────────────────────────────── -->
+<section class="hub-categories section-sm">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tools by Category</h2>
+      <p>Find the right tool for your use case.</p>
+    </div>
+
+    <div class="categories-grid">
+      @for (cat of toolCategories; track cat.label) {
+        <div class="category-card">
+          <div class="category-card-header">
+            <div class="category-icon">
+              <span class="material-symbols-outlined">{{ cat.icon }}</span>
+            </div>
+            <h3>{{ cat.label }}</h3>
+          </div>
+          <ul class="category-tool-list">
+            @for (tool of getToolsBySlug(cat.slugs); track tool.slug) {
+              <li>
+                <a [routerLink]="['/free-tools', tool.slug]">
+                  <span class="material-symbols-outlined">arrow_right</span>
+                  {{ tool.title }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── SEO Content ────────────────────────────────────────── -->
+<section class="hub-seo-content section-sm">
+  <div class="container">
+    <div class="seo-grid">
+
+      <!-- Left column -->
+      <div class="seo-col">
+        <h2>Why These Tools Are Different</h2>
+        <p>
+          Most "free" online tools are buried under ads, paywalls, or require you to create
+          an account just to copy a result. Every tool on this page is genuinely free,
+          runs entirely in your browser (your data never leaves your device), and has no
+          usage limits.
+        </p>
+        <p>
+          The <strong>Add to Calendar Link Generator</strong> supports all four major
+          calendar platforms with a single form. The <strong>UPI QR Code Generator</strong>
+          follows the official NPCI UPI Deep Link specification. The
+          <strong>Unix Timestamp Converter</strong> handles both second-precision and
+          millisecond-precision epoch values bidirectionally.
+        </p>
+
+        <h2>Use Cases Across Teams</h2>
+        <ul class="seo-list">
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Event Organizers</strong> — generate calendar links and event QR codes to share with attendees</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Small Business Owners</strong> — create UPI QR codes for contactless payments at checkout</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Remote Teams</strong> — convert meeting times across global time zones without juggling apps</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Developers &amp; Engineers</strong> — parse Unix timestamps and debug ISO 8601 date strings</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>HR &amp; Admin Teams</strong> — calculate employee tenure, verify ages, track working sessions</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right column -->
+      <div class="seo-col">
+        <h2>Featured Tool Highlights</h2>
+
+        <div class="feature-highlight">
+          <div class="feature-highlight-header">
+            <span class="material-symbols-outlined">event</span>
+            <h3>Add to Calendar Link Generator</h3>
+          </div>
+          <p>
+            Paste your event details once and get shareable links for Google Calendar,
+            Outlook Web, Yahoo Calendar, and a downloadable .ics file — all from a single
+            form. No API key. No account.
+          </p>
+        </div>
+
+        <div class="feature-highlight">
+          <div class="feature-highlight-header">
+            <span class="material-symbols-outlined">qr_code</span>
+            <h3>UPI QR Code Generator</h3>
+          </div>
+          <p>
+            Generates standards-compliant UPI QR codes using the official
+            <code>upi://pay?pa=&amp;pn=&amp;am=&amp;cu=</code> URI scheme.
+            Works with Google Pay, PhonePe, Paytm, BHIM, and all UPI-enabled apps.
+            Download as PNG at any resolution.
+          </p>
+        </div>
+
+        <div class="feature-highlight">
+          <div class="feature-highlight-header">
+            <span class="material-symbols-outlined">public</span>
+            <h3>Time Zone Converter</h3>
+          </div>
+          <p>
+            Supports all IANA timezone identifiers — from
+            <code>Asia/Karachi</code> to <code>Pacific/Auckland</code>.
+            Displays conversions on a visual 24-hour timeline so you can instantly spot
+            business hours overlap between international offices.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ Section ────────────────────────────────────────── -->
+<section class="hub-faq section-sm">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently Asked Questions</h2>
+      <p>How these tools work, what they support, and how your data is handled.</p>
+    </div>
+
+    <div class="faq-list" role="list">
+      @for (faq of faqs; track faq.q; let i = $index) {
+        <div class="faq-item" [class.open]="openFaqIndex === i" role="listitem">
+          <button
+            class="faq-question"
+            type="button"
+            [attr.aria-expanded]="openFaqIndex === i"
+            [attr.aria-controls]="'faq-answer-' + i"
+            (click)="toggleFaq(i)">
+            <span>{{ faq.q }}</span>
+            <span class="faq-icon material-symbols-outlined">
+              {{ openFaqIndex === i ? 'remove' : 'add' }}
+            </span>
+          </button>
+          <div
+            class="faq-answer"
+            [id]="'faq-answer-' + i"
+            [class.open]="openFaqIndex === i"
+            role="region">
+            <p>{{ faq.a }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Cross-Link to Workforce Tools ─────────────────────── -->
+<section class="hub-crosslink section-sm">
+  <div class="container">
+    <div class="crosslink-card">
+      <div class="crosslink-left">
+        <div class="crosslink-icon">
+          <span class="material-symbols-outlined">groups</span>
+        </div>
+        <div>
+          <h2>Also need HR &amp; Workforce Calculators?</h2>
+          <p>
+            Explore our 14 free workforce tools — absence rate, attrition, FTE, overtime,
+            PTO, time cards, schedule variance, and more.
+          </p>
+        </div>
+      </div>
+      <a routerLink="/free-workforce-tools" class="btn btn-primary crosslink-btn">
+        View Workforce Tools
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Bottom CTA ─────────────────────────────────────────── -->
+<section class="hub-cta section-sm">
+  <div class="container">
+    <div class="hub-cta-card">
+      <div class="hub-cta-content">
+        <span class="material-symbols-outlined hub-cta-icon">auto_awesome</span>
+        <h2>Managing a Team? You Need More Than Free Tools.</h2>
+        <p>
+          BriskPeople HRMS automates payroll, attendance, leave management, and employee
+          onboarding — turning what takes hours into a few clicks.
+        </p>
+        <div class="hub-cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary">Start Free Trial</a>
+          <a routerLink="/book-demo" class="btn btn-outline">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

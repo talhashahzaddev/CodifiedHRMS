@@ -1,0 +1,414 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ──────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Attrition Rate Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ─────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">person_remove</span>
+        </div>
+        <div>
+          <h1>Attrition Rate Calculator</h1>
+          <p class="tool-intro">
+            Calculate your organisation's employee attrition rate and estimate the financial
+            cost of workforce departures. Uses the SHRM-standard formula — (Employees Left ÷
+            Average Headcount) × 100 — and includes a 4-level status indicator with estimated
+            replacement cost.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ──────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Form -->
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Workforce Data</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <!-- Currency -->
+              <div class="form-group">
+                <label for="attr-currency" class="field-label">Currency</label>
+                <select id="attr-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) {
+                    <option [value]="c.value">{{ c.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Employees at Start -->
+              <div class="form-group" [class.has-error]="getFieldError('employeesAtStart')">
+                <label for="attr-start" class="field-label">Employees at Start of Period <span class="required">*</span></label>
+                <input id="attr-start" type="number" formControlName="employeesAtStart"
+                  class="field-input" placeholder="e.g. 120" min="0" aria-required="true"
+                  aria-label="Number of employees at the start of the period"/>
+                @if (getFieldError('employeesAtStart'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Employees at End -->
+              <div class="form-group" [class.has-error]="getFieldError('employeesAtEnd')">
+                <label for="attr-end" class="field-label">Employees at End of Period <span class="required">*</span></label>
+                <input id="attr-end" type="number" formControlName="employeesAtEnd"
+                  class="field-input" placeholder="e.g. 108" min="0" aria-required="true"
+                  aria-label="Number of employees at the end of the period"/>
+                @if (getFieldError('employeesAtEnd'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Employees Left -->
+              <div class="form-group" [class.has-error]="getFieldError('employeesLeft')">
+                <label for="attr-left" class="field-label">Employees That Left <span class="required">*</span></label>
+                <input id="attr-left" type="number" formControlName="employeesLeft"
+                  class="field-input" placeholder="e.g. 15" min="0" aria-required="true"
+                  aria-label="Number of employees who left during the period"/>
+                <span class="field-hint">Include both voluntary and involuntary separations</span>
+                @if (getFieldError('employeesLeft'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Avg Salary -->
+              <div class="form-group" [class.has-error]="getFieldError('avgSalary')">
+                <label for="attr-salary" class="field-label">Average Annual Salary <span class="required">*</span></label>
+                <input id="attr-salary" type="number" formControlName="avgSalary"
+                  class="field-input" placeholder="e.g. 60000" min="0" step="100"
+                  aria-required="true" aria-label="Average annual salary per employee"/>
+                @if (getFieldError('avgSalary'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Replacement Cost % -->
+              <div class="form-group" [class.has-error]="getFieldError('replacementCostPct')">
+                <label for="attr-repl" class="field-label">Replacement Cost (% of Salary) <span class="required">*</span></label>
+                <input id="attr-repl" type="number" formControlName="replacementCostPct"
+                  class="field-input" placeholder="50" min="0" max="500" step="5"
+                  aria-required="true" aria-label="Replacement cost as a percentage of annual salary"/>
+                <span class="field-hint">SHRM average: 50–60% for most roles; up to 200%+ for senior roles</span>
+                @if (getFieldError('replacementCostPct'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ formError }}
+                </div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-attr-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-attr-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              @if (result.hasWarning) {
+                <div class="result-warning-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ result.warningMsg }}
+                </div>
+              }
+
+              <!-- Main Result -->
+              <div class="result-hero result-hero--{{ result.level }}">
+                <div class="result-badge">
+                  <span class="material-symbols-outlined">
+                    {{ result.level === 'low' ? 'check_circle' : result.level === 'moderate' ? 'info' : result.level === 'high' ? 'warning' : 'cancel' }}
+                  </span>
+                  {{ result.levelLabel }}
+                </div>
+                <div class="result-main-value">{{ result.attritionRate | number: '1.2-2' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Employee Attrition Rate</div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">group</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Average Headcount</span>
+                    <span class="metric-value">{{ result.avgHeadcount | number: '1.1-1' }} employees</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person_remove</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Employees That Left</span>
+                    <span class="metric-value">{{ result.employeesLeft | number }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">favorite</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Implied Retention Rate</span>
+                    <span class="metric-value">{{ result.retentionRate | number: '1.2-2' }}%</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person_search</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Replacement Cost per Employee</span>
+                    <span class="metric-value">{{ result.replacementCostPerEmployee | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">payments</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Estimated Total Financial Loss</span>
+                    <span class="metric-value">{{ result.totalFinancialLoss | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-attr-csv">
+                  <span class="material-symbols-outlined">download</span> Download CSV
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-attr-print">
+                  <span class="material-symbols-outlined">print</span> Print
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">people_outline</span>
+              <p>Enter your headcount and departure data to calculate your attrition rate and estimate the financial cost of employee turnover.</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ─────────────────────────────── -->
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is an Attrition Rate Calculator?</h2>
+        <p>
+          An <strong>attrition rate calculator</strong> measures the percentage of employees who leave an
+          organisation over a defined period, relative to the average workforce size. It is one of the most
+          important metrics in Human Resources, providing an objective measure of workforce stability and the
+          effectiveness of employee engagement and retention strategies.
+        </p>
+        <p>
+          This calculator goes beyond the headline percentage: it also estimates the <em>financial cost</em>
+          of those departures by multiplying the number of employees who left by the replacement cost per
+          employee (as a % of average salary). This helps HR teams build the business case for retention
+          investment by converting an abstract percentage into a concrete financial figure.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Attrition Rate Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Benchmark workforce stability:</strong> Know immediately whether your attrition rate is Low, Moderate, High, or Very High relative to industry norms — and set targets accordingly.</li>
+          <li><strong>Quantify the cost of turnover:</strong> The financial loss output converts attrition from an HR metric into a business KPI that CFOs and executives respond to.</li>
+          <li><strong>Track changes over time:</strong> Running the calculation each quarter reveals whether retention initiatives are working or whether the situation is deteriorating.</li>
+          <li><strong>Segment by department:</strong> Run the calculation for each team separately to identify the highest-attrition areas requiring urgent intervention.</li>
+          <li><strong>Budget for recruitment:</strong> Use the estimated replacement cost to set a realistic recruitment and onboarding budget for the year.</li>
+          <li><strong>Compare before and after:</strong> Measure the impact of a pay review, culture initiative, or management change by comparing attrition rates before and after.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Attrition Rate Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — used to format the financial loss output.</li>
+          <li><strong>Enter Employees at Start</strong> — total headcount on day 1 of your measurement period.</li>
+          <li><strong>Enter Employees at End</strong> — total headcount on the last day of the period.</li>
+          <li><strong>Enter Employees That Left</strong> — all separations during the period (voluntary resignations, involuntary terminations, retirements). Do not subtract new hires.</li>
+          <li><strong>Enter Average Annual Salary</strong> — the mean gross annual salary across your workforce (or department).</li>
+          <li><strong>Enter Replacement Cost %</strong> — the cost of replacing one employee as a % of their annual salary. SHRM estimates 50–60% for most roles; use 100–200% for senior or specialized positions.</li>
+          <li>Click <strong>Calculate</strong>. The attrition rate, financial loss, retention rate, and status indicator appear instantly.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Employee Attrition Rate</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Average Headcount</strong> = (Employees at Start + Employees at End) ÷ 2</div>
+          <div class="formula-line"><strong>Attrition Rate (%)</strong> = (Employees That Left ÷ Average Headcount) × 100</div>
+          <div class="formula-line"><strong>Replacement Cost per Employee</strong> = Avg Annual Salary × (Replacement % ÷ 100)</div>
+          <div class="formula-line"><strong>Total Financial Loss</strong> = Employees That Left × Replacement Cost per Employee</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Start: <strong>120 employees</strong>. End: <strong>108 employees</strong>. Left: <strong>15</strong>. Avg salary: <strong>$60,000</strong>. Replacement cost: <strong>50%</strong>.</p>
+          <ul>
+            <li>Average Headcount = (120 + 108) ÷ 2 = <strong>114</strong></li>
+            <li>Attrition Rate = (15 ÷ 114) × 100 = <strong>13.2%</strong> 🟡 Moderate</li>
+            <li>Replacement Cost per Employee = $60,000 × 50% = <strong>$30,000</strong></li>
+            <li>Total Financial Loss = 15 × $30,000 = <strong>$450,000</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of attrition rate measurement">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SHRM-standard formula used across HR benchmarking surveys globally</td>
+                <td>Lumps voluntary and involuntary separations together — different root causes require different responses</td>
+              </tr>
+              <tr>
+                <td>Average headcount smooths distortions from mid-period hiring waves or layoffs</td>
+                <td>Replacement cost % is an estimate — actual costs vary significantly by role level and market</td>
+              </tr>
+              <tr>
+                <td>Financial loss output converts the metric into a business-level KPI</td>
+                <td>Does not measure hidden costs: knowledge loss, team morale impact, customer relationship disruption</td>
+              </tr>
+              <tr>
+                <td>4-level benchmark status provides instant context without additional research</td>
+                <td>Industry benchmarks vary significantly — a 15% rate is average in some sectors, very high in others</td>
+              </tr>
+              <tr>
+                <td>Segmentation by department reveals hotspots missed by company-wide averages</td>
+                <td>Does not distinguish between regrettable and non-regrettable attrition</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Attrition Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <h3>0–10% — Low Attrition</h3>
+            <p>Workforce is stable. Ensure you are not inadvertently retaining underperformers — some healthy attrition allows for fresh talent and new perspectives.</p>
+          </div>
+          <div class="insight-card insight-card--yellow">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div>
+            <h3>10–20% — Moderate Attrition</h3>
+            <p>Common across most industries. Run exit interviews to identify the primary drivers and track whether the rate is stable, rising, or falling quarter-over-quarter.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div>
+            <h3>20–40% — High Attrition</h3>
+            <p>Significant workforce instability. Investigate manager effectiveness, compensation benchmarking, and career development opportunities. The financial cost is likely substantial.</p>
+          </div>
+          <div class="insight-card insight-card--red">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">cancel</span></div>
+            <h3>40%+ — Very High Attrition</h3>
+            <p>A business continuity risk. Structural issues in the employment value proposition, working conditions, or management culture need urgent systemic resolution.</p>
+          </div>
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">payments</span></div>
+            <h3>High Financial Loss?</h3>
+            <p>Use the financial loss figure to justify investment in engagement programmes, competitive pay reviews, or manager training. The ROI on retention is almost always faster than predicted.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">compare</span></div>
+            <h3>Compare Attrition vs Retention Rate</h3>
+            <p>Also run the Retention Rate calculator to get the complementary view — they measure the same underlying workforce health from different angles, each revealing different nuances.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button"
+                [attr.aria-expanded]="openFaqIndex === i"
+                [attr.id]="'attr-faq-' + i"
+                (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span>
+                <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i">
+                <p>{{ faq.a }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info">
+              <h3>{{ tool.title }}</h3>
+              <p>{{ tool.description }}</p>
+            </div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS tracks headcount changes, automates exit interview workflows, and gives you real-time attrition dashboards — no manual calculation needed.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-attr-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-attr-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

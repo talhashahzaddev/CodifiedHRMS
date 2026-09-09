@@ -1,0 +1,317 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Billable Hours Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+        <div>
+          <h1>Billable Hours Calculator</h1>
+          <p class="tool-intro">Calculate your billable percentage, billing revenue, and revenue potential lost from non-billable time. Enter total hours worked, non-billable hours, and your billing rate to get a complete picture of your team's revenue efficiency — including a gap analysis against your target billability.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Hours & Rate</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="bh-currency" class="field-label">Currency</label>
+                <select id="bh-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalHoursWorked')">
+                <label for="bh-total" class="field-label">Total Hours Worked <span class="required">*</span></label>
+                <input id="bh-total" type="number" formControlName="totalHoursWorked" class="field-input" placeholder="e.g. 160" min="1" step="0.5" aria-required="true" aria-label="Total hours worked in the period"/>
+                <span class="field-hint">All hours worked — billable and non-billable combined</span>
+                @if (getFieldError('totalHoursWorked'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('nonBillableHours')">
+                <label for="bh-nonbill" class="field-label">Non-Billable Hours <span class="required">*</span></label>
+                <input id="bh-nonbill" type="number" formControlName="nonBillableHours" class="field-input" placeholder="e.g. 35" min="0" step="0.5" aria-required="true" aria-label="Total non-billable hours (admin, meetings, training)"/>
+                <span class="field-hint">Admin tasks, internal meetings, training, business development</span>
+                @if (getFieldError('nonBillableHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('billingRatePerHour')">
+                <label for="bh-rate" class="field-label">Billing Rate per Hour <span class="required">*</span></label>
+                <input id="bh-rate" type="number" formControlName="billingRatePerHour" class="field-input" placeholder="e.g. 150" min="0" step="0.01" aria-required="true" aria-label="Hourly billing rate per employee"/>
+                @if (getFieldError('billingRatePerHour'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('numEmployees')">
+                <label for="bh-emp" class="field-label">Number of Employees <span class="required">*</span></label>
+                <input id="bh-emp" type="number" formControlName="numEmployees" class="field-input" placeholder="1" min="1" aria-required="true" aria-label="Number of employees in this calculation"/>
+                <span class="field-hint">Used to calculate per-employee averages</span>
+                @if (getFieldError('numEmployees'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('targetBillablePct')">
+                <label for="bh-target" class="field-label">Target Billable % <span class="required">*</span></label>
+                <input id="bh-target" type="number" formControlName="targetBillablePct" class="field-input" placeholder="75" min="0" max="100" step="1" aria-required="true" aria-label="Target billable percentage"/>
+                <span class="field-hint">Consulting benchmark: 70–80%. Legal: 75–85%.</span>
+                @if (getFieldError('targetBillablePct'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-bh-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-bh-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              <div class="result-hero result-hero--{{ result.status }}">
+                <div class="result-badge">
+                  <span class="material-symbols-outlined">{{ result.status === 'high' ? 'check_circle' : result.status === 'moderate' ? 'info' : 'warning' }}</span>
+                  {{ result.statusLabel }}
+                </div>
+                <div class="result-main-value">{{ result.billablePct | number:'1.2-2' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Billable Percentage</div>
+              </div>
+
+              <!-- Target Gap Check -->
+              <div class="target-check" [class.target-met]="result.targetMet" [class.target-missed]="!result.targetMet">
+                <div class="target-check-icon"><span class="material-symbols-outlined">{{ result.targetMet ? 'check_circle' : 'cancel' }}</span></div>
+                <div class="target-check-text">
+                  <strong>Target: {{ result.targetBillablePct }}% Billable</strong>
+                  <p>
+                    @if (result.targetMet) { On target. <strong>{{ result.billableHours | number:'1.1-1' }}</strong> billable hours vs target of <strong>{{ result.targetBillableHours | number:'1.1-1' }}</strong> hrs. }
+                    @else { <strong>{{ result.gapHours | number:'1.1-1' }}</strong> additional hours needed to hit target. Revenue potential lost: <strong>{{ result.revenuePotentialLost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</strong>. }
+                  </p>
+                  <span class="target-status-label">{{ result.targetMet ? '✅ Target Met' : '🔴 Target Missed' }}</span>
+                </div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">task_alt</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Billable Hours</span>
+                    <span class="metric-value">{{ result.billableHours | number:'1.1-1' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">block</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Non-Billable Hours</span>
+                    <span class="metric-value">{{ result.nonBillableHours | number:'1.1-1' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">attach_money</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Billing Revenue</span>
+                    <span class="metric-value">{{ result.revenue | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Revenue per Employee</span>
+                    <span class="metric-value">{{ result.revenuePerEmployee | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Billable Hours per Employee</span>
+                    <span class="metric-value">{{ result.billablePerEmployee | number:'1.1-1' }} hrs</span>
+                  </div>
+                </div>
+                @if (!result.targetMet) {
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">money_off</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Revenue Potential Lost (gap)</span>
+                      <span class="metric-value">{{ result.revenuePotentialLost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-bh-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-bh-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">receipt_long</span>
+              <p>Enter your hours worked, non-billable hours, and billing rate to calculate your billable percentage, revenue, and target gap analysis.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>What is a Billable Hours Calculator?</h2>
+        <p>A <strong>billable hours calculator</strong> measures what percentage of total hours worked are spent on chargeable, revenue-generating activities. It calculates the <em>Billable Percentage</em> — one of the most critical KPIs for consulting, legal, IT services, agencies, and any firm that bills clients by time.</p>
+        <p>Beyond the headline percentage, this calculator computes: the exact billing revenue generated, revenue per employee, billable hours per employee, the target billable hours needed to hit your goal, and — critically — the <em>revenue potential lost</em> from hours that fall short of target. This gives both operational and financial visibility in a single calculation.</p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Billable Hours Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Measure revenue-generating efficiency:</strong> Billable % directly measures what fraction of your team's effort translates into client revenue — the most fundamental performance measure for time-based billing businesses.</li>
+          <li><strong>Quantify the cost of non-billable time:</strong> The revenue potential lost output converts non-billable hours into a financial figure, making the case for reducing admin overhead or improving project coverage.</li>
+          <li><strong>Set and track targets:</strong> Enter your target billable % and the calculator shows the exact gap in hours and the revenue at stake — giving your operations team a clear, measurable objective.</li>
+          <li><strong>Benchmark per employee:</strong> Revenue per employee and billable hours per employee enable fair comparison across team members or service lines with different billing rates.</li>
+          <li><strong>Identify patterns in non-billable time:</strong> Running this weekly or monthly reveals whether non-billable time is growing — often the first signal of process inefficiency, scope creep, or rework.</li>
+          <li><strong>Support pricing decisions:</strong> Consistent billable % data informs whether your billing rate reflects the true cost of the non-billable overhead embedded in every client engagement.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Billable Hours Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — used to display revenue and revenue-lost figures.</li>
+          <li><strong>Enter Total Hours Worked</strong> — all hours worked in the period, including billable and non-billable time.</li>
+          <li><strong>Enter Non-Billable Hours</strong> — admin, internal meetings, training, business development, rework, and other non-client-facing time.</li>
+          <li><strong>Enter Billing Rate per Hour</strong> — your standard hourly client billing rate (or the weighted average if rates vary by project).</li>
+          <li><strong>Enter Number of Employees</strong> — used to calculate per-employee averages. Enter 1 for an individual analysis.</li>
+          <li><strong>Enter Target Billable %</strong> — your firm's target (e.g., 75%). The calculator checks whether you met it and shows the gap.</li>
+          <li>Click <strong>Calculate</strong>. All results appear immediately, including the target check and revenue gap.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Billable Hours Percentage</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Billable Hours</strong> = Total Hours Worked − Non-Billable Hours</div>
+          <div class="formula-line"><strong>Billable Percentage (%)</strong> = (Billable Hours ÷ Total Hours Worked) × 100</div>
+          <div class="formula-line"><strong>Billing Revenue</strong> = Billable Hours × Billing Rate per Hour</div>
+          <div class="formula-line"><strong>Revenue per Employee</strong> = Billing Revenue ÷ Number of Employees</div>
+          <div class="formula-line"><strong>Target Billable Hours</strong> = Total Hours × (Target % ÷ 100)</div>
+          <div class="formula-line"><strong>Gap Hours</strong> = max(0, Target Billable Hours − Actual Billable Hours)</div>
+          <div class="formula-line"><strong>Revenue Potential Lost</strong> = Gap Hours × Billing Rate per Hour</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Team of <strong>5 consultants</strong>. Total hours worked: <strong>160 hrs</strong>. Non-billable: <strong>35 hrs</strong>. Rate: <strong>$150/hr</strong>. Target: <strong>75%</strong>.</p>
+          <ul>
+            <li>Billable Hours = 160 − 35 = <strong>125 hrs</strong></li>
+            <li>Billable % = (125 ÷ 160) × 100 = <strong>78.1%</strong> 🟢 Above target</li>
+            <li>Revenue = 125 × $150 = <strong>$18,750</strong></li>
+            <li>Revenue per Employee = $18,750 ÷ 5 = <strong>$3,750</strong></li>
+            <li>Target Billable Hours = 160 × 75% = <strong>120 hrs</strong> ✅ Actual (125) exceeds target</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of billable hours tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Direct line-of-sight from hours to revenue — the clearest efficiency metric for time-billing businesses</td><td>Does not measure quality of billable work; a high billable % with poor client outcomes is worse than a lower billable % with excellent outcomes</td></tr>
+              <tr><td>Revenue potential lost quantifies the financial impact of non-billable overhead for management reporting</td><td>Categorising time as billable vs non-billable requires disciplined, consistent time-tracking — manual tracking often miscategorises hours</td></tr>
+              <tr><td>Per-employee breakdown enables individual and team performance comparison</td><td>Billing rate is typically an average; actual rates may vary significantly by client, project, or employee seniority</td></tr>
+              <tr><td>Target gap analysis gives operations a concrete, actionable number of hours to recover</td><td>Maximising billable % at the expense of non-billable investment (training, BD, IP development) creates long-term strategic risk</td></tr>
+              <tr><td>Weekly tracking reveals patterns in non-billable time before they materially impact revenue</td><td>Firms with retainer or subscription pricing (not hourly billing) need different metrics — billable % becomes less relevant</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Billable Hours Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>≥ 80% Billable — High Billability</h3><p>Excellent revenue efficiency. Ensure non-billable time is not being suppressed artificially. Invest in non-billable activities (training, BD) to sustain long-term capability.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div><h3>70–79% — Moderate Billability</h3><p>Within acceptable range for most professional services firms. Small improvements in scheduling and admin reduction can push this to the next tier.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>Below 70% — Revenue Leakage</h3><p>Significant non-billable overhead. Audit what the 30%+ non-billable hours consist of. Common culprits: excessive meetings, admin rework, scope creep that can't be billed, and time lost to context switching.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">person</span></div><h3>Revenue per Employee Below Market</h3><p>If revenue per employee is below your industry benchmark, either the billing rate is below market or billable % is too low. Use both levers — improving billability is often faster than renegotiating rates.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">money_off</span></div><h3>Large Revenue Potential Lost</h3><p>Use the revenue potential lost figure to build the ROI case for: hiring dedicated admin support, automating timesheet submission, reducing internal meeting frequency, or improving project pipeline coverage.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div><h3>Compare Billable % Month-on-Month</h3><p>A single month's result has limited value. Track monthly to spot seasonal patterns and measure the impact of process changes. Most improving firms show a consistent 1–2% monthly gain over 6 months before plateau.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" [attr.id]="'bh-faq-' + i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS automates billable hour tracking, calculates utilization and revenue reports automatically, and alerts managers when teams fall below billability targets.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-bh-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-bh-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

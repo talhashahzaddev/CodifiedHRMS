@@ -1,0 +1,144 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Time Card Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">calendar_clock</span></div>
+        <div>
+          <h1>Weekly Time Card Calculator</h1>
+          <p class="tool-intro">Track your daily hours and calculate your weekly timesheet. Enter your daily hours worked (in decimals) to instantly sum your total weekly hours, calculate overtime (&gt;40 hours), and estimate your gross pay.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Weekly Hours</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="tc-curr" class="field-label">Currency</label>
+                <select id="tc-curr" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="tc-rate" class="field-label">Hourly Rate (Optional)</label>
+                <input id="tc-rate" type="number" formControlName="hourlyRate" class="field-input" placeholder="e.g. 20" min="0" step="0.5"/>
+              </div>
+
+              <div class="time-card-grid" formArrayName="days">
+                @for (day of daysArray.controls; track day; let i = $index) {
+                  <div class="day-row" [formGroupName]="i">
+                    <span class="day-label">{{ daysOfWeek[i] }}</span>
+                    <input type="number" formControlName="hoursWorked" class="day-input" placeholder="0" min="0" max="24" step="0.25" aria-label="Hours worked on {{ daysOfWeek[i] }}"/>
+                  </div>
+                }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-tc-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Timesheet
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-tc-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Clear
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--low">
+                <div class="result-badge"><span class="material-symbols-outlined">schedule</span>Weekly Total</div>
+                <div class="result-main-value">{{ result.totalHours | number:'1.2-2' }}<span class="result-unit"> hrs</span></div>
+                <div class="result-main-label">Total Hours Worked</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">work</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Hours</span>
+                    <span class="metric-value">{{ result.regularHours | number:'1.2-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">more_time</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime Hours</span>
+                    <span class="metric-value">{{ result.overtimeHours | number:'1.2-2' }} hrs</span>
+                  </div>
+                </div>
+                @if (result.grossPay !== null) {
+                  <div class="metric-row metric-row--highlight">
+                    <span class="metric-icon material-symbols-outlined">payments</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Estimated Gross Pay</span>
+                      <span class="metric-value">{{ result.grossPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-tc-csv"><span class="material-symbols-outlined">download</span> Download Timesheet</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-tc-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">calendar_clock</span>
+              <p>Enter your hours for each day to generate your weekly timesheet, calculate overtime, and estimate pay.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>

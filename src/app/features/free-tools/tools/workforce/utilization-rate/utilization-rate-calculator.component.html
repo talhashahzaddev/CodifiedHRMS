@@ -1,0 +1,291 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Utilization Rate Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">donut_large</span></div>
+        <div>
+          <h1>Utilization Rate Calculator</h1>
+          <p class="tool-intro">Calculate your team's utilization rate — the percentage of available time spent on billable or productive work. Enter billable hours, total available hours, and your target rate to see your utilization score, gap from target, and optional revenue impact.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Hours Data</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="util-currency" class="field-label">Currency (for revenue fields)</label>
+                <select id="util-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('billableHours')">
+                <label for="util-bill" class="field-label">Billable Hours <span class="required">*</span></label>
+                <input id="util-bill" type="number" formControlName="billableHours" class="field-input" placeholder="e.g. 130" min="0" step="0.5" aria-required="true" aria-label="Total billable hours worked"/>
+                <span class="field-hint">Hours worked on client or revenue-generating tasks</span>
+                @if (getFieldError('billableHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalHoursAvailable')">
+                <label for="util-total" class="field-label">Total Available Hours <span class="required">*</span></label>
+                <input id="util-total" type="number" formControlName="totalHoursAvailable" class="field-input" placeholder="e.g. 160" min="1" step="0.5" aria-required="true" aria-label="Total available working hours in the period"/>
+                <span class="field-hint">Total scheduled working hours excluding leave and holidays</span>
+                @if (getFieldError('totalHoursAvailable'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('targetUtilizationRate')">
+                <label for="util-target" class="field-label">Target Utilization Rate (%) <span class="required">*</span></label>
+                <input id="util-target" type="number" formControlName="targetUtilizationRate" class="field-input" placeholder="80" min="0" max="100" step="1" aria-required="true" aria-label="Target utilization rate percentage"/>
+                <span class="field-hint">Industry average: 75–85% for professional services</span>
+                @if (getFieldError('targetUtilizationRate'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('billingRatePerHour')">
+                <label for="util-rate" class="field-label">Billing Rate per Hour (optional)</label>
+                <input id="util-rate" type="number" formControlName="billingRatePerHour" class="field-input" placeholder="e.g. 150" min="0" step="0.01" aria-label="Hourly billing rate for revenue calculation"/>
+                <span class="field-hint">Enables revenue generated and revenue opportunity lost calculations</span>
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-util-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-util-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--{{ result.status }}">
+                <div class="result-badge">
+                  <span class="material-symbols-outlined">{{ result.status === 'high' ? 'check_circle' : result.status === 'moderate' ? 'info' : 'warning' }}</span>
+                  {{ result.statusLabel }}
+                </div>
+                <div class="result-main-value">{{ result.utilizationRate | number:'1.2-2' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Utilization Rate</div>
+              </div>
+
+              <div class="target-check" [class.target-met]="result.targetMet" [class.target-missed]="!result.targetMet">
+                <div class="target-check-icon"><span class="material-symbols-outlined">{{ result.targetMet ? 'check_circle' : 'cancel' }}</span></div>
+                <div class="target-check-text">
+                  <strong>Target: {{ result.targetUtilizationRate }}% Utilization</strong>
+                  <p>
+                    @if (result.targetMet) { You exceeded your target by <strong>{{ (result.utilizationRate - result.targetUtilizationRate) | number:'1.2-2' }}%</strong>. }
+                    @else { You are <strong>{{ result.utilizationGap | number:'1.2-2' }}%</strong> below your target. }
+                  </p>
+                  <span class="target-status-label">{{ result.targetMet ? '✅ Target Met' : '🔴 Target Missed' }}</span>
+                </div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">task_alt</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Billable Hours</span>
+                    <span class="metric-value">{{ result.billableHours | number:'1.1-1' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">block</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Unbilled Hours</span>
+                    <span class="metric-value">{{ result.unbilledHours | number:'1.1-1' }} hrs</span>
+                  </div>
+                </div>
+                @if (result.billableRevenue !== null) {
+                  <div class="metric-row metric-row--highlight">
+                    <span class="metric-icon material-symbols-outlined">attach_money</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Revenue Generated</span>
+                      <span class="metric-value">{{ result.billableRevenue | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">money_off</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Revenue Opportunity Lost</span>
+                      <span class="metric-value">{{ result.revenueLost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-util-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-util-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">donut_large</span>
+              <p>Enter your billable hours and total available hours to calculate your team's utilization rate and revenue impact.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>What is a Utilization Rate Calculator?</h2>
+        <p>A <strong>utilization rate calculator</strong> measures what percentage of your team's total available working time is spent on billable or value-generating work. It is the primary revenue-efficiency KPI for consulting, professional services, legal, IT services, and any firm that bills clients by time. The formula is simple: <em>(Billable Hours ÷ Total Available Hours) × 100</em>.</p>
+        <p>This calculator extends the basic formula to include a target utilization comparison, and optionally calculates the revenue generated by billable time and the revenue opportunity lost through unbilled time — giving you both an operational and a financial view of your team's capacity performance.</p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Utilization Rate Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Identify capacity underperformance early:</strong> A utilization rate below target is an early signal of revenue leakage that compounds over time. Catching it weekly rather than at month-end significantly reduces the financial impact.</li>
+          <li><strong>Quantify revenue at stake:</strong> The revenue opportunity lost figure puts a dollar figure on underutilization — transforming a percentage metric into a management-level financial alert.</li>
+          <li><strong>Set evidence-based targets:</strong> Entering your target utilization rate tells you the exact number of additional billable hours needed to hit it — giving operations managers a clear action target.</li>
+          <li><strong>Compare teams and periods:</strong> Utilization rate is normalised by available hours, so you can fairly compare months with different working days or teams with different headcounts.</li>
+          <li><strong>Support pricing and capacity decisions:</strong> Consistently high utilization (90%+) signals that additional resource is needed before burnout occurs. Consistently low utilization signals a pipeline or scheduling problem.</li>
+          <li><strong>Drive team accountability:</strong> Publishing weekly utilization rates by team creates healthy accountability without requiring invasive monitoring.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Utilization Rate Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — used for the revenue and revenue-lost fields if a billing rate is provided.</li>
+          <li><strong>Enter Billable Hours</strong> — total hours worked on client or revenue-generating tasks in the period.</li>
+          <li><strong>Enter Total Available Hours</strong> — total scheduled working hours in the period, excluding approved leave and public holidays.</li>
+          <li><strong>Enter your Target Utilization Rate</strong> — your team's utilization goal (default 80%). The calculator checks whether you met it.</li>
+          <li><strong>Enter Billing Rate per Hour</strong> (optional) — to calculate revenue generated by billable time and revenue opportunity lost through unbilled hours.</li>
+          <li>Click <strong>Calculate</strong> to see utilization rate, target check, unbilled hours, and revenue figures.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Utilization Rate</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Utilization Rate (%)</strong> = (Billable Hours ÷ Total Available Hours) × 100</div>
+          <div class="formula-line"><strong>Unbilled Hours</strong> = Total Available Hours − Billable Hours</div>
+          <div class="formula-line"><strong>Utilization Gap (%)</strong> = Target Rate − Actual Rate</div>
+          <div class="formula-line"><strong>Revenue Generated</strong> = Billable Hours × Billing Rate per Hour</div>
+          <div class="formula-line"><strong>Revenue Opportunity Lost</strong> = Unbilled Hours × Billing Rate per Hour</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Team of 5 consultants. Total available hours = <strong>160 hours</strong>. Billable hours = <strong>130 hours</strong>. Target = <strong>80%</strong>. Billing rate = <strong>$150/hr</strong>.</p>
+          <ul>
+            <li>Utilization Rate = (130 ÷ 160) × 100 = <strong>81.25%</strong> 🟡 Moderate (above target)</li>
+            <li>Unbilled Hours = 160 − 130 = <strong>30 hours</strong></li>
+            <li>Utilization Gap = 80% − 81.25% = <strong>−1.25%</strong> (exceeded target by 1.25%)</li>
+            <li>Revenue Generated = 130 × $150 = <strong>$19,500</strong></li>
+            <li>Revenue Opportunity Lost = 30 × $150 = <strong>$4,500</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of utilization rate tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Primary revenue-efficiency KPI for professional services — directly tied to financial performance</td><td>Does not measure quality of billable work — high utilization with poor quality is worse than moderate utilization with high quality</td></tr>
+              <tr><td>Revenue lost calculation puts a financial figure on underutilization visible to leadership</td><td>"Available hours" definition varies — inconsistent methodology across firms makes benchmarking unreliable</td></tr>
+              <tr><td>Target comparison provides a concrete, actionable performance gap</td><td>Sustained high utilization (90%+) correlates with burnout and increased turnover — the metric has diminishing returns beyond a threshold</td></tr>
+              <tr><td>Normalised by available hours, enabling fair cross-period and cross-team comparison</td><td>Does not account for non-billable work that is strategically valuable (training, internal IP development, BD)</td></tr>
+              <tr><td>Feeds directly into revenue forecasting and capacity planning models</td><td>Manipulation risk — employees may reclassify non-billable as billable to hit targets</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Utilization Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>80–90% — Optimal Range</h3><p>Healthy utilization for most professional services firms. Revenue is flowing efficiently without excessive burnout pressure. Focus on maintaining the pipeline that keeps this rate stable.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div><h3>70–79% — Moderate</h3><p>Revenue efficiency is acceptable but below best-practice benchmarks. Review project scheduling, pipeline coverage, and whether non-billable overhead can be reduced.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>Below 70% — Action Required</h3><p>Significant revenue leakage. Either the pipeline is insufficient to fill capacity, or too much time is being lost to admin/non-billable tasks. Quantify the revenue gap to prioritize interventions.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">local_fire_department</span></div><h3>Above 90% — Burnout Risk</h3><p>Very high utilization may indicate understaffing or inadequate non-billable time for development. Monitor team wellbeing closely and consider whether additional resource is needed.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div><h3>Rising Unbilled Hours</h3><p>Even if utilization rate is stable, an increase in unbilled hours (admin, rework, meetings) is a leading indicator that efficiency is declining. Investigate before it shows up in the rate.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">payments</span></div><h3>High Revenue Opportunity Lost?</h3><p>Use the revenue-lost figure to build the business case for hiring, automation of admin tasks, or sales pipeline investment. The ROI on any of these is often 3–5× the cost within a quarter.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" [attr.id]="'util-faq-' + i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS tracks billable hours, automates utilization reporting, and alerts managers when team utilization drops below target — no spreadsheets required.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-util-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-util-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

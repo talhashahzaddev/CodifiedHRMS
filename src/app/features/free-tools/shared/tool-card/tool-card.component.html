@@ -1,0 +1,10 @@
+<a class="tool-card-mini" [routerLink]="toolRoute" [attr.aria-label]="'Open ' + tool.title">
+  <div class="tcm-icon">
+    <span class="material-symbols-outlined">{{ tool.icon }}</span>
+  </div>
+  <div class="tcm-body">
+    <span class="tcm-title">{{ tool.title }}</span>
+    <span class="tcm-desc">{{ tool.description }}</span>
+  </div>
+  <span class="tcm-arrow material-symbols-outlined">arrow_forward</span>
+</a>

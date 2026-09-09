@@ -1,0 +1,304 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">FTE Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">groups</span></div>
+        <div>
+          <h1>FTE Calculator — Full-Time Equivalent</h1>
+          <p class="tool-intro">Convert your headcount into Full-Time Equivalent (FTE) for accurate workforce planning, payroll budgeting, and project staffing. Enter the number of full-time and part-time employees with their working hours to get a precise FTE breakdown.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Workforce Data</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="fte-currency" class="field-label">Currency (for salary budget)</label>
+                <select id="fte-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('fullTimeEmployees')">
+                <label for="fte-ft" class="field-label">Full-Time Employees <span class="required">*</span></label>
+                <input id="fte-ft" type="number" formControlName="fullTimeEmployees" class="field-input" placeholder="e.g. 30" min="0" aria-required="true" aria-label="Number of full-time employees"/>
+                @if (getFieldError('fullTimeEmployees'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('partTimeEmployees')">
+                <label for="fte-pt" class="field-label">Part-Time Employees <span class="required">*</span></label>
+                <input id="fte-pt" type="number" formControlName="partTimeEmployees" class="field-input" placeholder="e.g. 10" min="0" aria-required="true" aria-label="Number of part-time employees"/>
+                @if (getFieldError('partTimeEmployees'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('partTimeHoursPerWeek')">
+                <label for="fte-pthrs" class="field-label">Part-Time Hours per Week <span class="required">*</span></label>
+                <input id="fte-pthrs" type="number" formControlName="partTimeHoursPerWeek" class="field-input" placeholder="20" min="1" max="80" aria-required="true" aria-label="Average weekly hours for part-time employees"/>
+                <span class="field-hint">Average across all part-time employees</span>
+                @if (getFieldError('partTimeHoursPerWeek'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('standardHoursPerWeek')">
+                <label for="fte-std" class="field-label">Standard Full-Time Hours per Week <span class="required">*</span></label>
+                <input id="fte-std" type="number" formControlName="standardHoursPerWeek" class="field-input" placeholder="40" min="1" max="80" aria-required="true" aria-label="Standard full-time hours per week"/>
+                <span class="field-hint">Typically 35–40 hours. Use your organisation's standard.</span>
+                @if (getFieldError('standardHoursPerWeek'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('avgAnnualSalary')">
+                <label for="fte-salary" class="field-label">Average Annual Salary (optional)</label>
+                <input id="fte-salary" type="number" formControlName="avgAnnualSalary" class="field-input" placeholder="e.g. 55000" min="0" step="100" aria-label="Average annual salary for salary budget estimate"/>
+                <span class="field-hint">Used to estimate your FTE-adjusted salary budget</span>
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-fte-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate FTE
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-fte-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              @if (result.hasWarning) {
+                <div class="result-warning-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>{{ result.warningMsg }}
+                </div>
+              }
+
+              <div class="result-hero result-hero--low">
+                <div class="result-badge"><span class="material-symbols-outlined">groups</span>FTE Breakdown</div>
+                <div class="result-main-value">{{ result.totalFTE | number:'1.2-2' }}<span class="result-unit"> FTE</span></div>
+                <div class="result-main-label">Total Full-Time Equivalent</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Full-Time Employees</span>
+                    <span class="metric-value">{{ result.fullTimeEmployees }} employees = {{ result.fullTimeFTE | number:'1.2-2' }} FTE</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person_outline</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Part-Time Employees</span>
+                    <span class="metric-value">{{ result.partTimeEmployees }} employees = {{ result.partTimeFTE | number:'1.2-2' }} FTE</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">manage_accounts</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Headcount vs FTE</span>
+                    <span class="metric-value">{{ result.totalEmployees }} headcount → {{ result.totalFTE | number:'1.2-2' }} FTE</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">speed</span>
+                  <div class="metric-info">
+                    <span class="metric-label">FTE Ratio</span>
+                    <span class="metric-value">{{ result.fteRatio | number:'1.2-2' }} <span class="metric-sub">({{ (result.fteRatio * 100) | number:'1.0-0' }}% of full-time capacity)</span></span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Weekly Hours</span>
+                    <span class="metric-value">{{ result.totalWeeklyHours | number }} hrs / week</span>
+                  </div>
+                </div>
+                @if (result.salaryBudget !== null) {
+                  <div class="metric-row metric-row--highlight">
+                    <span class="metric-icon material-symbols-outlined">payments</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Estimated Annual Salary Budget</span>
+                      <span class="metric-value">{{ result.salaryBudget | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-fte-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-fte-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">groups</span>
+              <p>Enter your full-time and part-time employee counts with their working hours to calculate your total FTE, ratio, and optional salary budget.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>What is an FTE Calculator?</h2>
+        <p>An <strong>FTE (Full-Time Equivalent) calculator</strong> converts a mix of full-time and part-time employees into a single standardised workforce capacity unit. One FTE represents one employee working the standard full-time hours per week (usually 40). A part-timer working 20 hours per week equals 0.5 FTE.</p>
+        <p>FTE is the universal language of workforce planning — used in budget models, project resource allocation, grant applications, regulatory reporting, and HR capacity analysis. Without it, comparing a team of 20 (mostly part-time) with a team of 20 (all full-time) would be misleading. FTE removes that ambiguity.</p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the FTE Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Accurate workforce planning:</strong> Understand your true workforce capacity — not just your headcount — to plan hiring, restructuring, and project staffing accurately.</li>
+          <li><strong>Payroll budgeting:</strong> FTE-adjusted salary budgets reflect actual working time, not just employee count. A team of 20 at 0.5 FTE each has half the salary cost of 20 full-time employees.</li>
+          <li><strong>Project resource allocation:</strong> Express project needs in FTE (e.g., "this project needs 3 FTE for 4 months") to plan resourcing flexibly across full-time and part-time staff.</li>
+          <li><strong>Regulatory compliance:</strong> Under the ACA (US), businesses with 50+ FTE are classified as Applicable Large Employers. FTE is also used in grant applications, government contracts, and labour law thresholds.</li>
+          <li><strong>Benchmarking:</strong> Compare workforce efficiency across departments or periods using FTE as a common denominator — regardless of how many are full-time vs part-time.</li>
+          <li><strong>Identify over/under-utilisation:</strong> An FTE ratio below 1.0 reveals the degree to which your workforce is operating below full-time capacity — useful for identifying scheduling and contract optimisation opportunities.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the FTE Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select currency</strong> — only used if you enter an average annual salary for the budget estimate.</li>
+          <li><strong>Enter Full-Time Employees</strong> — the count of employees on full-time contracts. Each counts as 1.0 FTE.</li>
+          <li><strong>Enter Part-Time Employees</strong> — the count of employees working less than the standard schedule.</li>
+          <li><strong>Enter Part-Time Hours per Week</strong> — the average weekly hours your part-time employees work (e.g., 20). If they vary, use the average.</li>
+          <li><strong>Enter Standard Full-Time Hours per Week</strong> — your organisation's definition of full-time (typically 35–40 hours).</li>
+          <li><strong>Enter Average Annual Salary</strong> (optional) — if provided, the calculator estimates the FTE-adjusted annual payroll budget.</li>
+          <li>Click <strong>Calculate FTE</strong> to see your total FTE, FTE ratio, weekly hours, and optional salary budget.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate FTE</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Full-Time FTE</strong> = Full-Time Employees × 1.0</div>
+          <div class="formula-line"><strong>Part-Time FTE</strong> = Part-Time Employees × (Part-Time Hours ÷ Standard Full-Time Hours)</div>
+          <div class="formula-line"><strong>Total FTE</strong> = Full-Time FTE + Part-Time FTE</div>
+          <div class="formula-line"><strong>FTE Ratio</strong> = Total FTE ÷ Total Headcount</div>
+          <div class="formula-line"><strong>Total Weekly Hours</strong> = (Full-Time Employees × Standard Hours) + (Part-Time Employees × Part-Time Hours)</div>
+          <div class="formula-line"><strong>Salary Budget Estimate</strong> = Total FTE × Average Annual Salary</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p><strong>30 full-time employees + 10 part-time employees</strong> working 25 hours/week. Standard = 40 hours. Average salary = $55,000.</p>
+          <ul>
+            <li>Full-Time FTE = 30 × 1.0 = <strong>30.0</strong></li>
+            <li>Part-Time FTE = 10 × (25 ÷ 40) = 10 × 0.625 = <strong>6.25</strong></li>
+            <li>Total FTE = 30 + 6.25 = <strong>36.25 FTE</strong></li>
+            <li>FTE Ratio = 36.25 ÷ 40 = <strong>0.906</strong> (90.6% of full-time capacity)</li>
+            <li>Weekly Hours = (30 × 40) + (10 × 25) = 1,200 + 250 = <strong>1,450 hrs/week</strong></li>
+            <li>Salary Budget = 36.25 × $55,000 = <strong>$1,993,750/year</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of FTE measurement">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Universal HR standard used in budgeting, planning, and regulatory reporting globally</td><td>Treats all hours as equally productive — does not account for experience, role complexity, or performance differences</td></tr>
+              <tr><td>Makes it possible to fairly compare headcount across teams with different full/part-time mixes</td><td>A single average part-time hours figure may not accurately reflect a diverse range of individual part-time schedules</td></tr>
+              <tr><td>Enables precise project resource allocation in FTE × duration (e.g., "2 FTE for 6 months")</td><td>Does not capture contractor, freelancer, or outsourced capacity — which may be a large part of actual workforce</td></tr>
+              <tr><td>FTE-adjusted salary budget avoids over-estimating payroll cost from headcount alone</td><td>Salary budget estimate is a top-down average — actual payroll calculation requires individual pay rates and actual hours</td></tr>
+              <tr><td>Threshold-based compliance (ACA, grants) is calculated directly in FTE, so this tool produces audit-ready figures</td><td>FTE calculation methodology can differ between organisations and regulatory bodies — always verify the standard being used</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your FTE Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>FTE Ratio Close to 1.0</h3><p>Most of your workforce operates at or near full-time capacity. This is typical for stable, established organisations with predictable workloads.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div><h3>FTE Ratio Below 0.75</h3><p>A significant portion of your headcount is part-time. This may indicate a deliberate flexible staffing strategy — or it may represent higher HR administrative overhead per unit of productive capacity.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">flag</span></div><h3>Near ACA Threshold (US)</h3><p>US employers with 50+ FTE must comply with ACA health insurance requirements. If your FTE is near 50, monitor hiring carefully — crossing the threshold has significant compliance and cost implications.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">payments</span></div><h3>Large Gap: Headcount vs FTE</h3><p>A large headcount-to-FTE gap (e.g., 40 headcount but only 25 FTE) means your workforce is highly part-time. Compare salary budget on an FTE basis to headcount basis to understand the cost difference clearly.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">build</span></div><h3>Use FTE for Project Bidding</h3><p>When quoting project capacity to clients or management, expressing it in FTE avoids confusion from your internal full/part-time mix. "We have 12 FTE available for Q4" is unambiguous.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div><h3>FTE Growing Faster Than Revenue?</h3><p>If total FTE is growing faster than revenue per FTE, your workforce productivity may be declining. Track revenue-per-FTE quarterly to spot this efficiency risk early.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" [attr.id]="'fte-faq-' + i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS tracks FTE in real time, generates instant workforce capacity reports, and helps you plan headcount changes before they happen.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-fte-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-fte-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

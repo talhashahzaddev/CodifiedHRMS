@@ -1,0 +1,77 @@
+<!-- Custom UI tools (QR, timetable, time-tracker, banner, time-card) -->
+@if (isCustomUi) {
+  <div class="result-box result-box--pending">
+    <div class="pending-inner">
+      <span class="material-symbols-outlined pending-icon">hourglass_top</span>
+      <p>This tool uses a custom interactive interface.</p>
+      <p class="pending-sub">The full UI will be available in the next update.</p>
+    </div>
+  </div>
+
+<!-- No results yet -->
+} @else if (!isCalculated || results.length === 0) {
+  <div class="result-box result-box--empty">
+    <div class="empty-inner">
+      <span class="material-symbols-outlined empty-icon">calculate</span>
+      <p class="empty-title">Results appear here</p>
+      <p class="empty-sub">Fill in the form and click <strong>Calculate</strong> to see your results.</p>
+    </div>
+  </div>
+
+<!-- Awaiting valid input -->
+} @else if (!hasRealResults) {
+  <div class="result-box result-box--empty">
+    <div class="empty-inner">
+      <span class="material-symbols-outlined empty-icon">edit_note</span>
+      <p class="empty-title">{{ results[0]?.value }}</p>
+    </div>
+  </div>
+
+<!-- Results ready -->
+} @else {
+  <div class="result-box result-box--filled">
+
+    <!-- Primary result highlight -->
+    @if (primaryResult) {
+      <div class="result-primary" [class.result-primary--error]="primaryResult.isError">
+        <span class="result-primary-label">{{ primaryResult.label }}</span>
+        <span class="result-primary-value">
+          {{ primaryResult.value }}
+          @if (primaryResult.unit && !['%','₹','$'].includes(primaryResult.unit)) {
+            <small>{{ primaryResult.unit }}</small>
+          }
+        </span>
+        @if (primaryResult.description) {
+          <span class="result-primary-note">{{ primaryResult.description }}</span>
+        }
+      </div>
+    }
+
+    <!-- Secondary results -->
+    @if (secondaryResults.length > 0) {
+      <div class="result-secondary-list">
+        @for (r of secondaryResults; track r.label) {
+          <div class="result-row" [class.result-row--error]="r.isError">
+            <span class="result-row-label">{{ r.label }}</span>
+            <span class="result-row-value">
+              {{ r.value }}
+              @if (r.unit) { <small class="result-row-unit">{{ r.unit }}</small> }
+            </span>
+            @if (r.description) {
+              <span class="result-row-note">{{ r.description }}</span>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Copy / share row -->
+    <div class="result-actions">
+      <button class="result-action-btn" type="button" (click)="copyResults()" title="Copy results to clipboard">
+        <span class="material-symbols-outlined">content_copy</span>
+        Copy Results
+      </button>
+    </div>
+
+  </div>
+}

@@ -77,6 +77,109 @@ export const routes: Routes = [
     path: 'choose-best-employee-attendance-tracker',
     loadComponent: () => import('./pages/blog/attendance-tracker/attendance-tracker.component').then(m => m.AttendanceTrackerComponent)
   },
+  // ── Free Tools Hub Pages ──────────────────────────────────────────────────
+  {
+    path: 'free-workforce-tools',
+    loadComponent: () =>
+      import('./features/free-tools/workforce-hub/workforce-hub.component')
+        .then(m => m.WorkforceHubComponent)
+  },
+  // ── Workforce Tool Dedicated Routes (Batch 1) ─────────────────────────────
+  {
+    path: 'free-workforce-tools/absence-percentage-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/absence-percentage/absence-percentage-calculator.component')
+        .then(m => m.AbsencePercentageCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/schedule-variance-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/schedule-variance/schedule-variance-calculator.component')
+        .then(m => m.ScheduleVarianceCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/attrition-rate-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/attrition-rate/attrition-rate-calculator.component')
+        .then(m => m.AttritionRateCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/employee-retention-rate-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/employee-retention-rate/employee-retention-rate-calculator.component')
+        .then(m => m.EmployeeRetentionRateCalculatorComponent)
+  },
+  // ── Workforce Tool Dedicated Routes (Batch 2) ─────────────────────────────
+  {
+    path: 'free-workforce-tools/fte-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/fte/fte-calculator.component')
+        .then(m => m.FteCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/utilization-rate-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/utilization-rate/utilization-rate-calculator.component')
+        .then(m => m.UtilizationRateCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/billable-hours-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/billable-hours/billable-hours-calculator.component')
+        .then(m => m.BillableHoursCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/completion-percentage-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/completion-percentage/completion-percentage-calculator.component')
+        .then(m => m.CompletionPercentageCalculatorComponent)
+  },
+  // ── Workforce Tool Dedicated Routes (Batch 3) ─────────────────────────────
+  {
+    path: 'free-workforce-tools/overtime-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/overtime/overtime-calculator.component')
+        .then(m => m.OvertimeCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/shift-differential-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/shift-differential/shift-differential-calculator.component')
+        .then(m => m.ShiftDifferentialCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/pto-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/pto/pto-calculator.component')
+        .then(m => m.PtoCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/time-card-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/time-card/time-card-calculator.component')
+        .then(m => m.TimeCardCalculatorComponent)
+  },
+  // ── Fallback: generic ToolWrapper for remaining workforce tools ────────────
+  {
+    path: 'free-workforce-tools/:toolSlug',
+    loadComponent: () =>
+      import('./features/free-tools/tool-wrapper/tool-wrapper.component')
+        .then(m => m.ToolWrapperComponent)
+  },
+  {
+    path: 'free-tools',
+    loadComponent: () =>
+      import('./features/free-tools/free-tools-hub/free-tools-hub.component')
+        .then(m => m.FreeToolsHubComponent)
+  },
+  {
+    path: 'free-tools/:toolSlug',
+    loadComponent: () =>
+      import('./features/free-tools/tool-wrapper/tool-wrapper.component')
+        .then(m => m.ToolWrapperComponent)
+  },
+
+  // ── Catch-all ─────────────────────────────────────────────────────────────
   {
     path: '**',
     redirectTo: ''
