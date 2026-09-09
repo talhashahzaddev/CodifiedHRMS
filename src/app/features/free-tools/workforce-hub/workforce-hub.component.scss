@@ -56,7 +56,7 @@
   background: linear-gradient(
     135deg,
     rgba(240, 247, 255, 0.95) 0%,
-    rgba(250, 245, 255, 0.90) 50%,
+    rgba(235, 245, 255, 0.90) 50%,
     rgba(235, 252, 248, 0.85) 100%
   );
   z-index: 0;
@@ -80,7 +80,7 @@
     width: 500px;
     height: 500px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(12, 142, 255, 0.08) 0%, transparent 70%);
   }
 }
 
@@ -119,7 +119,7 @@
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--primary-500) 0%, var(--accent-500) 100%);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -161,7 +161,7 @@
   .hero-stat-num {
     font-size: var(--font-size-2xl);
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -238,7 +238,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--primary-400), var(--accent-500));
+    background: linear-gradient(90deg, var(--primary-400), var(--primary-600));
     opacity: 0;
     transition: opacity var(--transition-base);
   }
@@ -265,7 +265,7 @@
   width: 52px;
   height: 52px;
   border-radius: var(--border-radius-lg);
-  background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+  background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
   border: 1px solid rgba(12, 142, 255, 0.15);
   display: flex;
   align-items: center;
@@ -398,7 +398,7 @@
 }
 
 .metric-card {
-  background: linear-gradient(135deg, var(--primary-50) 0%, rgba(250, 245, 255, 0.6) 100%);
+  background: linear-gradient(135deg, var(--primary-50) 0%, rgba(240, 248, 255, 0.6) 100%);
   border: 1px solid rgba(185, 223, 255, 0.5);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
@@ -530,7 +530,7 @@
 }
 
 .hub-cta-card {
-  background: linear-gradient(135deg, var(--primary-600) 0%, var(--accent-500) 100%);
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%);
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-3xl) var(--spacing-2xl);
   text-align: center;

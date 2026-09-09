@@ -159,21 +159,22 @@ export const routes: Routes = [
       import('./features/free-tools/tools/workforce/time-card/time-card-calculator.component')
         .then(m => m.TimeCardCalculatorComponent)
   },
+  // ── Workforce Tool Dedicated Routes (Batch 4) ─────────────────────────────
+  {
+    path: 'free-workforce-tools/leave-encashment-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/leave-encashment/leave-encashment-calculator.component')
+        .then(m => m.LeaveEncashmentCalculatorComponent)
+  },
+  {
+    path: 'free-workforce-tools/project-cost-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/workforce/project-cost/project-cost-calculator.component')
+        .then(m => m.ProjectCostCalculatorComponent)
+  },
   // ── Fallback: generic ToolWrapper for remaining workforce tools ────────────
   {
     path: 'free-workforce-tools/:toolSlug',
-    loadComponent: () =>
-      import('./features/free-tools/tool-wrapper/tool-wrapper.component')
-        .then(m => m.ToolWrapperComponent)
-  },
-  {
-    path: 'free-tools',
-    loadComponent: () =>
-      import('./features/free-tools/free-tools-hub/free-tools-hub.component')
-        .then(m => m.FreeToolsHubComponent)
-  },
-  {
-    path: 'free-tools/:toolSlug',
     loadComponent: () =>
       import('./features/free-tools/tool-wrapper/tool-wrapper.component')
         .then(m => m.ToolWrapperComponent)
