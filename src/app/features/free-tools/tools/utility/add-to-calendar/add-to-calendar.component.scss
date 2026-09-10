@@ -1,0 +1,100 @@
+@use '../shared/ut-tool';
+
+// ── Date/Time side-by-side row ────────────────────────────────────────────────
+.date-time-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+// ── Platform Link Blocks ──────────────────────────────────────────────────────
+.platform-link-block {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+
+  &:last-of-type { margin-bottom: 0; }
+}
+
+.platform-link-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.platform-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  .material-symbols-outlined { font-size: 22px; }
+
+  &.google  { background: rgba(66, 133, 244, 0.1);  .material-symbols-outlined { color: #4285f4; } }
+  &.outlook { background: rgba(0, 120, 212, 0.1);   .material-symbols-outlined { color: #0078d4; } }
+  &.yahoo   { background: rgba(110, 0, 187, 0.1);   .material-symbols-outlined { color: #6e00bb; } }
+}
+
+.platform-name {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.platform-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.platform-open-btn {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs) !important;
+  padding: 4px 10px !important;
+}
+
+// ── ICS Download block ────────────────────────────────────────────────────────
+.ics-download-block {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-50) 0%, rgba(240, 248, 255, 0.6) 100%);
+  border: 1px solid rgba(12, 142, 255, 0.2);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  flex-wrap: wrap;
+
+  .ics-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(12, 142, 255, 0.1);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .material-symbols-outlined { font-size: 22px; color: var(--primary-500); }
+  }
+
+  .ics-title {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .ics-hint {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  > div { flex: 1; }
+}

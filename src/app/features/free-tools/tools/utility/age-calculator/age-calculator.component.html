@@ -1,0 +1,136 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Age Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">cake</span>
+        </div>
+        <div>
+          <h1>Age Calculator</h1>
+          <p class="tool-intro">
+            Calculate your exact age in years, months, and days, plus a countdown to your next birthday.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Details</h2>
+            </div>
+
+            <form [formGroup]="form" novalidate>
+              <div class="form-group" [class.has-error]="getFieldError('dob')">
+                <label class="field-label" for="dob">Date of Birth <span class="required">*</span></label>
+                <input id="dob" type="date" class="field-input" formControlName="dob">
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('asOfDate')">
+                <label class="field-label" for="asOfDate">Calculate Age As Of <span class="required">*</span></label>
+                <input id="asOfDate" type="date" class="field-input" formControlName="asOfDate">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Outputs -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">analytics</span>
+              <h2 class="card-title">Results</h2>
+            </div>
+
+            <div class="results-empty" *ngIf="errorMsg">
+              <span class="results-empty-icon material-symbols-outlined">error</span>
+              <p>{{ errorMsg }}</p>
+            </div>
+
+            <div class="results-content" *ngIf="result && !errorMsg">
+              
+              <!-- Primary Metric: Age -->
+              <div class="metric-highlight" style="margin-bottom: var(--spacing-xl);">
+                <span class="metric-value">
+                  {{ result.years }}<span class="metric-unit">y</span> 
+                  {{ result.months }}<span class="metric-unit">m</span> 
+                  {{ result.days }}<span class="metric-unit">d</span> 
+                </span>
+                <span class="metric-label">Current Age</span>
+              </div>
+
+              <!-- Secondary Metric: Next Birthday -->
+              <div class="metric-highlight bday-highlight">
+                <div class="bday-icon"><span class="material-symbols-outlined">celebration</span></div>
+                <div>
+                  <span class="metric-value">
+                    {{ result.nextBirthday.daysRemaining }} <span class="metric-unit">days away</span>
+                  </span>
+                  <span class="metric-label">
+                    Next Birthday ({{ result.nextBirthday.date | date:'longDate' }})
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

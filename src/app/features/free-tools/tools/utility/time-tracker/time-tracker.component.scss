@@ -1,0 +1,264 @@
+@use '../shared/ut-tool';
+
+// ── Tracker layout ────────────────────────────────────────────────────────────
+.tracker-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Stopwatch card ────────────────────────────────────────────────────────────
+.stopwatch-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+
+  @media (min-width: 961px) {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.stopwatch-display {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  margin-bottom: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--primary-50) 0%, rgba(240, 248, 255, 0.5) 100%);
+  border: 1px solid rgba(12, 142, 255, 0.12);
+  border-radius: var(--border-radius-xl);
+}
+
+.clock-time {
+  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--primary-700);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition: color var(--transition-fast);
+
+  &.running {
+    color: #065f46;
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.82; }
+}
+
+.clock-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-top: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gray-300);
+  transition: background var(--transition-fast);
+
+  &.active {
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    animation: dot-blink 1s ease-in-out infinite;
+  }
+}
+
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.tracker-form { margin-bottom: var(--spacing-md); }
+
+// ── Tracker controls ──────────────────────────────────────────────────────────
+.tracker-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.btn-start {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+
+  .material-symbols-outlined { font-size: 24px; }
+}
+
+.btn-stop {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  background: #dc2626;
+  border: 2px solid #dc2626;
+  color: white;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+  transition: all var(--transition-fast);
+
+  &:hover { background: #b91c1c; border-color: #b91c1c; transform: translateY(-1px); }
+  .material-symbols-outlined { font-size: 22px; }
+}
+
+// ── Sessions card ─────────────────────────────────────────────────────────────
+.sessions-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.sessions-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid var(--gray-100);
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.sessions-title {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  letter-spacing: -0.02em;
+}
+
+.sessions-meta {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.sessions-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+// ── Sessions empty state ──────────────────────────────────────────────────────
+.sessions-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  text-align: center;
+
+  .material-symbols-outlined {
+    font-size: 56px;
+    color: var(--gray-300);
+    margin-bottom: var(--spacing-md);
+  }
+
+  p {
+    font-size: var(--font-size-base);
+    color: var(--text-tertiary) !important;
+    max-width: 280px;
+    margin: 0;
+    line-height: 1.65;
+  }
+}
+
+// ── Session list ──────────────────────────────────────────────────────────────
+.session-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.session-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-bottom: 1px solid var(--gray-100);
+  transition: background var(--transition-fast);
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: var(--gray-50); }
+}
+
+.session-icon {
+  flex-shrink: 0;
+  .material-symbols-outlined { font-size: 22px; color: #10b981; }
+}
+
+.session-info { flex: 1; min-width: 0; }
+
+.session-label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-time {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-duration {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--primary-700);
+  font-family: 'Courier New', monospace;
+  flex-shrink: 0;
+  min-width: 72px;
+  text-align: right;
+}
+
+.session-delete {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  color: var(--gray-400);
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-fast);
+
+  &:hover { color: #dc2626; background: rgba(239, 68, 68, 0.06); }
+  .material-symbols-outlined { font-size: 16px; }
+}

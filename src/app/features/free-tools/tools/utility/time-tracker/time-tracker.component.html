@@ -1,0 +1,206 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Time Tracker</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">timer</span>
+        </div>
+        <div>
+          <h1>Time Tracker</h1>
+          <p class="tool-intro">
+            A precise, distraction-free time tracker. Name your task, hit Start, and log sessions to your
+            browser. All data stays local — nothing is sent to any server. Export your log as CSV.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tracker-layout">
+
+        <!-- ── Stopwatch Card ─────────────────────────────────────── -->
+        <div class="stopwatch-card">
+          <div class="stopwatch-display">
+            <div class="clock-time" [class.running]="isRunning"
+                 role="timer" aria-live="polite">
+              {{ formatElapsed(elapsedMs) }}
+            </div>
+            <div class="clock-status">
+              <span class="status-dot" [class.active]="isRunning"></span>
+              {{ isRunning ? 'Recording…' : 'Ready' }}
+            </div>
+          </div>
+
+          <!-- Task input -->
+          <form [formGroup]="form" class="tracker-form" novalidate>
+            <div class="form-group" [class.has-error]="getFieldError('label')">
+              <label class="field-label" for="taskLabel">Task / Project Name <span class="required">*</span></label>
+              <input id="taskLabel" type="text" class="field-input"
+                     formControlName="label"
+                     [disabled]="isRunning"
+                     placeholder="e.g. Client Proposal — BriskPeople"
+                     autocomplete="off">
+              <span class="field-error" *ngIf="getFieldError('label')">
+                <span class="material-symbols-outlined">error</span>{{ getFieldError('label') }}
+              </span>
+            </div>
+          </form>
+
+          <!-- Controls -->
+          <div class="tracker-controls">
+            <button *ngIf="!isRunning" class="btn btn-start btn-primary" (click)="start()" id="startTimerBtn">
+              <span class="material-symbols-outlined">play_arrow</span>
+              Start Timer
+            </button>
+            <button *ngIf="isRunning" class="btn btn-stop" (click)="stop()" id="stopTimerBtn">
+              <span class="material-symbols-outlined">stop</span>
+              Stop &amp; Save
+            </button>
+            <button *ngIf="isRunning" class="btn btn-outline btn-sm" (click)="discard()" id="discardTimerBtn">
+              <span class="material-symbols-outlined">delete</span>
+              Discard
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Sessions Log ───────────────────────────────────────── -->
+        <div class="sessions-card">
+          <div class="sessions-header">
+            <div>
+              <h2 class="sessions-title">Session Log</h2>
+              <p class="sessions-meta" *ngIf="sessions.length">
+                {{ sessions.length }} sessions —
+                <strong>Total: {{ totalDuration(sessions) }}</strong>
+              </p>
+            </div>
+            <div class="sessions-actions" *ngIf="sessions.length">
+              <button class="btn btn-sm btn-outline" (click)="exportCsv()" id="exportCsvBtn">
+                <span class="material-symbols-outlined">download</span> Export CSV
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="clearAllSessions()" id="clearSessionsBtn">
+                <span class="material-symbols-outlined">delete_sweep</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div class="sessions-empty" *ngIf="!sessions.length">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+            <p>No sessions yet. Name a task and click <strong>Start Timer</strong> to begin tracking.</p>
+          </div>
+
+          <!-- Session list -->
+          <ul class="session-list" *ngIf="sessions.length">
+            <li class="session-item" *ngFor="let s of sessions">
+              <div class="session-icon">
+                <span class="material-symbols-outlined">check_circle</span>
+              </div>
+              <div class="session-info">
+                <div class="session-label">{{ s.label }}</div>
+                <div class="session-time">
+                  {{ formatDate(s.startMs) }} → {{ formatDate(s.endMs) }}
+                </div>
+              </div>
+              <div class="session-duration">{{ formatElapsed(s.duration) }}</div>
+              <button class="session-delete" (click)="deleteSession(s.id)"
+                      [attr.aria-label]="'Delete ' + s.label + ' session'">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>Why Use a Browser-Based Time Tracker?</h2>
+        <p>
+          For freelancers, consultants, developers, and students who need to log time without committing to
+          a full SaaS subscription, a browser-based time tracker is the simplest solution. There's nothing to
+          install, no account to create, and no data leaving your device. Open the page, name your task, click
+          Start, and your time is being tracked.
+        </p>
+        <p>
+          This tracker uses <code>Date.now()</code> for all elapsed time calculations — not interval tick
+          counting — which means it remains accurate even if the browser tab is throttled, the computer goes
+          to sleep, or the system clock advances while you're away. It also persists the active session to
+          <code>localStorage</code> so that even if you accidentally close the tab, reopening the page will
+          resume the timer from the correct start time.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
