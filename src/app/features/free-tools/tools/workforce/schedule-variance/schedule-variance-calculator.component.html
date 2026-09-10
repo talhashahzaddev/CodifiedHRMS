@@ -1,0 +1,366 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ──────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Schedule Variance Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ─────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">timeline</span>
+        </div>
+        <div>
+          <h1>Schedule Variance Calculator</h1>
+          <p class="tool-intro">
+            Calculate your project's Schedule Variance (SV) and Schedule Performance Index (SPI) instantly
+            using PMI-standard Earned Value Management formulas. Enter the Earned Value and Planned Value
+            to determine whether your project is ahead of schedule, on track, or behind.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ──────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Form -->
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Project Values</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <!-- Currency -->
+              <div class="form-group">
+                <label for="sv-currency" class="field-label">Currency</label>
+                <select id="sv-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) {
+                    <option [value]="c.value">{{ c.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Earned Value -->
+              <div class="form-group" [class.has-error]="getFieldError('earnedValue')">
+                <label for="sv-ev" class="field-label">Earned Value (EV) <span class="required">*</span></label>
+                <input id="sv-ev" type="number" formControlName="earnedValue"
+                  class="field-input" placeholder="e.g. 45000" min="0" step="0.01"
+                  aria-required="true" aria-label="Earned Value — budgeted cost of work performed"/>
+                <span class="field-hint">Budgeted cost of work actually performed (BCWP)</span>
+                @if (getFieldError('earnedValue'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Planned Value -->
+              <div class="form-group" [class.has-error]="getFieldError('plannedValue')">
+                <label for="sv-pv" class="field-label">Planned Value (PV) <span class="required">*</span></label>
+                <input id="sv-pv" type="number" formControlName="plannedValue"
+                  class="field-input" placeholder="e.g. 50000" min="0" step="0.01"
+                  aria-required="true" aria-label="Planned Value — budgeted cost of work scheduled"/>
+                <span class="field-hint">Budgeted cost of work scheduled by this date (BCWS)</span>
+                @if (getFieldError('plannedValue'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ formError }}
+                </div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-sv-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-sv-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              <!-- Status Hero -->
+              <div class="result-hero result-hero--{{ result.status }}">
+                <div class="result-badge">
+                  <span class="material-symbols-outlined">
+                    {{ result.status === 'ahead' ? 'trending_up' : result.status === 'on-track' ? 'check_circle' : 'trending_down' }}
+                  </span>
+                  {{ result.statusLabel }}
+                </div>
+                <div class="result-main-value">
+                  {{ result.sv | currency: result.currency : 'symbol-narrow' : '1.2-2' }}
+                </div>
+                <div class="result-main-label">Schedule Variance (EV − PV)</div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">speed</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Schedule Performance Index (SPI)</span>
+                    <span class="metric-value">{{ result.spi | number: '1.2-2' }}
+                      <span class="metric-sub">{{ result.spi >= 1 ? '(≥1.0 is good)' : '(&lt;1.0 behind)' }}</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">percent</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Variance Percentage (SV%)</span>
+                    <span class="metric-value">{{ result.svPct | number: '1.2-2' }}%</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">work</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Earned Value (EV)</span>
+                    <span class="metric-value">{{ result.ev | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">calendar_month</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Planned Value (PV)</span>
+                    <span class="metric-value">{{ result.pv | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-sv-csv">
+                  <span class="material-symbols-outlined">download</span> Download CSV
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-sv-print">
+                  <span class="material-symbols-outlined">print</span> Print
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">analytics</span>
+              <p>Enter your <strong>Earned Value</strong> and <strong>Planned Value</strong> and click <strong>Calculate</strong> to see your EVM schedule performance metrics.</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ─────────────────────────────── -->
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is a Schedule Variance Calculator?</h2>
+        <p>
+          A <strong>Schedule Variance (SV) calculator</strong> is a project management tool that uses the Earned Value
+          Management (EVM) methodology — defined in the PMI PMBOK® Guide — to measure how far ahead or behind
+          schedule a project is at any given point. It computes two key EVM indicators: <em>Schedule Variance (SV)</em>
+          and <em>Schedule Performance Index (SPI)</em>.
+        </p>
+        <p>
+          Schedule Variance expresses the difference between work completed (Earned Value) and work that should
+          have been completed by now (Planned Value) in monetary terms. A positive SV means more work has been
+          done than planned; a negative SV means the project is running behind. The SPI expresses this as a ratio —
+          an SPI of 0.9 means you are completing only 90 cents of work for every $1 of work that should have been done.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Schedule Variance Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Objective schedule health measurement:</strong> Removes subjectivity from schedule assessments — SV and SPI give a precise, data-driven answer to "are we on track?"</li>
+          <li><strong>Early warning system:</strong> An SPI below 1.0 is an early signal that schedule recovery actions are needed before the project reaches a critical delay.</li>
+          <li><strong>Stakeholder communication:</strong> A simple currency figure (e.g., "We are $10,000 worth of work behind schedule") communicates schedule status in a way that non-technical stakeholders instantly understand.</li>
+          <li><strong>Forecasting future completion:</strong> SPI feeds into Estimate at Completion (EAC) and Time Estimate at Completion (TEAC) formulas for reliable project end-date forecasting.</li>
+          <li><strong>PMI/PMBOK compliance:</strong> EVM is the standard approach for schedule measurement in government contracts, construction, and enterprise software projects.</li>
+          <li><strong>Cross-project comparison:</strong> SPI is a normalized ratio, so it can be used to compare schedule performance across projects of different sizes or budgets.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Schedule Variance Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — the currency in which your project budget is denominated.</li>
+          <li><strong>Enter Earned Value (EV)</strong> — the budgeted cost of work actually completed. EV = % Complete × Total Budget (BAC). For example, if your project is 45% complete on a $100,000 budget, EV = $45,000.</li>
+          <li><strong>Enter Planned Value (PV)</strong> — the amount of budget that was supposed to be spent on work by today, according to your baseline schedule. If the plan says 50% should be done by now, PV = $50,000.</li>
+          <li>Click <strong>Calculate</strong>. Schedule Variance, SPI, and variance percentage appear instantly.</li>
+          <li>Download the CSV or print the result for project status reports or client presentations.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Schedule Variance (SV) and SPI</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Schedule Variance (SV)</strong> = Earned Value (EV) − Planned Value (PV)</div>
+          <div class="formula-line"><strong>Schedule Performance Index (SPI)</strong> = EV ÷ PV</div>
+          <div class="formula-line"><strong>Variance Percentage (SV%)</strong> = (SV ÷ PV) × 100</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Project baseline: $100,000 total budget. At this point in the schedule, <strong>50% of work should have been done (PV = $50,000)</strong>. Actual completion: <strong>45% (EV = $45,000)</strong>.</p>
+          <ul>
+            <li>SV = $45,000 − $50,000 = <strong>−$5,000</strong> 🔴 Behind Schedule</li>
+            <li>SPI = $45,000 ÷ $50,000 = <strong>0.90</strong> (only 90% of planned work done per $1 spent)</li>
+            <li>SV% = (−$5,000 ÷ $50,000) × 100 = <strong>−10%</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of Schedule Variance analysis">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PMI-standard EVM metric — recognized internationally across government and enterprise projects</td>
+                <td>Requires an accurate baseline plan and regular % complete tracking to produce meaningful results</td>
+              </tr>
+              <tr>
+                <td>SPI is a normalized ratio, enabling meaningful cross-project comparison</td>
+                <td>SV naturally trends toward zero as the project approaches 100% complete, regardless of how delayed it was</td>
+              </tr>
+              <tr>
+                <td>Expresses schedule status in financial terms — accessible to non-technical stakeholders</td>
+                <td>Does not identify which specific tasks or milestones are causing the delay</td>
+              </tr>
+              <tr>
+                <td>Feeds directly into Estimate at Completion (EAC) and forecast completion date calculations</td>
+                <td>Does not account for the critical path — a task may be late but not on the critical path, so it may not impact the end date</td>
+              </tr>
+              <tr>
+                <td>Complements Cost Variance (CV) for a complete project health picture</td>
+                <td>Quality of the result depends entirely on the accuracy of EV measurement — "% complete" estimates can be subjective</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your SPI Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div>
+            <h3>SPI &gt; 1.1 — Significantly Ahead</h3>
+            <p>Excellent schedule performance. Verify the % complete figures are accurate and not overestimated. Consider whether resources can be reallocated to other projects.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <h3>SPI 0.95–1.1 — On Track</h3>
+            <p>Within acceptable tolerance. Continue monitoring. Minor course corrections may be needed to maintain this position through the remaining work.</p>
+          </div>
+          <div class="insight-card insight-card--yellow">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div>
+            <h3>SPI 0.8–0.95 — Slight Delay</h3>
+            <p>Schedule is slipping. Review the critical path and identify specific delayed tasks. Consider adding resources or reducing scope before the situation worsens.</p>
+          </div>
+          <div class="insight-card insight-card--red">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">trending_down</span></div>
+            <h3>SPI Below 0.8 — Formal Recovery Needed</h3>
+            <p>A serious delay. A formal schedule recovery plan is required. Escalate to senior stakeholders and reassess the project end date.</p>
+          </div>
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">link</span></div>
+            <h3>Track SV Alongside CPI</h3>
+            <p>Cost Variance (CV = EV − AC) tells you whether you are over or under budget. Use both SPI and CPI together for a complete EVM project health assessment.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">functions</span></div>
+            <h3>Forecast Using SPI</h3>
+            <p>Use SPI to forecast your completion date: TEAC = Original Duration ÷ SPI. If the project is 120 days long and SPI = 0.9, estimated completion = 120 ÷ 0.9 = 133 days.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button"
+                [attr.aria-expanded]="openFaqIndex === i"
+                [attr.id]="'sv-faq-' + i"
+                (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span>
+                <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i">
+                <p>{{ faq.a }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info">
+              <h3>{{ tool.title }}</h3>
+              <p>{{ tool.description }}</p>
+            </div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS integrates project tracking, time management, and workforce analytics in one platform — so you always know where your team stands.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-sv-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-sv-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

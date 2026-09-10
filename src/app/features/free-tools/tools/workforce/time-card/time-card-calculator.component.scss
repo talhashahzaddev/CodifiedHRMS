@@ -1,0 +1,41 @@
+@use '../shared/wf-tool';
+
+// ── Specific Customizations for Time Card ───────────────────────
+.time-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+
+  .day-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 8px 12px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius-md);
+
+    .day-label {
+      flex: 1;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .day-input {
+      width: 100px;
+      padding: 8px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-sm);
+      text-align: right;
+
+      &:focus {
+        border-color: var(--primary-400);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(12, 142, 255, 0.12);
+      }
+    }
+  }
+}

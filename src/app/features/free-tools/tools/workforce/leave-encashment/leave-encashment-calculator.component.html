@@ -1,0 +1,155 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Leave Encashment Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">request_quote</span></div>
+        <div>
+          <h1>Leave Encashment Calculator</h1>
+          <p class="tool-intro">Calculate the cash payout value of your unused vacation or PTO days. Enter your basic monthly salary and your unused leave balance to determine your daily pay rate and the total gross encashment value.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Salary & Leave</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="le-curr" class="field-label">Currency</label>
+                <select id="le-curr" formControlName="currency" class="field-select">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('monthlySalary')">
+                <label for="le-salary" class="field-label">Monthly Basic Salary <span class="required">*</span></label>
+                <input id="le-salary" type="number" formControlName="monthlySalary" class="field-input" placeholder="e.g. 5000" min="0" step="100" aria-required="true"/>
+                <span class="field-hint">Use basic salary (excluding variable allowances) for standard encashment</span>
+                @if (getFieldError('monthlySalary'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('daysInMonth')">
+                <label for="le-dim" class="field-label">Standard Days in Month <span class="required">*</span></label>
+                <input id="le-dim" type="number" formControlName="daysInMonth" class="field-input" placeholder="30" min="1" max="31" aria-required="true"/>
+                <span class="field-hint">Often 30 or 26 days depending on local labor laws</span>
+                @if (getFieldError('daysInMonth'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalLeaveBalance')">
+                <label for="le-bal" class="field-label">Total Unused Leave Balance (Days) <span class="required">*</span></label>
+                <input id="le-bal" type="number" formControlName="totalLeaveBalance" class="field-input" placeholder="e.g. 21" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('totalLeaveBalance'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('daysToEncash')">
+                <label for="le-encash" class="field-label">Days to Encash <span class="required">*</span></label>
+                <input id="le-encash" type="number" formControlName="daysToEncash" class="field-input" placeholder="e.g. 10" min="0" step="0.5" aria-required="true"/>
+                <span class="field-hint">Cannot exceed total leave balance</span>
+                @if (getFieldError('daysToEncash'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-le-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Payout
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-le-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--high">
+                <div class="result-badge"><span class="material-symbols-outlined">payments</span>Payout Value</div>
+                <div class="result-main-value">{{ result.grossEncashmentValue | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</div>
+                <div class="result-main-label">Gross Encashment Amount</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">point_of_sale</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Calculated Daily Rate</span>
+                    <span class="metric-value">{{ result.dailyRate | currency: result.currency : 'symbol-narrow' : '1.2-2' }} / day</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">flight_takeoff</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Leave Days Encashed</span>
+                    <span class="metric-value">{{ result.encashableDays | number:'1.1-1' }} days</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">event_available</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Remaining Leave Balance</span>
+                    <span class="metric-value">{{ result.remainingDaysAfterEncashment | number:'1.1-1' }} days</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-le-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-le-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">request_quote</span>
+              <p>Enter your salary details and unused leave days to calculate your encashment payout value.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>

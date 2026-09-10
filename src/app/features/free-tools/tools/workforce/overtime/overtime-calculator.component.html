@@ -1,0 +1,202 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Overtime Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">more_time</span></div>
+        <div>
+          <h1>Overtime Calculator</h1>
+          <p class="tool-intro">Calculate your regular pay, overtime pay (time-and-a-half), and total gross wages. Enter your hourly rate and total hours worked in a week to instantly see the breakdown of your standard and premium earnings.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Pay Details</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="ot-curr" class="field-label">Currency</label>
+                <select id="ot-curr" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('regularHourlyRate')">
+                <label for="ot-rate" class="field-label">Regular Hourly Rate <span class="required">*</span></label>
+                <input id="ot-rate" type="number" formControlName="regularHourlyRate" class="field-input" placeholder="e.g. 20" min="0" step="0.5" aria-required="true" aria-label="Regular hourly rate"/>
+                @if (getFieldError('regularHourlyRate'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalHoursWorked')">
+                <label for="ot-hours" class="field-label">Total Hours Worked (Weekly) <span class="required">*</span></label>
+                <input id="ot-hours" type="number" formControlName="totalHoursWorked" class="field-input" placeholder="e.g. 45" min="0" step="0.5" aria-required="true" aria-label="Total hours worked in a week"/>
+                @if (getFieldError('totalHoursWorked'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('standardHoursLimit')">
+                <label for="ot-limit" class="field-label">Overtime Starts After (Hours) <span class="required">*</span></label>
+                <input id="ot-limit" type="number" formControlName="standardHoursLimit" class="field-input" placeholder="40" min="1" aria-required="true" aria-label="Standard hours limit before overtime begins"/>
+                <span class="field-hint">Usually 40 hours per week (FLSA standard)</span>
+                @if (getFieldError('standardHoursLimit'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('overtimeMultiplier')">
+                <label for="ot-mult" class="field-label">Overtime Rate Multiplier <span class="required">*</span></label>
+                <input id="ot-mult" type="number" formControlName="overtimeMultiplier" class="field-input" placeholder="1.5" min="1" step="0.1" aria-required="true" aria-label="Overtime multiplier"/>
+                <span class="field-hint">Usually 1.5x ("time and a half") or 2.0x ("double time")</span>
+                @if (getFieldError('overtimeMultiplier'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-ot-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Pay
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-ot-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--high">
+                <div class="result-badge"><span class="material-symbols-outlined">payments</span>Total Gross Pay</div>
+                <div class="result-main-value">{{ result.totalGrossPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</div>
+                <div class="result-main-label">Estimated Weekly Pay</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Hours</span>
+                    <span class="metric-value">{{ result.regularHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">more_time</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime Hours</span>
+                    <span class="metric-value">{{ result.overtimeHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">attach_money</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Pay</span>
+                    <span class="metric-value">{{ result.regularPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">monetization_on</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime Pay ({{ result.overtimeMultiplier }}x)</span>
+                    <span class="metric-value">{{ result.overtimePay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">pie_chart</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime % of Total Pay</span>
+                    <span class="metric-value">{{ result.overtimePctOfTotalPay | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">speed</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Effective Hourly Rate</span>
+                    <span class="metric-value">{{ result.effectiveHourlyRate | currency: result.currency : 'symbol-narrow' : '1.2-2' }} / hr</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-ot-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-ot-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">more_time</span>
+              <p>Enter your regular rate and hours worked to calculate your gross pay and see the split between regular and overtime earnings.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>What is an Overtime Calculator?</h2>
+        <p>An <strong>overtime calculator</strong> splits your total weekly hours into standard hours and premium hours, then applies the appropriate pay multipliers to calculate your total gross wages. It allows both employers and employees to accurately predict weekly payroll costs or take-home pay based on actual hours worked.</p>
+      </section>
+      
+      <section class="edu-section">
+        <h2>How to Calculate Overtime</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Regular Hours</strong> = Min(Total Hours, Standard Limit)</div>
+          <div class="formula-line"><strong>Overtime Hours</strong> = Max(0, Total Hours − Standard Limit)</div>
+          <div class="formula-line"><strong>Regular Pay</strong> = Regular Hours × Hourly Rate</div>
+          <div class="formula-line"><strong>Overtime Pay</strong> = Overtime Hours × Hourly Rate × Overtime Multiplier</div>
+          <div class="formula-line"><strong>Total Gross Pay</strong> = Regular Pay + Overtime Pay</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Rate: <strong>$20/hr</strong>. Total Hours: <strong>45</strong>. Standard: <strong>40</strong>. Multiplier: <strong>1.5x</strong></p>
+          <ul>
+            <li>Regular Hours: 40. Overtime Hours: 45 - 40 = 5.</li>
+            <li>Regular Pay = 40 × $20 = $800</li>
+            <li>Overtime Rate = $20 × 1.5 = $30/hr</li>
+            <li>Overtime Pay = 5 × $30 = $150</li>
+            <li><strong>Total Gross Pay = $800 + $150 = $950</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>

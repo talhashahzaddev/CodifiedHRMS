@@ -1,0 +1,229 @@
+<!-- ── Breadcrumb ──────────────────────────────────────────── -->
+<nav class="hub-breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol class="breadcrumb-list">
+      <li><a routerLink="/">Home</a></li>
+      <li><span class="breadcrumb-sep material-symbols-outlined">chevron_right</span></li>
+      <li aria-current="page">Free Workforce Tools</li>
+    </ol>
+  </div>
+</nav>
+
+<!-- ── Hero Section ───────────────────────────────────────── -->
+<section class="hub-hero">
+  <div class="hub-hero-bg"></div>
+  <div class="container">
+    <div class="hub-hero-content">
+      <div class="hub-hero-badge">
+        <span class="material-symbols-outlined">verified</span>
+        14 Free HR Calculators — No Sign-Up Required
+      </div>
+      <h1 class="hub-hero-title">
+        Free Workforce Tools &amp;<br>
+        <span class="gradient-text">HR Calculators</span>
+      </h1>
+      <p class="hub-hero-desc">
+        Professional-grade HR calculators for absence rates, attrition, retention, overtime,
+        FTE, PTO, shift differentials, utilization rates, and more. Built for HR teams,
+        managers, and business owners. Free forever.
+      </p>
+      <div class="hub-hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">14</span>
+          <span class="hero-stat-label">HR Calculators</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">100%</span>
+          <span class="hero-stat-label">Free Forever</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">0</span>
+          <span class="hero-stat-label">Sign-Ups Needed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tools Grid ─────────────────────────────────────────── -->
+<section class="hub-tools section-sm" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <h2>All 14 Free Workforce Calculators</h2>
+      <p>Click any tool below to open it instantly in your browser.</p>
+    </div>
+
+    <div class="tools-grid">
+      @for (tool of tools; track tool.slug) {
+        <a
+          class="tool-card"
+          [routerLink]="['/free-workforce-tools', tool.slug]"
+          [attr.aria-label]="'Open ' + tool.title">
+          <div class="tool-card-icon">
+            <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          </div>
+          <div class="tool-card-body">
+            <h3 class="tool-card-title">{{ tool.title }}</h3>
+            <p class="tool-card-desc">{{ tool.description }}</p>
+          </div>
+          <div class="tool-card-footer">
+            <span class="tool-card-cta">
+              Open Calculator
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── SEO Content ────────────────────────────────────────── -->
+<section class="hub-seo-content section-sm">
+  <div class="container">
+    <div class="seo-grid">
+
+      <!-- Left column -->
+      <div class="seo-col">
+        <h2>Why Use Free HR Calculators?</h2>
+        <p>
+          Human Resources teams rely on dozens of recurring calculations — from daily time
+          card math to quarterly attrition reviews. Spreadsheets work, but they're fragile:
+          formulas break, files get misplaced, and version control becomes a nightmare.
+          These free browser-based tools eliminate that friction entirely.
+        </p>
+        <p>
+          Every calculator on this page implements the industry-standard formula for that
+          metric. The <strong>Absence Percentage Calculator</strong> uses the universally
+          accepted formula: <code>(Absent ÷ (Employees × Workdays)) × 100</code>. The
+          <strong>Attrition Rate Calculator</strong> follows SHRM's recommended methodology.
+          The <strong>Leave Encashment Calculator</strong> applies the exact Indian Income Tax
+          Act, Section 10(10AA) exemption logic.
+        </p>
+
+        <h2>Who Are These Tools For?</h2>
+        <ul class="seo-list">
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>HR Managers</strong> who need quick answers without opening Excel</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Payroll Officers</strong> calculating overtime, shift differentials, and leave encashment</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Operations Managers</strong> tracking utilization rates and billable hours</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Project Managers</strong> computing earned value and schedule variance</span>
+          </li>
+          <li>
+            <span class="material-symbols-outlined">check_circle</span>
+            <span><strong>Small Business Owners</strong> doing their own HR without a dedicated team</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right column -->
+      <div class="seo-col">
+        <h2>Key Workforce Metrics Explained</h2>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="material-symbols-outlined">person_off</span>
+            <h3>Absenteeism Rate</h3>
+          </div>
+          <p>
+            Measures what percentage of total scheduled work time is lost to absences.
+            Industry benchmark: under 3% is excellent; above 5% signals a systemic issue.
+          </p>
+          <code class="formula-block">(Absent Days ÷ (Employees × Workdays)) × 100</code>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="material-symbols-outlined">trending_down</span>
+            <h3>Attrition Rate</h3>
+          </div>
+          <p>
+            Measures the rate at which employees leave the organisation. Industry average
+            (US, 2024) is ~23% annually. Below 10% is considered very low attrition.
+          </p>
+          <code class="formula-block">(Employees Left ÷ Avg Headcount) × 100</code>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="material-symbols-outlined">groups</span>
+            <h3>Full-Time Equivalent (FTE)</h3>
+          </div>
+          <p>
+            Converts all hours worked (including part-time) into full-time unit equivalents,
+            enabling accurate headcount budgeting and ACA compliance reporting.
+          </p>
+          <code class="formula-block">Total Hours Worked ÷ Standard Full-Time Hours</code>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ Section ────────────────────────────────────────── -->
+<section class="hub-faq section-sm">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently Asked Questions</h2>
+      <p>Common questions about HR metrics, formulas, and compliance.</p>
+    </div>
+
+    <div class="faq-list" role="list">
+      @for (faq of faqs; track faq.q; let i = $index) {
+        <div class="faq-item" [class.open]="openFaqIndex === i" role="listitem">
+          <button
+            class="faq-question"
+            type="button"
+            [attr.aria-expanded]="openFaqIndex === i"
+            [attr.aria-controls]="'faq-answer-' + i"
+            (click)="toggleFaq(i)">
+            <span>{{ faq.q }}</span>
+            <span class="faq-icon material-symbols-outlined">
+              {{ openFaqIndex === i ? 'remove' : 'add' }}
+            </span>
+          </button>
+          <div
+            class="faq-answer"
+            [id]="'faq-answer-' + i"
+            [class.open]="openFaqIndex === i"
+            role="region">
+            <p>{{ faq.a }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Bottom CTA ─────────────────────────────────────────── -->
+<section class="hub-cta section-sm">
+  <div class="container">
+    <div class="hub-cta-card">
+      <div class="hub-cta-content">
+        <span class="material-symbols-outlined hub-cta-icon">auto_awesome</span>
+        <h2>Need a Full HR System, Not Just Calculators?</h2>
+        <p>
+          BriskPeople HRMS automates attendance, payroll, leave, performance, and
+          onboarding — so your team can focus on people, not spreadsheets.
+        </p>
+        <div class="hub-cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary">Start Free Trial</a>
+          <a routerLink="/book-demo" class="btn btn-outline">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

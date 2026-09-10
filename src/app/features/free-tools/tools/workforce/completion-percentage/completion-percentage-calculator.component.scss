@@ -1,0 +1,95 @@
+@use '../shared/wf-tool';
+
+// ── Specific Customizations for Completion Percentage ───────────────────────
+.form-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--spacing-lg) 0 var(--spacing-md);
+  color: var(--gray-400);
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px dashed var(--gray-200);
+  }
+
+  span {
+    padding: 0 var(--spacing-md);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.form-section-label {
+  margin-bottom: var(--spacing-md);
+
+  .section-label-text {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-500);
+    padding: 4px 8px;
+    background: var(--primary-50);
+    border-radius: var(--border-radius-sm);
+  }
+}
+
+// ── Progress Bar ──────────────────────────────────────────────────────────────
+.progress-bar-wrapper {
+  margin-bottom: var(--spacing-xl);
+  padding: 0 var(--spacing-sm);
+
+  .progress-bar-track {
+    position: relative;
+    height: 16px;
+    background: var(--gray-100);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-400), var(--primary-600));
+    border-radius: 999px;
+    transition: width var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.fill--complete {
+      background: linear-gradient(90deg, #10b981, #059669); // success green
+    }
+  }
+
+  .progress-bar-planned-marker {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 4px;
+    background: var(--error);
+    border-radius: 2px;
+    z-index: 2;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 2px white;
+    transition: left var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .progress-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--gray-500);
+
+    .progress-bar-value {
+      color: var(--primary-700);
+    }
+  }
+}
+
+// Ensure negative values display correctly
+.value--negative { color: var(--error); }
+.value--positive { color: var(--success); }

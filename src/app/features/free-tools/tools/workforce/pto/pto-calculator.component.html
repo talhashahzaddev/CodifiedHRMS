@@ -1,0 +1,160 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">PTO Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">flight_takeoff</span></div>
+        <div>
+          <h1>PTO Accrual Calculator</h1>
+          <p class="tool-intro">Calculate your available Paid Time Off (PTO) balance. Enter your annual allowance, accrual schedule, and time already taken to find out exactly how many hours (and days) you have available right now, and what your balance will be at year-end.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter PTO Policy</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group" [class.has-error]="getFieldError('annualPtoHours')">
+                <label for="pto-annual" class="field-label">Annual PTO Allowance (Hours) <span class="required">*</span></label>
+                <input id="pto-annual" type="number" formControlName="annualPtoHours" class="field-input" placeholder="e.g. 120" min="0" aria-required="true"/>
+                <span class="field-hint">e.g. 15 days × 8 hours = 120 hours</span>
+                @if (getFieldError('annualPtoHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group">
+                <label for="pto-freq" class="field-label">Accrual Frequency</label>
+                <select id="pto-freq" formControlName="accrualFrequency" class="field-select">
+                  @for (f of accrualFrequencies; track f.value) { <option [value]="f.value">{{ f.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('periodsPassed')">
+                <label for="pto-periods" class="field-label">Pay Periods Passed this Year <span class="required">*</span></label>
+                <input id="pto-periods" type="number" formControlName="periodsPassed" class="field-input" placeholder="e.g. 10" min="0" max="52" aria-required="true"/>
+                @if (getFieldError('periodsPassed'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('carryoverHours')">
+                <label for="pto-carry" class="field-label">Carryover Hours from Last Year</label>
+                <input id="pto-carry" type="number" formControlName="carryoverHours" class="field-input" placeholder="0" min="0"/>
+                @if (getFieldError('carryoverHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('ptoHoursUsed')">
+                <label for="pto-used" class="field-label">PTO Hours Used this Year</label>
+                <input id="pto-used" type="number" formControlName="ptoHoursUsed" class="field-input" placeholder="0" min="0"/>
+                @if (getFieldError('ptoHoursUsed'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('standardHoursPerDay')">
+                <label for="pto-hrsday" class="field-label">Standard Hours per Workday <span class="required">*</span></label>
+                <input id="pto-hrsday" type="number" formControlName="standardHoursPerDay" class="field-input" placeholder="8" min="1" max="24" aria-required="true"/>
+                <span class="field-hint">Used to convert your hour balance into days</span>
+                @if (getFieldError('standardHoursPerDay'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-pto-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate PTO
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-pto-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--{{ result.isNegativeBalance ? 'warning' : 'high' }}">
+                <div class="result-badge"><span class="material-symbols-outlined">event_available</span>Current Balance</div>
+                <div class="result-main-value">{{ result.remainingBalance | number:'1.1-2' }}<span class="result-unit"> hrs</span></div>
+                <div class="result-main-label">{{ result.daysRemaining | number:'1.1-2' }} Days Available</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">trending_up</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Earned per Pay Period</span>
+                    <span class="metric-value">{{ result.accrualRatePerPeriod | number:'1.3-3' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">hourglass_top</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Accrued Year-to-Date</span>
+                    <span class="metric-value">{{ result.totalAccruedToDate | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">today</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Projected Year-End Balance</span>
+                    <span class="metric-value">{{ result.projectedYearEndBalance | number:'1.1-2' }} hrs ({{ (result.projectedYearEndBalance / result.standardHoursPerDay) | number:'1.1-1' }} days)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-pto-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-pto-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">flight_takeoff</span>
+              <p>Enter your annual allowance and pay periods passed to see how much vacation time you have available today.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>

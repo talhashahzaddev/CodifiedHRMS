@@ -1,0 +1,192 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Project Cost Estimator & Pricing Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">account_balance_wallet</span></div>
+        <div>
+          <h1>Project Cost Estimator & Pricing Calculator</h1>
+          <p class="tool-intro">Calculate total project costs and determine the exact pricing required to achieve your target profit margin. Breaks down direct labor, materials, and overhead into a clear percentage analysis.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Project Details</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="pc-curr" class="field-label">Currency</label>
+                <select id="pc-curr" formControlName="currency" class="field-select">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('estimatedHours')">
+                <label for="pc-hrs" class="field-label">Estimated Direct Labor Hours <span class="required">*</span></label>
+                <input id="pc-hrs" type="number" formControlName="estimatedHours" class="field-input" placeholder="e.g. 120" min="1" aria-required="true"/>
+                @if (getFieldError('estimatedHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('averageHourlyRate')">
+                <label for="pc-rate" class="field-label">Average Labor Rate / Hour <span class="required">*</span></label>
+                <input id="pc-rate" type="number" formControlName="averageHourlyRate" class="field-input" placeholder="e.g. 45" min="0" step="0.5" aria-required="true"/>
+                <span class="field-hint">Use fully burdened labor cost rate, not the client billing rate</span>
+                @if (getFieldError('averageHourlyRate'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('materialsCost')">
+                <label for="pc-mat" class="field-label">Materials & Equipment Cost <span class="required">*</span></label>
+                <input id="pc-mat" type="number" formControlName="materialsCost" class="field-input" placeholder="e.g. 1500" min="0" step="10" aria-required="true"/>
+                @if (getFieldError('materialsCost'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('overheadPct')">
+                <label for="pc-over" class="field-label">Overhead % (of Direct Costs) <span class="required">*</span></label>
+                <input id="pc-over" type="number" formControlName="overheadPct" class="field-input" placeholder="15" min="0" max="100" aria-required="true"/>
+                <span class="field-hint">General & Admin business overhead applied to projects</span>
+                @if (getFieldError('overheadPct'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('targetProfitMargin')">
+                <label for="pc-margin" class="field-label">Target Profit Margin (%) <span class="required">*</span></label>
+                <input id="pc-margin" type="number" formControlName="targetProfitMargin" class="field-input" placeholder="20" min="0" max="99" aria-required="true"/>
+                <span class="field-hint">Determines the final recommended selling price</span>
+                @if (getFieldError('targetProfitMargin'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-pc-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Pricing
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-pc-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--high">
+                <div class="result-badge"><span class="material-symbols-outlined">sell</span>Recommended Pricing</div>
+                <div class="result-main-value">{{ result.finalPrice | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</div>
+                <div class="result-main-label">Selling Price to achieve {{ result.profitMargin }}% Margin</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">account_balance</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Internal Cost</span>
+                    <span class="metric-value">{{ result.totalCost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">trending_up</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Gross Profit Generated</span>
+                    <span class="metric-value">{{ (result.finalPrice - result.totalCost) | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cost-breakdown-panel">
+                <h3 class="panel-subtitle">Cost Breakdown Analysis</h3>
+                <div class="cost-bar" aria-hidden="true">
+                  <div class="cost-segment segment-labor" [style.width.%]="result.costBreakdown.laborPct"></div>
+                  <div class="cost-segment segment-materials" [style.width.%]="result.costBreakdown.materialsPct"></div>
+                  <div class="cost-segment segment-overhead" [style.width.%]="result.costBreakdown.overheadPct"></div>
+                </div>
+                <div class="cost-legend">
+                  <span class="legend-item legend-labor">Labor ({{ result.costBreakdown.laborPct | number:'1.0-0' }}%)</span>
+                  <span class="legend-item legend-materials">Materials ({{ result.costBreakdown.materialsPct | number:'1.0-0' }}%)</span>
+                  <span class="legend-item legend-overhead">Overhead ({{ result.costBreakdown.overheadPct | number:'1.0-0' }}%)</span>
+                </div>
+
+                <div class="metrics-grid">
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">engineering</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Direct Labor Cost</span>
+                      <span class="metric-value">{{ result.laborCost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">inventory</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Materials Cost</span>
+                      <span class="metric-value">{{ result.materialsCost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">business</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Overhead Applied</span>
+                      <span class="metric-value">{{ result.overheadCost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-pc-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-pc-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">account_balance_wallet</span>
+              <p>Enter your labor hours, materials, overhead, and margin target to calculate your project costs and determine exactly what you need to charge your client.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>

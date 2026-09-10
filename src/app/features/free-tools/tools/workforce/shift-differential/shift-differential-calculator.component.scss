@@ -1,0 +1,30 @@
+@use '../shared/wf-tool';
+
+.diff-type-toggle {
+  display: flex;
+  background: var(--gray-100);
+  border-radius: var(--border-radius-md);
+  padding: 4px;
+  margin-bottom: var(--spacing-sm);
+
+  .toggle-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+
+    &:hover { color: var(--text-primary); }
+
+    &.active {
+      background: var(--bg-primary);
+      color: var(--primary-700);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}

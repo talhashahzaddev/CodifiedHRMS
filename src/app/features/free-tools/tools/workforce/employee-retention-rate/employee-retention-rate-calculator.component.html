@@ -1,0 +1,405 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ──────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Employee Retention Rate Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ─────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">favorite</span>
+        </div>
+        <div>
+          <h1>Employee Retention Rate Calculator</h1>
+          <p class="tool-intro">
+            Calculate your organisation's employee retention rate — the percentage of existing employees
+            who stayed throughout a period. This calculator uses the SHRM-standard formula, excludes new
+            hires to isolate true retention, and includes a target check to tell you whether you hit your
+            retention goal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ──────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Form -->
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Headcount Data</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <!-- Currency -->
+              <div class="form-group">
+                <label for="ret-currency" class="field-label">Currency</label>
+                <select id="ret-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) {
+                    <option [value]="c.value">{{ c.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Employees at Start -->
+              <div class="form-group" [class.has-error]="getFieldError('employeesAtStart')">
+                <label for="ret-start" class="field-label">Total Employees at Start <span class="required">*</span></label>
+                <input id="ret-start" type="number" formControlName="employeesAtStart"
+                  class="field-input" placeholder="e.g. 200" min="1" aria-required="true"
+                  aria-label="Total number of employees at the start of the period"/>
+                @if (getFieldError('employeesAtStart'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- New Hires -->
+              <div class="form-group" [class.has-error]="getFieldError('newHires')">
+                <label for="ret-hires" class="field-label">Total New Hires During Period <span class="required">*</span></label>
+                <input id="ret-hires" type="number" formControlName="newHires"
+                  class="field-input" placeholder="e.g. 20" min="0" aria-required="true"
+                  aria-label="Total number of new employees hired during the period"/>
+                <span class="field-hint">New hires are excluded from the retention rate formula</span>
+                @if (getFieldError('newHires'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Employees at End -->
+              <div class="form-group" [class.has-error]="getFieldError('employeesAtEnd')">
+                <label for="ret-end" class="field-label">Total Employees at End <span class="required">*</span></label>
+                <input id="ret-end" type="number" formControlName="employeesAtEnd"
+                  class="field-input" placeholder="e.g. 190" min="0" aria-required="true"
+                  aria-label="Total number of employees at the end of the period"/>
+                @if (getFieldError('employeesAtEnd'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Cost per Hire -->
+              <div class="form-group" [class.has-error]="getFieldError('costPerHire')">
+                <label for="ret-cost" class="field-label">Cost per Hire (optional)</label>
+                <input id="ret-cost" type="number" formControlName="costPerHire"
+                  class="field-input" placeholder="4000" min="0" step="100"
+                  aria-label="Average cost per new hire for turnover cost estimation"/>
+                <span class="field-hint">SHRM 2023 benchmark: avg $4,700 per hire in the US</span>
+              </div>
+
+              <!-- Target Retention -->
+              <div class="form-group" [class.has-error]="getFieldError('targetRetention')">
+                <label for="ret-target" class="field-label">Target Retention Rate (%) (optional)</label>
+                <input id="ret-target" type="number" formControlName="targetRetention"
+                  class="field-input" placeholder="90" min="0" max="100" step="1"
+                  aria-label="Your organisation's target retention rate percentage"/>
+                <span class="field-hint">Recommended: 85–95% for most industries</span>
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ formError }}
+                </div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-ret-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-ret-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              @if (result.hasInconsistency) {
+                <div class="result-warning-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ result.inconsistencyMsg }}
+                </div>
+              }
+
+              <!-- Main Result -->
+              <div class="result-hero" [class.result-hero--low]="result.retentionRate >= 85" [class.result-hero--moderate]="result.retentionRate >= 70 && result.retentionRate < 85" [class.result-hero--high]="result.retentionRate < 70">
+                <div class="result-main-value">{{ result.retentionRate | number: '1.2-2' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Overall Retention Rate</div>
+                <div class="result-sub-label">
+                  {{ result.retentionRate >= 85 ? '✅ Excellent' : result.retentionRate >= 70 ? '⚠️ Average' : '🔴 Below Target' }}
+                </div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">person_remove</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Employees Who Left</span>
+                    <span class="metric-value">{{ result.employeesLeft | number }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">swap_horiz</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Turnover Rate</span>
+                    <span class="metric-value">{{ result.turnoverRate | number: '1.2-2' }}%</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">payments</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Estimated Turnover Cost</span>
+                    <span class="metric-value">{{ result.turnoverCost | currency: result.currency : 'symbol-narrow' : '1.0-0' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Target Check -->
+              <div class="target-check" [class.target-met]="result.targetMet" [class.target-missed]="!result.targetMet">
+                <div class="target-check-icon">
+                  <span class="material-symbols-outlined">{{ result.targetMet ? 'check_circle' : 'cancel' }}</span>
+                </div>
+                <div class="target-check-text">
+                  <strong>Target: {{ result.targetRetention }}% Retention</strong>
+                  <p>You can afford to lose up to <strong>{{ result.maxAllowableLoss }}</strong> employees and still hit your target. You lost <strong>{{ result.employeesLeft }}</strong>.</p>
+                  <span class="target-status-label">{{ result.targetMet ? '✅ Target Met' : '🔴 Target Missed' }}</span>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-ret-csv">
+                  <span class="material-symbols-outlined">download</span> Download CSV
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-ret-print">
+                  <span class="material-symbols-outlined">print</span> Print
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">favorite_border</span>
+              <p>Enter your headcount data to calculate your employee retention rate, turnover cost, and check whether you hit your retention target.</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ─────────────────────────────── -->
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is an Employee Retention Rate Calculator?</h2>
+        <p>
+          An <strong>employee retention rate calculator</strong> measures the percentage of your existing
+          workforce that remained with the organisation throughout a defined period. Unlike attrition rate,
+          which counts departures relative to the average headcount, the retention rate specifically measures
+          the survival of employees who were with you at the <em>start</em> of the period — new hires are
+          excluded from the calculation.
+        </p>
+        <p>
+          This distinction is critical: a company might appear to grow headcount (due to heavy hiring) while
+          simultaneously losing a high percentage of its core team. The retention rate reveals this dynamic
+          by isolating original-employee stability from the confounding effect of new hire volume.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Employee Retention Rate Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Isolate existing employee stability:</strong> Separating new hires from the formula gives a true measure of whether your core workforce is staying — not just whether headcount is growing.</li>
+          <li><strong>Set and track against targets:</strong> The Target Check feature tells you the exact maximum number of employees you can lose and still hit your retention goal — a concrete operational boundary.</li>
+          <li><strong>Estimate the true cost of turnover:</strong> The turnover cost output uses your actual cost per hire to put a dollar figure on your departures — essential for CFO-level reporting.</li>
+          <li><strong>Complement attrition analysis:</strong> Retention rate and attrition rate together create a complete picture of workforce dynamics. Use both for a comprehensive HR health report.</li>
+          <li><strong>Justify retention investment:</strong> A tangible turnover cost figure helps HR leaders make the business case for engagement programmes, pay reviews, and management development.</li>
+          <li><strong>Track improvement over time:</strong> Quarterly calculations reveal whether retention is improving in response to HR initiatives or continuing to decline.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Employee Retention Rate Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Enter Total Employees at Start</strong> — headcount on the first day of your measurement period.</li>
+          <li><strong>Enter Total New Hires</strong> — all employees who joined during the period (not existing employees). These will be excluded from the retention formula.</li>
+          <li><strong>Enter Total Employees at End</strong> — headcount on the last day of the period (including new hires still present).</li>
+          <li><strong>Enter Cost per Hire</strong> (optional) — your average cost to recruit, onboard, and ramp up a new employee. Defaults to $4,000 (SHRM 2023 benchmark).</li>
+          <li><strong>Enter Target Retention %</strong> (optional) — your internal HR goal. The calculator tells you whether you met it and by how much.</li>
+          <li>Click <strong>Calculate</strong> to see your retention rate, employees lost, turnover cost, and the target check result.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Employee Retention Rate</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Retention Rate (%)</strong> = ((Employees at End − New Hires) ÷ Employees at Start) × 100</div>
+          <div class="formula-line"><strong>Employees Left</strong> = (Employees at Start + New Hires) − Employees at End</div>
+          <div class="formula-line"><strong>Turnover Rate (%)</strong> = (Employees Left ÷ Average Headcount) × 100</div>
+          <div class="formula-line"><strong>Turnover Cost</strong> = Employees Left × Cost per Hire</div>
+          <div class="formula-line"><strong>Max Allowable Loss</strong> = Employees at Start × (1 − Target % ÷ 100)</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Start: <strong>200 employees</strong>. New Hires: <strong>20</strong>. End: <strong>190 employees</strong>. Cost per hire: <strong>$4,700</strong>. Target retention: <strong>90%</strong>.</p>
+          <ul>
+            <li>Retention Rate = ((190 − 20) ÷ 200) × 100 = (170 ÷ 200) × 100 = <strong>85%</strong></li>
+            <li>Employees Left = (200 + 20) − 190 = <strong>30</strong></li>
+            <li>Turnover Cost = 30 × $4,700 = <strong>$141,000</strong></li>
+            <li>Max Allowable Loss for 90% target = 200 × (1 − 0.90) = <strong>20 employees</strong></li>
+            <li>Result: <strong>30 left vs 20 allowed</strong> → 🔴 Target Missed</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of employee retention rate tracking">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Isolates core workforce stability from the confounding effect of new hire volume</td>
+                <td>Does not distinguish between regrettable (top performer) and non-regrettable departures</td>
+              </tr>
+              <tr>
+                <td>Target Check gives HR a concrete operational boundary — not just an abstract percentage</td>
+                <td>Cost per hire is an estimate; actual costs vary by role seniority and market conditions</td>
+              </tr>
+              <tr>
+                <td>Turnover cost converts retention from an HR metric into a financial business case</td>
+                <td>Does not capture the hidden cost of disengaged employees who stay (presenteeism)</td>
+              </tr>
+              <tr>
+                <td>Complements attrition rate for a complete workforce health picture</td>
+                <td>Should be segmented by department, tenure, and role level for actionable insights</td>
+              </tr>
+              <tr>
+                <td>Easy to benchmark against SHRM industry averages (typically 77–85%)</td>
+                <td>A single period's result can be skewed by one-time restructuring events or market shocks</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Retention Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <h3>90%+ — Excellent Retention</h3>
+            <p>Your workforce is highly stable. Focus on maintaining the conditions that drive this — flexibility, growth opportunities, and fair compensation are usually the top contributors.</p>
+          </div>
+          <div class="insight-card insight-card--yellow">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div>
+            <h3>80–90% — Good, With Room to Improve</h3>
+            <p>Near industry average. Run exit interviews with the employees who left to identify common themes. Even a 5% improvement in retention could save tens of thousands in replacement costs.</p>
+          </div>
+          <div class="insight-card insight-card--red">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div>
+            <h3>Below 80% — Action Required</h3>
+            <p>Below-average retention signals a systemic problem — likely compensation gaps, poor management relationships, or lack of career progression. The turnover cost at this level is significant.</p>
+          </div>
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">flag</span></div>
+            <h3>Target Missed?</h3>
+            <p>If you missed your target, analyse which teams or departments had the highest departures. Often, 20% of teams account for 80% of the total turnover. Focus resources there first.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">insights</span></div>
+            <h3>Track Quarterly, Not Just Annually</h3>
+            <p>Annual retention rates mask mid-year spikes. A company that loses 30% of its workforce in Q1 but stays flat the rest of the year will show the same annual rate as one with steady, predictable turnover.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">payments</span></div>
+            <h3>High Turnover Cost?</h3>
+            <p>If the turnover cost surprises you, consider this: most HR programmes (EAP, compensation reviews, flexible work) cost a fraction of what they prevent in replacement costs.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button"
+                [attr.aria-expanded]="openFaqIndex === i"
+                [attr.id]="'ret-faq-' + i"
+                (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span>
+                <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i">
+                <p>{{ faq.a }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info">
+              <h3>{{ tool.title }}</h3>
+              <p>{{ tool.description }}</p>
+            </div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS tracks headcount in real time, automates retention reporting, and sends early-warning alerts when departments exceed their attrition targets.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-ret-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-ret-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

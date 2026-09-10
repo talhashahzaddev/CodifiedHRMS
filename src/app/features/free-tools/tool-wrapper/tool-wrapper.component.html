@@ -1,0 +1,291 @@
+@if (currentTool(); as tool) {
+
+  <!-- ── Breadcrumb ─────────────────────────────────────── -->
+  <app-tool-breadcrumb [crumbs]="breadcrumbs()"></app-tool-breadcrumb>
+
+  <!-- ── Tool Hero ──────────────────────────────────────── -->
+  <section class="tool-hero">
+    <div class="tool-hero-bg"></div>
+    <div class="container">
+      <div class="tool-hero-inner">
+        <div class="tool-hero-icon">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+        </div>
+        <div class="tool-hero-text">
+          <h1>{{ tool.title }}</h1>
+          <p>{{ tool.longDescription }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Calculator Section ─────────────────────────────── -->
+  <section class="tool-calc-section section-sm">
+    <div class="container">
+
+      @if (isCustomUi()) {
+        <!-- Custom UI placeholder — individual components in Step 4 -->
+        <div class="custom-ui-notice">
+          <span class="material-symbols-outlined">construction</span>
+          <h2>Interactive Tool Coming Soon</h2>
+          <p>
+            This tool requires a custom interface ({{ tool.title }}).
+            It will be fully implemented in the next step.
+          </p>
+        </div>
+
+      } @else if (isLiveTool()) {
+        <!-- Live data tool (no form) -->
+        <div class="calc-grid calc-grid--full">
+          <div class="calc-panel-result">
+            <div class="form-panel-header">
+              <span class="material-symbols-outlined">schedule</span>
+              <h2>Live Results</h2>
+              <button type="button" class="refresh-btn" (click)="refreshLive()">
+                <span class="material-symbols-outlined">refresh</span>
+                Refresh
+              </button>
+            </div>
+            <app-result-box
+              [results]="results()"
+              [isCalculated]="isCalculated()"
+              [toolTitle]="tool.title"
+              [isCustomUi]="false">
+            </app-result-box>
+          </div>
+        </div>
+
+      } @else {
+        <!-- Standard two-column calculator -->
+        <div class="calc-grid">
+
+          <!-- LEFT: Form Panel -->
+          <div class="calc-panel-form">
+            <div class="form-panel-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2>Enter Your Values</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+              <div class="form-fields">
+                @for (field of tool.fields; track field.key) {
+                  <div class="form-field" [class.form-field--error]="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+
+                    <label [for]="'field-' + field.key" class="field-label">
+                      {{ field.label }}
+                    </label>
+
+                    @if (isSelect(field)) {
+                      <select
+                        class="field-input field-select"
+                        [formControlName]="field.key"
+                        [id]="'field-' + field.key">
+                        @for (opt of field.options ?? []; track opt.value) {
+                          <option [value]="opt.value">{{ opt.label }}</option>
+                        }
+                      </select>
+
+                    } @else if (isTextArea(field)) {
+                      <textarea
+                        class="field-input field-textarea"
+                        [formControlName]="field.key"
+                        [id]="'field-' + field.key"
+                        [placeholder]="field.placeholder ?? ''"
+                        rows="3">
+                      </textarea>
+
+                    } @else {
+                      <input
+                        class="field-input"
+                        [type]="inputType(field)"
+                        [formControlName]="field.key"
+                        [id]="'field-' + field.key"
+                        [placeholder]="field.placeholder ?? ''"
+                        [attr.min]="field.min !== undefined ? field.min : null"
+                        [attr.max]="field.max !== undefined ? field.max : null"
+                        [attr.step]="field.step ?? (field.type === 'number' ? 1 : null)"
+                      />
+                    }
+
+                    @if (form.get(field.key)?.invalid && form.get(field.key)?.touched) {
+                      <span class="field-error">
+                        <span class="material-symbols-outlined">error_outline</span>
+                        Please enter a valid value.
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary calc-submit-btn"
+                id="btn-calculate-{{ tool.slug }}">
+                <span class="material-symbols-outlined">calculate</span>
+                Calculate
+              </button>
+            </form>
+          </div>
+
+          <!-- RIGHT: Result Box Panel -->
+          <div class="calc-panel-result">
+            <div class="form-panel-header">
+              <span class="material-symbols-outlined">assessment</span>
+              <h2>Results</h2>
+            </div>
+            <app-result-box
+              [results]="results()"
+              [isCalculated]="isCalculated()"
+              [toolTitle]="tool.title"
+              [isCustomUi]="isCustomUi()">
+            </app-result-box>
+          </div>
+
+        </div><!-- /calc-grid -->
+      }
+
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────── -->
+  <section class="tool-educational section-sm">
+    <div class="container">
+      @let eduContent = getEducationalContent(tool.slug);
+
+      <!-- Tab nav -->
+      <div class="edu-tabs" role="tablist">
+        <button
+          class="edu-tab"
+          [class.active]="activeTab() === 'how-to'"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'how-to'"
+          (click)="setTab('how-to')"
+          type="button"
+          id="tab-how-to">
+          <span class="material-symbols-outlined">help_outline</span>
+          How to Use
+        </button>
+        @if (eduContent.formula) {
+          <button
+            class="edu-tab"
+            [class.active]="activeTab() === 'formula'"
+            role="tab"
+            [attr.aria-selected]="activeTab() === 'formula'"
+            (click)="setTab('formula')"
+            type="button"
+            id="tab-formula">
+            <span class="material-symbols-outlined">functions</span>
+            Formula
+          </button>
+        }
+        <button
+          class="edu-tab"
+          [class.active]="activeTab() === 'pros-cons'"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'pros-cons'"
+          (click)="setTab('pros-cons')"
+          type="button"
+          id="tab-pros-cons">
+          <span class="material-symbols-outlined">balance</span>
+          Pros &amp; Cons
+        </button>
+      </div>
+
+      <!-- Tab content -->
+      <div class="edu-content">
+        @if (activeTab() === 'how-to') {
+          <ol class="how-to-list">
+            @for (step of eduContent.howToUse; track step; let i = $index) {
+              <li>
+                <span class="how-to-num">{{ i + 1 }}</span>
+                <span>{{ step }}</span>
+              </li>
+            }
+          </ol>
+
+        } @else if (activeTab() === 'formula' && eduContent.formula) {
+          <div class="formula-panel">
+            <code class="formula-block">{{ eduContent.formula }}</code>
+            @if (eduContent.formulaNote) {
+              <p class="formula-note">{{ eduContent.formulaNote }}</p>
+            }
+          </div>
+
+        } @else if (activeTab() === 'pros-cons') {
+          <div class="pros-cons-grid">
+            <div class="pros-col">
+              <h3><span class="material-symbols-outlined">thumb_up</span> Strengths</h3>
+              <ul>
+                @for (pro of eduContent.pros; track pro) {
+                  <li><span class="material-symbols-outlined">check_circle</span>{{ pro }}</li>
+                }
+              </ul>
+            </div>
+            <div class="cons-col">
+              <h3><span class="material-symbols-outlined">info</span> Limitations</h3>
+              <ul>
+                @for (con of eduContent.cons; track con) {
+                  <li><span class="material-symbols-outlined">warning</span>{{ con }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────── -->
+  @if (relatedTools().length > 0) {
+    <section class="tool-related section-sm">
+      <div class="container">
+        <div class="related-header">
+          <h2>Related Tools</h2>
+          <p>More free tools you might find useful.</p>
+        </div>
+        <div class="related-grid">
+          @for (related of relatedTools(); track related.slug) {
+            <app-tool-card [tool]="related"></app-tool-card>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- ── Bottom CTA ─────────────────────────────────────── -->
+  <section class="tool-cta section-sm">
+    <div class="container">
+      <div class="tool-cta-card">
+        <div class="tool-cta-left">
+          <span class="material-symbols-outlined tool-cta-icon">auto_awesome</span>
+          <div>
+            <h2>Want to automate this for your whole team?</h2>
+            <p>BriskPeople HRMS handles HR calculations, payroll, leave, and attendance automatically — no spreadsheets required.</p>
+          </div>
+        </div>
+        <div class="tool-cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary">
+            Start Free Trial
+          </a>
+          <a routerLink="/book-demo" class="btn btn-outline">
+            Book a Demo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+} @else {
+  <!-- ── 404 Tool Not Found ──────────────────────────────── -->
+  <div class="tool-not-found">
+    <div class="container">
+      <span class="material-symbols-outlined not-found-icon">search_off</span>
+      <h1>Tool Not Found</h1>
+      <p>The tool you're looking for doesn't exist or may have moved.</p>
+      <div class="not-found-actions">
+        <a routerLink="/free-tools" class="btn btn-primary">Browse Utility Tools</a>
+        <a routerLink="/free-workforce-tools" class="btn btn-outline">Browse Workforce Tools</a>
+      </div>
+    </div>
+  </div>
+}

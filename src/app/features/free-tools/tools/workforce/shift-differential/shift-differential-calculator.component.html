@@ -1,0 +1,176 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Shift Differential Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">nights_stay</span></div>
+        <div>
+          <h1>Shift Differential Calculator</h1>
+          <p class="tool-intro">Calculate premium pay for night, evening, and weekend shifts. Enter your base rate and shift hours, then apply a flat bonus rate or a percentage premium to determine your total gross pay and the exact value of your shift differential.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Shift Details</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="sd-curr" class="field-label">Currency</label>
+                <select id="sd-curr" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('baseHourlyRate')">
+                <label for="sd-rate" class="field-label">Base Hourly Rate <span class="required">*</span></label>
+                <input id="sd-rate" type="number" formControlName="baseHourlyRate" class="field-input" placeholder="e.g. 25" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('baseHourlyRate'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('regularHours')">
+                <label for="sd-reghrs" class="field-label">Regular Hours (No Premium) <span class="required">*</span></label>
+                <input id="sd-reghrs" type="number" formControlName="regularHours" class="field-input" placeholder="e.g. 20" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('regularHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('shiftHours')">
+                <label for="sd-shifthrs" class="field-label">Premium Shift Hours <span class="required">*</span></label>
+                <input id="sd-shifthrs" type="number" formControlName="shiftHours" class="field-input" placeholder="e.g. 20" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('shiftHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Differential Type <span class="required">*</span></label>
+                <div class="diff-type-toggle">
+                  <button type="button" class="toggle-btn" [class.active]="form.get('diffType')?.value === 'flat'" (click)="form.get('diffType')?.setValue('flat')">Flat Rate (+ $/hr)</button>
+                  <button type="button" class="toggle-btn" [class.active]="form.get('diffType')?.value === 'percentage'" (click)="form.get('diffType')?.setValue('percentage')">Percentage (+ %)</button>
+                </div>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('diffAmount')">
+                <label for="sd-amt" class="field-label">
+                  Differential Amount {{ form.get('diffType')?.value === 'flat' ? '(e.g. 2.50)' : '(e.g. 15%)' }} <span class="required">*</span>
+                </label>
+                <input id="sd-amt" type="number" formControlName="diffAmount" class="field-input" placeholder="{{ form.get('diffType')?.value === 'flat' ? '2.50' : '15' }}" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('diffAmount'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-sd-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-sd-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--moderate">
+                <div class="result-badge"><span class="material-symbols-outlined">nights_stay</span>Total Pay</div>
+                <div class="result-main-value">{{ result.totalGrossPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</div>
+                <div class="result-main-label">Estimated Gross Pay</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Hours</span>
+                    <span class="metric-value">{{ result.regularHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">dark_mode</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Shift Hours (Premium)</span>
+                    <span class="metric-value">{{ result.shiftHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">attach_money</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Base Pay (All Hours)</span>
+                    <span class="metric-value">{{ result.basePay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">add_circle</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Differential Premium Add-on</span>
+                    <span class="metric-value">+ {{ result.differentialPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">speed</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Effective Hourly Rate</span>
+                    <span class="metric-value">{{ result.effectiveHourlyRate | currency: result.currency : 'symbol-narrow' : '1.2-2' }} / hr</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-sd-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-sd-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">nights_stay</span>
+              <p>Enter your base rate, hours worked, and premium rate to calculate your shift differential pay.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+</main>
