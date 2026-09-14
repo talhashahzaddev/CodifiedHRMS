@@ -1,0 +1,109 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">GMT Timestamp</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">language</span>
+        </div>
+        <div>
+          <h1>GMT / UTC Time Now</h1>
+          <p class="tool-intro">
+            A live, auto-refreshing display of the current UTC time, Unix timestamps, and global offsets.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      
+      <!-- Live Clock Display (Full Width) -->
+      <div class="live-clock-card">
+        <div class="clock-label">Current UTC / GMT Time</div>
+        <div class="clock-time font-mono" role="timer">{{ utcTimeStr }}</div>
+        <div class="clock-date">{{ utcDateStr }}</div>
+        
+        <div class="clock-epochs">
+          <div class="epoch-item">
+            <span class="epoch-label">Unix Seconds</span>
+            <span class="epoch-val font-mono">{{ unixSecs }}</span>
+          </div>
+          <div class="epoch-item">
+            <span class="epoch-label">Unix Milliseconds</span>
+            <span class="epoch-val font-mono">{{ unixMs }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offset Table -->
+      <div class="offset-card">
+        <h2 class="card-title">Major Time Zones</h2>
+        <div class="table-wrap">
+          <table class="offset-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>UTC Offset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tz of timezones">
+                <td>{{ tz.name }}</td>
+                <td class="font-mono">{{ formatOffset(tz.offset) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

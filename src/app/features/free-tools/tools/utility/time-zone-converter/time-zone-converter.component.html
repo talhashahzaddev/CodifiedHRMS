@@ -1,0 +1,171 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Time Zone Converter</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">public</span>
+        </div>
+        <div>
+          <h1>Time Zone Converter</h1>
+          <p class="tool-intro">
+            Convert a time between any two time zones with a visual 24-hour timeline.
+            Great for scheduling international meetings across multiple regions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Select Zones</h2>
+            </div>
+
+            <form [formGroup]="form" novalidate>
+              <div class="form-group" [class.has-error]="getFieldError('sourceTime')">
+                <label class="field-label" for="sourceTime">Source Time <span class="required">*</span></label>
+                <input id="sourceTime" type="time" class="field-input" formControlName="sourceTime">
+                <span class="field-error" *ngIf="getFieldError('sourceTime')">{{ getFieldError('sourceTime') }}</span>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('sourceZone')">
+                <label class="field-label" for="sourceZone">Source Time Zone <span class="required">*</span></label>
+                <select id="sourceZone" class="field-input field-select" formControlName="sourceZone">
+                  <option *ngFor="let tz of commonTimeZones" [value]="tz">{{ tz }}</option>
+                </select>
+              </div>
+
+              <div class="card-divider">Target Time Zones</div>
+
+              <div class="form-group" [class.has-error]="getFieldError('targetZone1')">
+                <label class="field-label" for="targetZone1">Target Zone 1 <span class="required">*</span></label>
+                <select id="targetZone1" class="field-input field-select" formControlName="targetZone1">
+                  <option *ngFor="let tz of commonTimeZones" [value]="tz">{{ tz }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="targetZone2">Target Zone 2 (optional)</label>
+                <select id="targetZone2" class="field-input field-select" formControlName="targetZone2">
+                  <option value="">-- None --</option>
+                  <option *ngFor="let tz of commonTimeZones" [value]="tz">{{ tz }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="targetZone3">Target Zone 3 (optional)</label>
+                <select id="targetZone3" class="field-input field-select" formControlName="targetZone3">
+                  <option value="">-- None --</option>
+                  <option *ngFor="let tz of commonTimeZones" [value]="tz">{{ tz }}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Timeline Output -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">view_timeline</span>
+              <h2 class="card-title">24-Hour Timeline</h2>
+            </div>
+
+            <div class="timeline-container" *ngIf="timeline.length">
+              
+              <!-- Timeline Header -->
+              <div class="timeline-row timeline-header">
+                <div class="timeline-cell timeline-offset">Offset</div>
+                <div class="timeline-cell timeline-source">
+                  {{ form.get('sourceZone')?.value }}
+                </div>
+                <div class="timeline-cell timeline-target" *ngFor="let target of targetZones">
+                  {{ target }}
+                </div>
+              </div>
+
+              <!-- Timeline Rows -->
+              <div class="timeline-scroll">
+                <div class="timeline-row" *ngFor="let slot of timeline" [class.is-current]="slot.isCurrent">
+                  <div class="timeline-cell timeline-offset">
+                    <span class="offset-badge" [class.badge-current]="slot.isCurrent">{{ slot.label }}</span>
+                  </div>
+                  <div class="timeline-cell timeline-source font-mono">{{ slot.sourceLabel }}</div>
+                  <div class="timeline-cell timeline-target font-mono" *ngFor="let targetTime of slot.targets">
+                    {{ targetTime }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+      <div class="edu-section">
+        <h2>How the Time Zone Converter Works</h2>
+        <p>
+          Unlike basic clocks, this tool generates an interactive 24-hour visual timeline. This makes it
+          incredibly easy to find overlapping waking hours for international team meetings. The timeline
+          automatically handles Daylight Saving Time (DST) rules for all selected regions.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

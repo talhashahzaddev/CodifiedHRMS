@@ -1,0 +1,120 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">ISO Time Formatter</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">format_list_bulleted</span>
+        </div>
+        <div>
+          <h1>ISO Time Formatter</h1>
+          <p class="tool-intro">
+            Generate all ISO 8601 standard variations (UTC, ordinal, week date) from a single date input.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Select Local Date</h2>
+            </div>
+
+            <form [formGroup]="form" novalidate>
+              <div class="form-group">
+                <label class="field-label" for="inputDate">Date</label>
+                <input id="inputDate" type="date" class="field-input" formControlName="inputDate">
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="inputTime">Time</label>
+                <input id="inputTime" type="time" step="1" class="field-input" formControlName="inputTime">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Formats List -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">list_alt</span>
+              <h2 class="card-title">ISO 8601 Formats</h2>
+            </div>
+
+            <div class="formats-list">
+              <div class="format-item" *ngFor="let fmt of formats; let i = index" (click)="copy(fmt.value, i)">
+                <div class="format-header">
+                  <span class="format-label">{{ fmt.label }}</span>
+                  <button type="button" class="btn-copy-sm" [class.copied]="copiedIndex === i">
+                    <span class="material-symbols-outlined">
+                      {{ copiedIndex === i ? 'check' : 'content_copy' }}
+                    </span>
+                    {{ copiedIndex === i ? 'Copied' : 'Copy' }}
+                  </button>
+                </div>
+                <div class="format-value font-mono">{{ fmt.value }}</div>
+                <div class="format-desc">{{ fmt.description }}</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

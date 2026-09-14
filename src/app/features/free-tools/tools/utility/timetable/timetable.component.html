@@ -1,0 +1,217 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Timetable Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">table_chart</span>
+        </div>
+        <div>
+          <h1>Timetable Generator</h1>
+          <p class="tool-intro">
+            Build a visual weekly schedule by clicking any cell to add subjects, colors, and notes.
+            Auto-saved to your browser. Export as CSV or PNG. No account required.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Toolbar ────────────────────────────────────────────────────── -->
+  <section class="timetable-toolbar-section">
+    <div class="container">
+      <div class="timetable-toolbar">
+        <div class="toolbar-info">
+          <span class="material-symbols-outlined">info</span>
+          Click any cell to add a subject. Your timetable auto-saves in your browser.
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn btn-sm btn-outline" (click)="exportCsv()" id="exportCsvBtn">
+            <span class="material-symbols-outlined">csv</span> Export CSV
+          </button>
+          <button class="btn btn-sm btn-outline" (click)="exportPng()" id="exportPngBtn">
+            <span class="material-symbols-outlined">image</span> Export PNG
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="clearAll()" id="clearAllBtn">
+            <span class="material-symbols-outlined">delete_sweep</span> Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Timetable Grid ─────────────────────────────────────────────── -->
+  <section class="timetable-section">
+    <div class="container timetable-container">
+      <div class="timetable-scroll">
+        <table class="timetable-table" id="timetableGrid" role="grid" aria-label="Weekly Timetable">
+          <thead>
+            <tr>
+              <th class="time-col-header">Time</th>
+              <th *ngFor="let day of days; trackBy: trackByDay">{{ day }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hour of hours; let hIdx = index; trackBy: trackByHour">
+              <td class="time-label">{{ hour }}</td>
+              <td *ngFor="let day of days; let dIdx = index; trackBy: trackByDay"
+                  class="tt-cell"
+                  [class.has-entry]="getCell(dIdx, hIdx)"
+                  [class.editing]="editingKey === cellKey(dIdx, hIdx)"
+                  [style.background-color]="getCell(dIdx, hIdx)?.color || ''"
+                  (click)="openEdit(dIdx, hIdx)"
+                  [attr.aria-label]="day + ' ' + hour"
+                  role="gridcell" tabindex="0"
+                  (keyup.enter)="openEdit(dIdx, hIdx)">
+                <ng-container *ngIf="getCell(dIdx, hIdx) as cell">
+                  <span class="tt-cell-subject">{{ cell.subject }}</span>
+                  <span class="tt-cell-desc" *ngIf="cell.description">{{ cell.description }}</span>
+                </ng-container>
+                <span class="tt-cell-add" *ngIf="!getCell(dIdx, hIdx)">
+                  <span class="material-symbols-outlined">add</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Cell Edit Panel (slide-in) ────────────────────────────────── -->
+  <div class="tt-edit-overlay" *ngIf="editingKey" (click)="closeEdit()"></div>
+  <div class="tt-edit-panel" [class.open]="editingKey" *ngIf="editingKey">
+    <div class="tt-edit-header">
+      <h3 class="tt-edit-title">Edit Cell</h3>
+      <button class="tt-edit-close" (click)="closeEdit()" aria-label="Close">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <form [formGroup]="editForm" (ngSubmit)="saveCell()" novalidate class="tt-edit-form">
+      <div class="form-group" [class.has-error]="editForm.get('subject')?.invalid && editForm.get('subject')?.touched">
+        <label class="field-label" for="ttSubject">Subject / Title <span class="required">*</span></label>
+        <input id="ttSubject" type="text" class="field-input"
+               formControlName="subject" placeholder="e.g. Mathematics" autofocus>
+        <span class="field-error" *ngIf="editForm.get('subject')?.invalid && editForm.get('subject')?.touched">
+          <span class="material-symbols-outlined">error</span> Subject is required.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="ttDesc">Notes (optional)</label>
+        <input id="ttDesc" type="text" class="field-input"
+               formControlName="description" placeholder="e.g. Room 3B, Prof. Ahmed">
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">Cell Color</label>
+        <div class="color-swatches-row">
+          <button type="button" class="color-swatch-btn"
+                  *ngFor="let color of cellColors"
+                  [style.background]="color"
+                  [class.selected]="editForm.get('color')?.value === color"
+                  (click)="editForm.get('color')?.setValue(color)"
+                  [attr.aria-label]="'Set color ' + color">
+            <span class="material-symbols-outlined check-icon" *ngIf="editForm.get('color')?.value === color">check</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tt-edit-actions">
+        <button type="submit" class="btn btn-primary btn-sm" id="saveCellBtn">
+          <span class="material-symbols-outlined">save</span> Save
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" (click)="clearCell()" id="clearCellBtn">
+          <span class="material-symbols-outlined">delete</span> Clear Cell
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" (click)="closeEdit()" id="cancelEditBtn">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is a Timetable Generator?</h2>
+        <p>
+          A timetable generator helps you plan and visualize a recurring weekly schedule across fixed time slots.
+          Whether you're organizing a class schedule, shift roster, study plan, or weekly work routine, a timetable
+          gives you an at-a-glance view of all activities across all days and hours.
+        </p>
+        <p>
+          This tool lets you build your timetable interactively directly in your browser. Click any cell to add
+          a subject, description, and color. Your timetable auto-saves to localStorage every time you make a
+          change, and exports to CSV (for spreadsheets) or PNG (for sharing or printing).
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

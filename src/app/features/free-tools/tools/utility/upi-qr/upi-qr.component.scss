@@ -1,0 +1,70 @@
+@use '../shared/ut-tool';
+
+// ── Color picker row ──────────────────────────────────────────────────────────
+.color-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.color-group { margin-bottom: var(--spacing-md); }
+
+.color-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  padding: 7px var(--spacing-sm);
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.color-hex {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+// ── Canvas hidden state ───────────────────────────────────────────────────────
+.canvas-hidden { display: none; }
+
+// ── UPI app badges ────────────────────────────────────────────────────────────
+.upi-apps-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--gray-100);
+}
+
+.upi-apps-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.upi-app-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--primary-50);
+  color: var(--primary-700);
+  border: 1px solid rgba(12, 142, 255, 0.2);
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}

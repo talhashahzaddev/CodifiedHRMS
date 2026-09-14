@@ -1,0 +1,36 @@
+@use '../shared/ut-tool';
+
+// ── Mailto usage tip ──────────────────────────────────────────────────────────
+.mailto-usage-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  background: rgba(12, 142, 255, 0.05);
+  border: 1px solid rgba(12, 142, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--primary-500);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary) !important;
+    margin: 0;
+    line-height: 1.6;
+
+    code {
+      font-family: 'Courier New', monospace;
+      background: var(--primary-50);
+      color: var(--primary-700);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+  }
+}

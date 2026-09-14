@@ -1,0 +1,107 @@
+@use '../shared/ut-tool';
+
+// ── Mode tab toggle ───────────────────────────────────────────────────────────
+.mode-toggle-row {
+  display: flex;
+  background: var(--gray-100);
+  border-radius: var(--border-radius-md);
+  padding: 3px;
+  margin-bottom: var(--spacing-md);
+  gap: 2px;
+}
+
+.mode-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: calc(var(--border-radius-md) - 2px);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  .material-symbols-outlined { font-size: 16px; }
+
+  &.active {
+    background: var(--bg-primary);
+    color: var(--primary-700);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:hover:not(.active) {
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.5);
+  }
+}
+
+// ── Date/time grid ────────────────────────────────────────────────────────────
+.date-time-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+// ── Color picker row ──────────────────────────────────────────────────────────
+.color-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.color-group { margin-bottom: var(--spacing-md); }
+
+.color-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  padding: 7px var(--spacing-sm);
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.color-hex {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+// ── Canvas hidden state ───────────────────────────────────────────────────────
+.canvas-hidden { display: none; }
+
+// ── QR mode badge ─────────────────────────────────────────────────────────────
+.qr-mode-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--primary-700);
+  background: var(--primary-50);
+  border: 1px solid rgba(12, 142, 255, 0.2);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: var(--spacing-md);
+  width: fit-content;
+
+  .material-symbols-outlined { font-size: 14px; }
+}

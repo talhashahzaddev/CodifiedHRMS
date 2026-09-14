@@ -181,6 +181,107 @@ export const routes: Routes = [
   },
 
   // ── Catch-all ─────────────────────────────────────────────────────────────
+  // ── Free Utility Tools Hub ────────────────────────────────────────────────
+  {
+    path: 'free-tools',
+    loadComponent: () =>
+      import('./features/free-tools/free-tools-hub/free-tools-hub.component')
+        .then(m => m.FreeToolsHubComponent)
+  },
+
+  // ── Utility Tool Dedicated Routes (Batch 1 — Generators & Links) ──────────
+  {
+    path: 'free-tools/add-to-calendar-link-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/add-to-calendar/add-to-calendar.component')
+        .then(m => m.AddToCalendarComponent)
+  },
+  {
+    path: 'free-tools/event-qr-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/event-qr/event-qr.component')
+        .then(m => m.EventQrComponent)
+  },
+  {
+    path: 'free-tools/mailto-link-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/mailto/mailto.component')
+        .then(m => m.MailtoComponent)
+  },
+  {
+    path: 'free-tools/upi-qr-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/upi-qr/upi-qr.component')
+        .then(m => m.UpiQrComponent)
+  },
+
+  // ── Utility Tool Dedicated Routes (Batch 2 — Canvas & Storage) ────────────
+  {
+    path: 'free-tools/banner-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/banner-generator/banner-generator.component')
+        .then(m => m.BannerGeneratorComponent)
+  },
+  {
+    path: 'free-tools/timetable-generator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/timetable/timetable.component')
+        .then(m => m.TimetableComponent)
+  },
+  {
+    path: 'free-tools/time-tracker',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/time-tracker/time-tracker.component')
+        .then(m => m.TimeTrackerComponent)
+  },
+
+  // ── Utility Tool Dedicated Routes (Batch 3 — Date/Time Math) ─────────────
+  {
+    path: 'free-tools/time-zone-converter',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/time-zone-converter/time-zone-converter.component')
+        .then(m => m.TimeZoneConverterComponent)
+  },
+  {
+    path: 'free-tools/time-difference-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/time-difference/time-difference.component')
+        .then(m => m.TimeDifferenceComponent)
+  },
+  {
+    path: 'free-tools/age-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/age-calculator/age-calculator.component')
+        .then(m => m.AgeCalculatorComponent)
+  },
+  {
+    path: 'free-tools/age-difference-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/age-difference/age-difference.component')
+        .then(m => m.AgeDifferenceComponent)
+  },
+
+  // ── Utility Tool Dedicated Routes (Batch 4 — Dev Tools) ──────────────────
+  {
+    path: 'free-tools/unix-timestamp-converter',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/unix-timestamp/unix-timestamp.component')
+        .then(m => m.UnixTimestampComponent)
+  },
+  {
+    path: 'free-tools/iso-time-formatter',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/iso-formatter/iso-formatter.component')
+        .then(m => m.IsoFormatterComponent)
+  },
+  {
+    path: 'free-tools/gmt-timestamp',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/gmt-timestamp/gmt-timestamp.component')
+        .then(m => m.GmtTimestampComponent)
+  },
+
+  // ── Catch-all ─────────────────────────────────────────────────────────────
   {
     path: '**',
     redirectTo: ''

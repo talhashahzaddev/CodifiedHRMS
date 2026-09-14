@@ -1,0 +1,246 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Mailto Link Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">alternate_email</span>
+        </div>
+        <div>
+          <h1>Mailto Link Generator</h1>
+          <p class="tool-intro">
+            Build a perfectly URL-encoded <code>mailto:</code> link with pre-filled To, CC, BCC, Subject,
+            and Body. Paste it into any website, email template, or button.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Email Parameters</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="generate()" novalidate>
+
+              <div class="form-group" [class.has-error]="getFieldError('to')">
+                <label class="field-label" for="emailTo">
+                  To <span class="required">*</span>
+                </label>
+                <input id="emailTo" type="email" class="field-input"
+                       formControlName="to" placeholder="e.g. contact@company.com"
+                       autocomplete="email">
+                <span class="field-hint">For multiple recipients, separate with commas.</span>
+                <span class="field-error" *ngIf="getFieldError('to')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('to') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="emailCc">CC (optional)</label>
+                <input id="emailCc" type="text" class="field-input"
+                       formControlName="cc" placeholder="e.g. manager@company.com">
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="emailBcc">BCC (optional)</label>
+                <input id="emailBcc" type="text" class="field-input"
+                       formControlName="bcc" placeholder="e.g. hr@company.com">
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('subject')">
+                <label class="field-label" for="emailSubject">
+                  Subject <span class="required">*</span>
+                </label>
+                <input id="emailSubject" type="text" class="field-input"
+                       formControlName="subject" placeholder="e.g. Application for HR Manager Role">
+                <span class="field-error" *ngIf="getFieldError('subject')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('subject') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="emailBody">Body (optional)</label>
+                <textarea id="emailBody" class="field-input field-textarea"
+                          formControlName="body"
+                          placeholder="Dear Hiring Manager,&#10;&#10;I am writing to apply for..."
+                          rows="5"></textarea>
+                <span class="field-hint">Line breaks will be correctly encoded as %0A in the link.</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="generateMailtoBtn">
+                  <span class="material-symbols-outlined">bolt</span>
+                  Generate Link
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="resetMailtoBtn">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+
+          <div class="results-empty" *ngIf="!result">
+            <span class="results-empty-icon material-symbols-outlined">alternate_email</span>
+            <p>Fill in the email fields and click <strong>Generate Link</strong> to create your mailto URL.</p>
+          </div>
+
+          <div class="results-card" *ngIf="result">
+            <div class="card-header">
+              <span class="material-symbols-outlined">link</span>
+              <h2 class="card-title">Your Mailto Link</h2>
+            </div>
+
+            <!-- Raw mailto link -->
+            <div class="output-block">
+              <div class="output-label">Raw Mailto Link</div>
+              <div class="output-value">
+                <span class="output-text">{{ result.rawLink }}</span>
+                <button class="btn-copy" [class.copied]="copiedKey === 'raw'"
+                        (click)="copy('raw', result.rawLink)" id="copyRawBtn">
+                  <span class="material-symbols-outlined">{{ copiedKey === 'raw' ? 'check' : 'content_copy' }}</span>
+                  {{ copiedKey === 'raw' ? 'Copied!' : 'Copy' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- HTML snippet -->
+            <div class="output-block">
+              <div class="output-label">HTML Anchor Snippet</div>
+              <div class="output-value">
+                <span class="output-text">{{ result.htmlSnippet }}</span>
+                <button class="btn-copy" [class.copied]="copiedKey === 'html'"
+                        (click)="copy('html', result.htmlSnippet)" id="copyHtmlBtn">
+                  <span class="material-symbols-outlined">{{ copiedKey === 'html' ? 'check' : 'content_copy' }}</span>
+                  {{ copiedKey === 'html' ? 'Copied!' : 'Copy' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Test it -->
+            <div class="result-actions">
+              <button class="btn btn-primary btn-sm" (click)="openMailto()" id="testMailtoBtn">
+                <span class="material-symbols-outlined">send</span>
+                Test in Email Client
+              </button>
+            </div>
+
+            <!-- Usage tip -->
+            <div class="mailto-usage-tip">
+              <span class="material-symbols-outlined">tips_and_updates</span>
+              <p>Paste the HTML snippet into your webpage code. Change <code>Send Email</code> to any link text you prefer.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is a Mailto Link?</h2>
+        <p>
+          A <code>mailto:</code> link is a standard HTML hyperlink that instructs the browser to open the user's
+          default email client (Gmail, Outlook, Apple Mail, Thunderbird, etc.) and pre-populate a new compose
+          window with your specified fields. It's the simplest way to add a "Contact Us" or "Email Us" button
+          to any website without a backend form or server.
+        </p>
+        <p>
+          The basic syntax is: <code>mailto:recipient@example.com?subject=Hello&amp;body=Hi%20there</code>.
+          Every parameter must be URL-encoded — which is exactly what this generator handles automatically.
+        </p>
+      </div>
+
+      <div class="edu-section">
+        <h2>Why URL Encoding Matters</h2>
+        <p>
+          Without proper encoding, special characters like spaces, line breaks, ampersands, and question marks
+          will break the mailto link. For example, a space must become <code>%20</code>, a newline becomes
+          <code>%0A</code>, and an ampersand becomes <code>%26</code>. Our generator applies
+          <code>encodeURIComponent()</code> to the Subject and Body fields, and uses the correct
+          <code>&amp;</code> delimiter between parameters so the link works across all browsers and email clients.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -1,0 +1,178 @@
+@use '../shared/ut-tool';
+
+// ── Custom size row ───────────────────────────────────────────────────────────
+.custom-size-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+// ── Radio group ───────────────────────────────────────────────────────────────
+.radio-row {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+
+  input[type="radio"] {
+    accent-color: var(--primary-500);
+    width: 15px;
+    height: 15px;
+  }
+
+  &:has(input:checked) {
+    border-color: var(--primary-400);
+    background: var(--primary-50);
+    color: var(--primary-700);
+  }
+}
+
+// ── Two-col row ───────────────────────────────────────────────────────────────
+.two-col-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+// ── Color row ─────────────────────────────────────────────────────────────────
+.color-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+
+  .color-group { flex: 1; min-width: 120px; }
+}
+
+.color-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  padding: 7px var(--spacing-sm);
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.color-hex {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+// ── File upload ───────────────────────────────────────────────────────────────
+.file-upload-wrap {}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px var(--spacing-md);
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+
+  .material-symbols-outlined { font-size: 20px; color: var(--primary-500); }
+
+  &:hover {
+    border-color: var(--primary-400);
+    background: var(--primary-50);
+    color: var(--primary-700);
+  }
+}
+
+// ── Canvas preview ────────────────────────────────────────────────────────────
+.banner-preview-wrap {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+}
+
+canvas {
+  &.canvas-visible {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  &.canvas-hidden { display: none; }
+}
+
+.preview-dims {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--text-tertiary);
+  background: var(--gray-100);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+// ── Size table ────────────────────────────────────────────────────────────────
+.size-table-wrap { overflow-x: auto; }
+
+.size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+
+  th {
+    background: var(--gray-50);
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 10px var(--spacing-md);
+    text-align: left;
+    border-bottom: 2px solid var(--gray-200);
+  }
+
+  td {
+    padding: 10px var(--spacing-md);
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--text-primary);
+    vertical-align: middle;
+
+    &:nth-child(2) {
+      font-family: 'Courier New', monospace;
+      font-size: var(--font-size-xs);
+      color: var(--primary-700);
+    }
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+}

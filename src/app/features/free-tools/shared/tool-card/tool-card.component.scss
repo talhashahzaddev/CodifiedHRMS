@@ -17,7 +17,7 @@
     position: absolute;
     left: 0; top: 0; bottom: 0;
     width: 3px;
-    background: linear-gradient(180deg, var(--primary-400), var(--accent-500));
+    background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
     opacity: 0;
     transition: opacity var(--transition-base);
   }
@@ -37,7 +37,7 @@
   width: 42px;
   height: 42px;
   border-radius: var(--border-radius-md);
-  background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+  background: linear-gradient(135deg, var(--primary-50), var(--primary-50));
   border: 1px solid rgba(12, 142, 255, 0.12);
   display: flex;
   align-items: center;
