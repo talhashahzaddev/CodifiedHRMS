@@ -14,7 +14,7 @@
 .tool-breadcrumb {
   background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid var(--gray-100);
-  padding: var(--spacing-sm) 0;
+  padding: 0 0 var(--spacing-sm);
 
   .breadcrumb-list {
     display: flex;
@@ -95,7 +95,7 @@
     color: var(--text-secondary) !important;
     line-height: 1.75;
     margin: 0;
-    max-width: 680px;
+    max-width: 100%;
   }
 }
 
