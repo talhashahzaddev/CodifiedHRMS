@@ -179,42 +179,61 @@ export class OvertimeCalculatorComponent implements OnInit, OnDestroy {
   }
 
   private updateSeo(): void {
-    const t = 'Free Overtime Calculator — Time and a Half Pay Tool | Brisk People';
-    const d = 'Calculate overtime pay instantly. Enter your hourly rate and total hours worked to find your time-and-a-half overtime pay, regular pay, and total gross wages. Free HR tool.';
+    const tool = getToolBySlug('overtime-calculator');
+    if (!tool) return;
+    const t = tool.seoTitle;
+    const d = tool.seoDescription;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    
     this.title.setTitle(t);
     this.meta.updateTag({ name: 'description',        content: d });
-    this.meta.updateTag({ name: 'keywords',           content: 'overtime calculator, time and a half calculator, calculate overtime pay, gross pay calculator, overtime wages' });
+    this.meta.updateTag({ name: 'keywords',           content: tool.keywords });
     this.meta.updateTag({ property: 'og:title',       content: t });
     this.meta.updateTag({ property: 'og:description', content: d });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://www.briskpeople.com/free-workforce-tools/overtime-calculator' });
+    this.meta.updateTag({ property: 'og:url',         content: url });
     this.meta.updateTag({ name: 'twitter:card',       content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',      content: t });
     this.meta.updateTag({ name: 'twitter:description', content: d });
+    
+    // Set canonical tag
+    let canonicalLink = this.document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.remove();
+    canonicalLink = this.document.createElement('link');
+    canonicalLink.setAttribute('rel', 'canonical');
+    canonicalLink.setAttribute('href', url);
+    this.document.head.appendChild(canonicalLink);
   }
 
   private injectJsonLd(): void {
-    const schemas = [
+    const tool = getToolBySlug('overtime-calculator');
+    if (!tool) return;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    const schemas: any[] = [
       {
-        '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-        name: 'Overtime Calculator', applicationCategory: 'BusinessApplication',
-        operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        description: 'Free online overtime calculator to calculate regular pay, overtime pay, and total gross wages.',
-        url: 'https://www.briskpeople.com/free-workforce-tools/overtime-calculator'
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: tool.title, applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: tool.seoDescription,
+        url: url
       },
       {
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',                 item: 'https://www.briskpeople.com' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.briskpeople.com' },
           { '@type': 'ListItem', position: 2, name: 'Free Workforce Tools', item: 'https://www.briskpeople.com/free-workforce-tools' },
-          { '@type': 'ListItem', position: 3, name: 'Overtime Calculator',  item: 'https://www.briskpeople.com/free-workforce-tools/overtime-calculator' }
+          { '@type': 'ListItem', position: 3, name: tool.title, item: url }
         ]
-      },
-      {
-        '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
       }
     ];
+
+    if (this.faqs && this.faqs.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      });
+    }
+
     this.jsonLdScript = this.document.createElement('script');
     this.jsonLdScript.type = 'application/ld+json';
     this.jsonLdScript.text = JSON.stringify(schemas);

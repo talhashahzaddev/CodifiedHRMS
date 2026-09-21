@@ -576,3 +576,107 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+// ── FAQ Accordion ─────────────────────────────────────────────────────────────
+.tool-faq {
+  background: var(--surface-secondary, var(--gray-50));
+  border-top: 1px solid var(--border-color);
+
+  .faq-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+
+    .faq-header-icon {
+      font-size: 36px;
+      color: var(--primary-600);
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 4px;
+    }
+
+    p {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .faq-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--surface-primary, #fff);
+    transition: box-shadow 0.2s ease;
+
+    &:hover { box-shadow: var(--shadow-sm); }
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+
+    &:hover { background: var(--gray-50); }
+
+    &.open {
+      background: var(--primary-50, #eff6ff);
+      border-bottom: 1px solid var(--border-color);
+
+      .faq-q-text { color: var(--primary-700, #1d4ed8); }
+      .faq-chevron { color: var(--primary-600); }
+    }
+
+    .faq-q-text {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .faq-chevron {
+      font-size: 22px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  .faq-answer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    animation: faq-slide-in 0.18s ease;
+
+    p {
+      font-size: var(--font-size-sm);
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+}
+
+@keyframes faq-slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

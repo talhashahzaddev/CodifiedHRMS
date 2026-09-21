@@ -235,6 +235,50 @@
     </div>
   </section>
 
+  <!-- ── FAQ Section ──────────────────────────────────────── -->
+  @let faqContent = getEducationalContent(tool.slug);
+  @if (faqContent.faqs && faqContent.faqs.length > 0) {
+    <section class="tool-faq section-sm">
+      <div class="container">
+        <div class="faq-header">
+          <span class="material-symbols-outlined faq-header-icon">help_center</span>
+          <div>
+            <h2>Frequently Asked Questions</h2>
+            <p>Common questions about the {{ tool.title }}</p>
+          </div>
+        </div>
+        <div class="faq-list" role="list">
+          @for (faq of faqContent.faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button
+                class="faq-question"
+                [class.open]="openFaqIndex() === i"
+                (click)="toggleFaq(i)"
+                [attr.aria-expanded]="openFaqIndex() === i"
+                [id]="'faq-q-' + i"
+                [attr.aria-controls]="'faq-a-' + i"
+                type="button">
+                <span class="faq-q-text">{{ faq.q }}</span>
+                <span class="material-symbols-outlined faq-chevron">
+                  {{ openFaqIndex() === i ? 'expand_less' : 'expand_more' }}
+                </span>
+              </button>
+              @if (openFaqIndex() === i) {
+                <div
+                  class="faq-answer"
+                  role="region"
+                  [id]="'faq-a-' + i"
+                  [attr.aria-labelledby]="'faq-q-' + i">
+                  <p>{{ faq.a }}</p>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
   <!-- ── Related Tools ──────────────────────────────────── -->
   @if (relatedTools().length > 0) {
     <section class="tool-related section-sm">

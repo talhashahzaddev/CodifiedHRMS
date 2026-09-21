@@ -18,4 +18,5 @@ export interface EducationalContent {
   formulaNote?: string;    // plain-English explanation of the formula
   pros: string[];
   cons: string[];
+  faqs?: { q: string; a: string }[];  // FAQ accordion + JSON-LD FAQPage schema
 }

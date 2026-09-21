@@ -255,42 +255,61 @@ export class CompletionPercentageCalculatorComponent implements OnInit, OnDestro
   }
 
   private updateSeo(): void {
-    const t = 'Free Completion Percentage Calculator — Project Progress Tool | Brisk People';
-    const d = 'Calculate project or task completion percentage instantly. Optional: add start/due dates for time elapsed %, days remaining, projected finish, and schedule status. Free, no sign-up.';
+    const tool = getToolBySlug('completion-percentage-calculator');
+    if (!tool) return;
+    const t = tool.seoTitle;
+    const d = tool.seoDescription;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    
     this.title.setTitle(t);
     this.meta.updateTag({ name: 'description',        content: d });
-    this.meta.updateTag({ name: 'keywords',           content: 'completion percentage calculator, project completion calculator, task completion %, project progress tool, % complete calculator' });
+    this.meta.updateTag({ name: 'keywords',           content: tool.keywords });
     this.meta.updateTag({ property: 'og:title',       content: t });
     this.meta.updateTag({ property: 'og:description', content: d });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://www.briskpeople.com/free-workforce-tools/completion-percentage-calculator' });
+    this.meta.updateTag({ property: 'og:url',         content: url });
     this.meta.updateTag({ name: 'twitter:card',       content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',      content: t });
     this.meta.updateTag({ name: 'twitter:description', content: d });
+    
+    // Set canonical tag
+    let canonicalLink = this.document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.remove();
+    canonicalLink = this.document.createElement('link');
+    canonicalLink.setAttribute('rel', 'canonical');
+    canonicalLink.setAttribute('href', url);
+    this.document.head.appendChild(canonicalLink);
   }
 
   private injectJsonLd(): void {
-    const schemas = [
+    const tool = getToolBySlug('completion-percentage-calculator');
+    if (!tool) return;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    const schemas: any[] = [
       {
-        '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-        name: 'Completion Percentage Calculator', applicationCategory: 'BusinessApplication',
-        operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        description: 'Free project completion percentage calculator with schedule status, projected finish date, and plan variance.',
-        url: 'https://www.briskpeople.com/free-workforce-tools/completion-percentage-calculator'
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: tool.title, applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: tool.seoDescription,
+        url: url
       },
       {
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',                     item: 'https://www.briskpeople.com' },
-          { '@type': 'ListItem', position: 2, name: 'Free Workforce Tools',     item: 'https://www.briskpeople.com/free-workforce-tools' },
-          { '@type': 'ListItem', position: 3, name: 'Completion Percentage Calculator', item: 'https://www.briskpeople.com/free-workforce-tools/completion-percentage-calculator' }
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.briskpeople.com' },
+          { '@type': 'ListItem', position: 2, name: 'Free Workforce Tools', item: 'https://www.briskpeople.com/free-workforce-tools' },
+          { '@type': 'ListItem', position: 3, name: tool.title, item: url }
         ]
-      },
-      {
-        '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
       }
     ];
+
+    if (this.faqs && this.faqs.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      });
+    }
+
     this.jsonLdScript = this.document.createElement('script');
     this.jsonLdScript.type = 'application/ld+json';
     this.jsonLdScript.text = JSON.stringify(schemas);
