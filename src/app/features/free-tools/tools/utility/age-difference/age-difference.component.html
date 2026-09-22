@@ -107,14 +107,85 @@
   <section class="tool-edu">
     <div class="container">
       <div class="edu-section">
+        <h2>What is an Age Difference Calculator?</h2>
+        <p>An <strong>Age Difference Calculator</strong> computes the exact gap in time between two dates of birth. It breaks down the age gap into precise years, months, and days, taking the guesswork out of determining exactly how much older one person is than another.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Use an Age Gap Calculator?</h2>
+        <p>Whether you're comparing your age with a sibling, a partner, or even a historical figure, doing the math manually is difficult because of leap years and uneven calendar months. This tool instantly processes the two dates and provides an accurate, absolute difference regardless of which date you enter first.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Calculate an Age Gap</h2>
+        <p>Simply input the two birth dates into the respective fields. The tool automatically determines which date is earlier and calculates the absolute time difference between them. The result is displayed clearly in years, months, and days.</p>
+      </div>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Age Difference Calculator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Instantly calculates the absolute time gap between two people</td>
+                <td>Does not account for differences in birth time (hours/minutes)</td>
+              </tr>
+              <tr>
+                <td>Handles leap years properly for highly accurate month/day counts</td>
+                <td>Assumes the Gregorian calendar for all historical dates</td>
+              </tr>
+              <tr>
+                <td>Order-independent: it doesn't matter who you enter first</td>
+                <td>Only calculates difference between two people at a time</td>
+              </tr>
+              <tr>
+                <td>Free, fast, and completely private (runs in your browser)</td>
+                <td>Does not adjust for time zone differences at birth</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">family_restroom</span></div>
+            <h3>Family Planning & Siblings</h3>
+            <p>Parents frequently use this tool to calculate the exact age gap between children, which is helpful for anticipating developmental stages and schooling overlaps.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">favorite</span></div>
+            <h3>Relationship Milestones</h3>
+            <p>Couples use age difference calculators out of curiosity to find out exactly how much older one partner is than the other, down to the day.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">menu_book</span></div>
+            <h3>Genealogy & History</h3>
+            <p>Historians compare the birth dates of historical figures to understand the generational gap between leaders, inventors, or authors living in the same era.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">pets</span></div>
+            <h3>Pet Age Comparisons</h3>
+            <p>Compare the ages of different pets in your household to understand their life stages and how many years apart they were adopted.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -133,4 +204,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

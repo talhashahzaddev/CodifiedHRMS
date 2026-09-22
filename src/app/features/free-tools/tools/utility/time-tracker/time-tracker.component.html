@@ -137,33 +137,84 @@
     <div class="container">
 
       <div class="edu-section">
-        <h2>Why Use a Browser-Based Time Tracker?</h2>
-        <p>
-          For freelancers, consultants, developers, and students who need to log time without committing to
-          a full SaaS subscription, a browser-based time tracker is the simplest solution. There's nothing to
-          install, no account to create, and no data leaving your device. Open the page, name your task, click
-          Start, and your time is being tracked.
-        </p>
-        <p>
-          This tracker uses <code>Date.now()</code> for all elapsed time calculations — not interval tick
-          counting — which means it remains accurate even if the browser tab is throttled, the computer goes
-          to sleep, or the system clock advances while you're away. It also persists the active session to
-          <code>localStorage</code> so that even if you accidentally close the tab, reopening the page will
-          resume the timer from the correct start time.
-        </p>
+        <h2>What is an Online Time Tracker?</h2>
+        <p>An <strong>Online Time Tracker</strong> is a browser-based stopwatch and logging utility that helps you monitor exactly how much time you spend on specific tasks, projects, or client work. It provides a running timer and allows you to log sessions into an exportable timesheet.</p>
       </div>
+      <div class="edu-section">
+        <h2>Why Track Your Time?</h2>
+        <p>Accurate time tracking is essential for freelancers billing by the hour, students managing study sessions, and professionals striving to improve their productivity. By keeping a precise log of your activities, you can identify time-sinks, improve your estimates, and ensure you are compensated accurately for your work.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Use the Stopwatch & Logger</h2>
+        <p>Enter a task name and click the "Play" button to start the timer. You can pause and resume the timer as needed. When you are finished with the task, click "Stop & Log" to record the session into your local timesheet. You can accumulate multiple sessions and export the entire log as a CSV file for your records.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the browser Time Tracker">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Requires no software installation, accounts, or monthly fees</td>
+                <td>Timer stops if the browser tab is forcefully closed or crashes</td>
+              </tr>
+              <tr>
+                <td>Provides a simple, distraction-free interface for deep work</td>
+                <td>Logs are stored locally; clearing browser data will delete them</td>
+              </tr>
+              <tr>
+                <td>Allows tagging and accumulating multiple sessions throughout the day</td>
+                <td>Cannot sync automatically across multiple devices (e.g. phone to desktop)</td>
+              </tr>
+              <tr>
+                <td>Exports directly to CSV for easy import into Excel or payroll systems</td>
+                <td>Does not monitor screen activity or take screenshots like invasive trackers</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">monetization_on</span></div>
+            <h3>Freelance Billing</h3>
+            <p>Independent contractors use the tracker to log exact hours spent on client projects, exporting the CSV at the end of the week to generate invoices.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">self_improvement</span></div>
+            <h3>Pomodoro & Focus Sessions</h3>
+            <p>Students and writers use the tool to run focused study blocks, pausing the timer during breaks and logging the total productive time per day.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">task</span></div>
+            <h3>Task Estimation Auditing</h3>
+            <p>Software developers track how long a coding task actually took versus their initial sprint estimate to improve future planning.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">gavel</span></div>
+            <h3>Legal & Consulting</h3>
+            <p>Lawyers and consultants use the stopwatch to capture billable increments (e.g., 6-minute blocks) during phone calls and consultations.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
             <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
                     (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>

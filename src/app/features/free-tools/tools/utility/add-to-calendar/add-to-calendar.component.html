@@ -248,43 +248,72 @@
     <div class="container">
 
       <div class="edu-section">
-        <h2>What is an "Add to Calendar" Link?</h2>
-        <p>
-          An "Add to Calendar" link is a specially crafted URL that, when clicked, opens the user's preferred
-          calendar application with the event details pre-filled. Instead of manually typing event information,
-          your attendees can add your event to their calendar in a single click — reducing friction and improving
-          event attendance.
-        </p>
-        <p>
-          There are three main formats: a direct Google Calendar URL, an Outlook Web compose link, a Yahoo Calendar
-          URL, and a downloadable .ics file (iCalendar format, RFC 5545) for all other calendar apps.
-        </p>
+        <h2>What is an Add to Calendar Link?</h2>
+        <p>An <strong>Add to Calendar link</strong> is a specially formatted URL that allows users to seamlessly add an event to their preferred digital calendar. Instead of manually typing out event details, attendees can simply click a link to instantly save the date, time, location, and description to Google Calendar, Outlook, Yahoo, or Apple Calendar.</p>
       </div>
-
       <div class="edu-section">
-        <h2>How the Date Format Works</h2>
-        <p>
-          Google Calendar and Yahoo Calendar require dates in the UTC-based format
-          <strong>YYYYMMDDTHHmmssZ</strong>. The "Z" suffix indicates the time is expressed in Coordinated
-          Universal Time (UTC). Our generator automatically converts your local date and time input to UTC,
-          so attendees in any timezone see the correct local time.
-        </p>
-        <p>
-          Outlook Web accepts ISO 8601 format (<strong>YYYY-MM-DDTHH:mm:ss</strong>), while the .ics file uses
-          the same UTC format with CRLF line endings as required by RFC 5545.
-        </p>
+        <h2>Why Use an Event Link Generator?</h2>
+        <p>Creating these links manually can be tedious and prone to errors, as different calendar providers use completely different URL structures and require strict URL encoding. Our generator automatically handles time zone conversions (UTC), URL encoding, and formats the links perfectly for every major platform. It also generates a standard <code>.ics</code> file for maximum compatibility.</p>
       </div>
-
       <div class="edu-section">
-        <h2>How to Use These Links</h2>
-        <ul class="how-to-list">
-          <li>Enter your event title, start/end date and time, and optional location and description.</li>
-          <li>Click "Generate Links" to instantly create all four calendar link formats.</li>
-          <li>Copy the Google, Outlook, or Yahoo link and paste it into your email, website, or newsletter.</li>
-          <li>Download the .ics file to send as an email attachment — recipients can open it with any calendar app.</li>
-          <li>For all-day events, toggle "All-Day Event" before generating — time fields will be hidden automatically.</li>
-        </ul>
+        <h2>How to Generate Calendar Links</h2>
+        <p>Simply enter your event's title, start and end times, location, and a brief description. If it's a multi-day or full-day event, toggle the "All-Day Event" option. Once you click "Generate Link," you can instantly copy the raw URLs or HTML snippets to embed directly into your emails, newsletters, or website.</p>
       </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of Add to Calendar generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Eliminates manual data entry for attendees</td>
+                <td>Requires users to be logged into their calendar provider on their browser</td>
+              </tr>
+              <tr>
+                <td>Dramatically increases event attendance and RSVP rates</td>
+                <td>ICS files must be downloaded and manually opened on some mobile devices</td>
+              </tr>
+              <tr>
+                <td>Automatically handles time zone conversions (using UTC format)</td>
+                <td>URL length can be long if the description contains extensive text</td>
+              </tr>
+              <tr>
+                <td>Free, browser-based, and supports all major calendar platforms</td>
+                <td>Does not track who actually clicked the link (unless you use a URL shortener)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">mail</span></div>
+            <h3>Email Marketing Campaigns</h3>
+            <p>Embed these links directly into your newsletter templates so subscribers can instantly add webinars, product launches, or sales events to their schedules.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">web</span></div>
+            <h3>Website "Register Now" Pages</h3>
+            <p>Place an "Add to Google Calendar" button on your thank-you page immediately after a user registers for an online event to reduce no-show rates.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">business_center</span></div>
+            <h3>Corporate Meeting Invites</h3>
+            <p>Ensure external clients or candidates never miss an interview by including a direct Outlook calendar link in their confirmation emails.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">school</span></div>
+            <h3>Educational Schedules</h3>
+            <p>Allow students to download their class schedules or important academic deadlines directly to their personal Apple or Google calendars.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
@@ -294,9 +323,7 @@
             <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
                     (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
-              <span class="faq-icon material-symbols-outlined">
-                {{ openFaqIndex === i ? 'remove' : 'add' }}
-              </span>
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
             <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>

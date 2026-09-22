@@ -170,28 +170,71 @@
 
       <div class="edu-section">
         <h2>What is a Mailto Link?</h2>
-        <p>
-          A <code>mailto:</code> link is a standard HTML hyperlink that instructs the browser to open the user's
-          default email client (Gmail, Outlook, Apple Mail, Thunderbird, etc.) and pre-populate a new compose
-          window with your specified fields. It's the simplest way to add a "Contact Us" or "Email Us" button
-          to any website without a backend form or server.
-        </p>
-        <p>
-          The basic syntax is: <code>mailto:recipient@example.com?subject=Hello&amp;body=Hi%20there</code>.
-          Every parameter must be URL-encoded — which is exactly what this generator handles automatically.
-        </p>
+        <p>A <code>mailto:</code> link is a standard HTML hyperlink that instructs the browser to open the user's default email client (Gmail, Outlook, Apple Mail, Thunderbird, etc.) and pre-populate a new compose window with your specified fields. It's the simplest way to add a "Contact Us" button to any website without needing a backend server.</p>
       </div>
-
       <div class="edu-section">
         <h2>Why URL Encoding Matters</h2>
-        <p>
-          Without proper encoding, special characters like spaces, line breaks, ampersands, and question marks
-          will break the mailto link. For example, a space must become <code>%20</code>, a newline becomes
-          <code>%0A</code>, and an ampersand becomes <code>%26</code>. Our generator applies
-          <code>encodeURIComponent()</code> to the Subject and Body fields, and uses the correct
-          <code>&amp;</code> delimiter between parameters so the link works across all browsers and email clients.
-        </p>
+        <p>Without proper encoding, special characters like spaces, line breaks, ampersands, and question marks will completely break a mailto link. For example, a space must become <code>%20</code>, and a newline becomes <code>%0A</code>. Our generator automatically applies strict URL encoding to the Subject and Body fields so your links work flawlessly across all browsers.</p>
       </div>
+      <div class="edu-section">
+        <h2>How to Generate a Mailto URL</h2>
+        <p>Enter the recipient email address, subject line, and the body of your message. You can also add CC and BCC recipients. As you type, the tool generates a raw mailto URL and a ready-to-use HTML anchor tag snippet. Copy the HTML snippet and paste it directly into your website's source code.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of Mailto links">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Requires zero backend coding, servers, or form processors</td>
+                <td>Exposes your email address to spambots scraping the website</td>
+              </tr>
+              <tr>
+                <td>Opens in the user's familiar, native email client automatically</td>
+                <td>Fails if the user uses webmail but hasn't set it as their OS default handler</td>
+              </tr>
+              <tr>
+                <td>Allows pre-filling complex templates (CC, BCC, Subject, Body)</td>
+                <td>Cannot enforce required fields like a traditional web form can</td>
+              </tr>
+              <tr>
+                <td>Extremely fast to implement in static HTML or email signatures</td>
+                <td>URL length limits in older browsers can truncate very long message bodies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">badge</span></div>
+            <h3>Email Signatures</h3>
+            <p>Create a "Refer a Friend" or "Contact Support" button in your email signature that automatically sets the subject line for easy sorting.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">public</span></div>
+            <h3>Static Websites</h3>
+            <p>For simple portfolio or landing pages, a mailto link is the fastest way to add a "Hire Me" button without managing a backend server.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">campaign</span></div>
+            <h3>Marketing Campaigns</h3>
+            <p>Include an "RSVP via Email" link in newsletters that pre-fills the subject with "Yes, I will attend" to lower the barrier to response.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">support_agent</span></div>
+            <h3>Internal Support Portals</h3>
+            <p>Generate a link for employees to report IT issues, automatically CCing the department head and pre-filling a troubleshooting template in the body.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
@@ -203,7 +246,7 @@
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>

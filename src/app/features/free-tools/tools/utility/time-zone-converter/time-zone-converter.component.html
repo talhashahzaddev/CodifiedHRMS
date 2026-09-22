@@ -131,25 +131,88 @@
   <!-- ── Educational Content ────────────────────────────────────────── -->
   <section class="tool-edu">
     <div class="container">
+
       <div class="edu-section">
-        <h2>How the Time Zone Converter Works</h2>
-        <p>
-          Unlike basic clocks, this tool generates an interactive 24-hour visual timeline. This makes it
-          incredibly easy to find overlapping waking hours for international team meetings. The timeline
-          automatically handles Daylight Saving Time (DST) rules for all selected regions.
-        </p>
+        <h2>What is a Time Zone Converter?</h2>
+        <p>A <strong>Time Zone Converter</strong> is a utility that translates the current or scheduled time from one geographic region to another. It visualizes the time offset between different cities, making it easy to schedule global meetings without doing mental math.</p>
       </div>
+      <div class="edu-section">
+        <h2>Why is Time Zone Conversion Difficult?</h2>
+        <p>Global timekeeping is complicated by varying UTC offsets, regional Daylight Saving Time (DST) rules, and localized calendar changes. Manually calculating times between places like New York, London, and Tokyo can lead to missed meetings. This tool uses the browser's native IANA timezone database to ensure 100% accurate, DST-aware conversions.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Compare Global Times</h2>
+        <p>Search for and select a "Base Timezone" (e.g., your local time) and then add up to three "Target Timezones". The tool will generate a visual 24-hour timeline. You can drag the slider to scrub through the hours of the day and see exactly what time it will be across all selected cities simultaneously.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Time Zone Converter">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Provides a visual 24-hour timeline to see multiple regions at once</td>
+                <td>Requires searching by formal IANA timezone names (e.g. Europe/London)</td>
+              </tr>
+              <tr>
+                <td>Native IANA database automatically handles regional Daylight Saving Time</td>
+                <td>Does not display a world map for visual geographical context</td>
+              </tr>
+              <tr>
+                <td>Allows comparing up to 4 different global locations simultaneously</td>
+                <td>Only calculates current/static offsets; cannot schedule dates far in the future</td>
+              </tr>
+              <tr>
+                <td>Interactive slider makes finding overlapping working hours incredibly easy</td>
+                <td>Does not integrate directly into your calendar software</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">groups</span></div>
+            <h3>Remote Team Meetings</h3>
+            <p>Managers use the slider to find the "golden hour" where working hours overlap between teams in San Francisco, London, and Tokyo.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">support_agent</span></div>
+            <h3>Customer Support Handoffs</h3>
+            <p>Global support teams use the timeline to coordinate follow-the-sun shift handoffs ensuring 24/7 coverage without overlap waste.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">live_tv</span></div>
+            <h3>Live Event Broadcasting</h3>
+            <p>Marketers use the converter to determine the optimal time to host a webinar or launch a product that maximizes live viewership globally.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">flight</span></div>
+            <h3>Travel Planning</h3>
+            <p>Frequent flyers use the converter to anticipate what time it will be back home when they land, helping to manage jet lag and family calls.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -168,4 +231,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

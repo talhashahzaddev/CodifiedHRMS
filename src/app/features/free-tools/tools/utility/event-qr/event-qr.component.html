@@ -179,17 +179,72 @@
     <div class="container">
 
       <div class="edu-section">
-        <h2>How Does an Event QR Code Work?</h2>
-        <p>
-          In <strong>iCal Event</strong> mode, the QR code encodes a standard <code>BEGIN:VCALENDAR</code>
-          vEvent string. When scanned on iOS, the phone immediately offers to add the event to Apple Calendar.
-          On Android, apps like Google Calendar or any QR scanning app with calendar integration will pick it up.
-        </p>
-        <p>
-          In <strong>URL mode</strong>, the QR simply encodes a web address — useful when you want to link
-          attendees to an Eventbrite page, a Zoom join link, a Google Meet room, or any registration form.
-        </p>
+        <h2>What is an Event QR Code?</h2>
+        <p>An <strong>Event QR Code</strong> is a scannable barcode that contains calendar event data (encoded as a vCalendar or iCalendar string). When a user scans the QR code with their smartphone camera, their phone automatically parses the data and prompts them to save the event directly to their native calendar app.</p>
       </div>
+      <div class="edu-section">
+        <h2>Why Use QR Codes for Events?</h2>
+        <p>Event QR codes bridge the gap between physical marketing and digital calendars. By printing these codes on flyers, posters, wedding invitations, or conference badges, you eliminate the friction of attendees having to manually type out event dates and times. It drastically increases event attendance and engagement.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Generate a Calendar QR Code</h2>
+        <p>Fill out your event details including the title, start/end dates, location, and a brief description. As you type, the QR code on the right updates instantly. Once your details are finalized, click "Download PNG" to save the high-resolution QR code for your print or digital marketing materials.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Event QR Generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Converts offline physical marketing into digital calendar events</td>
+                <td>Requires users to have a smartphone with a QR-capable camera</td>
+              </tr>
+              <tr>
+                <td>Encodes the data entirely offline; no server or internet needed to scan</td>
+                <td>Very long descriptions make the QR code dense and harder to scan</td>
+              </tr>
+              <tr>
+                <td>Works universally across iOS (Apple Calendar) and Android</td>
+                <td>Cannot update the event details dynamically once the code is printed</td>
+              </tr>
+              <tr>
+                <td>High-resolution PNG download suitable for professional printing</td>
+                <td>Older phones may require a third-party QR scanning app</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">print</span></div>
+            <h3>Print Advertising & Flyers</h3>
+            <p>Print the QR code on posters and flyers so people walking by can instantly save your concert, gallery opening, or pop-up shop date.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">card_membership</span></div>
+            <h3>Conference Badges & Tickets</h3>
+            <p>Include QR codes on event tickets or conference lanyards that link to keynote speeches, breakout sessions, or networking hours.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">celebration</span></div>
+            <h3>Wedding & Party Invitations</h3>
+            <p>Add a small QR code to physical wedding invitations, allowing guests to effortlessly block out the weekend in their digital planners.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">storefront</span></div>
+            <h3>Retail Store Signage</h3>
+            <p>Place a QR code in your shop window to remind customers of an upcoming weekend sale or exclusive VIP shopping event.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
@@ -201,7 +256,7 @@
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>
