@@ -546,6 +546,20 @@ export const UTILITY_TOOLS: ToolConfig[] = [
     ]
   },
   {
+    slug: 'salary-tax-calculator',
+    category: 'utility',
+    title: 'Salary Tax Calculator',
+    subtitle: 'Calculate your FBR income tax instantly for any fiscal year',
+    description: 'Instantly calculate Pakistan FBR salary income tax for 2023-24 to 2026-27. See annual/monthly tax, effective rate, and take-home pay.',
+    longDescription: 'Enter your monthly or annual gross salary and select the fiscal year to instantly calculate your FBR income tax liability under the official salaried-person slab system. Displays gross annual salary, annual and monthly tax deduction, effective tax rate, annual and monthly take-home pay, and highlights your active tax bracket in a full slab table.',
+    icon: 'account_balance',
+    seoTitle: 'Pakistan Salary Tax Calculator 2026-27 — FBR Income Tax Slabs | BriskPeople',
+    seoDescription: 'Calculate your Pakistan FBR salary income tax instantly for fiscal years 2023-24 to 2026-27. See annual & monthly tax, effective rate, take-home pay, and your active tax bracket. Free — no sign-up required.',
+    keywords: 'salary tax calculator pakistan, FBR income tax calculator 2026-27, pakistan income tax slab 2026, salaried person tax calculator, monthly tax calculator pakistan, FBR tax calculator, income tax slab pakistan 2025-26, how to calculate salary tax pakistan, net salary calculator pakistan, take home salary calculator pakistan',
+    relatedSlugs: ['leave-encashment-calculator', 'overtime-calculator', 'time-card-calculator', 'fte-calculator'],
+    fields: []
+  },
+  {
     slug: 'age-difference-calculator',
     category: 'utility',
     title: 'Age Difference Calculator',

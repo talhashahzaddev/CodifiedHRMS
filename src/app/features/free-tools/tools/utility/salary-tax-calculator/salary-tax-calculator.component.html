@@ -1,0 +1,416 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Salary Tax Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">account_balance</span>
+        </div>
+        <div>
+          <h1>Pakistan FBR Salary Tax Calculator 2026-27</h1>
+          <p class="tool-intro">
+            Calculate your exact income tax liability under the official FBR salaried-person tax slabs.
+            Instantly see your gross salary, annual &amp; monthly tax, effective tax rate, and take-home pay — for any fiscal year from 2023-24 to 2026-27.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Salary Details</h2>
+            </div>
+
+            <form [formGroup]="form" novalidate>
+
+              <!-- Fiscal Year -->
+              <div class="form-group">
+                <label class="field-label" for="fiscalYear">
+                  Fiscal Year <span class="required">*</span>
+                </label>
+                <select id="fiscalYear" class="field-select" formControlName="fiscalYear">
+                  <option *ngFor="let fy of fiscalYears" [value]="fy.value">{{ fy.label }}</option>
+                </select>
+                <span class="field-hint">Select the FBR fiscal year for which to calculate tax.</span>
+              </div>
+
+              <!-- Salary Mode Toggle -->
+              <div class="toggle-row">
+                <span class="toggle-label">Input Mode</span>
+                <label class="toggle-switch" id="salaryModeToggle">
+                  <input
+                    type="checkbox"
+                    [checked]="!isMonthly"
+                    (change)="toggleSalaryMode()"
+                    aria-label="Switch between Monthly and Annual salary input"
+                  />
+                  <span class="toggle-track">
+                    <span class="toggle-thumb"></span>
+                  </span>
+                  <span class="toggle-text">{{ isMonthly ? 'Monthly' : 'Annual' }}</span>
+                </label>
+              </div>
+
+              <!-- Salary Amount -->
+              <div class="form-group">
+                <label class="field-label" for="salaryAmount">
+                  {{ isMonthly ? 'Monthly' : 'Annual' }} Salary (PKR) <span class="required">*</span>
+                </label>
+                <div class="pkr-input-group">
+                  <span class="pkr-prefix">PKR</span>
+                  <input
+                    id="salaryAmount"
+                    type="number"
+                    class="field-input pkr-input"
+                    formControlName="salaryAmount"
+                    [placeholder]="isMonthly ? 'e.g. 150000' : 'e.g. 1800000'"
+                    min="0"
+                  />
+                </div>
+                <span class="field-hint">
+                  Enter your {{ isMonthly ? 'gross monthly salary (×12 for annual)' : 'gross annual salary' }} before any deductions.
+                </span>
+              </div>
+
+              <!-- Quick Amount Chips -->
+              <div class="quick-amounts">
+                <span class="quick-label">Quick fill:</span>
+                <div class="quick-chips">
+                  <button *ngIf="isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 50000})">50K</button>
+                  <button *ngIf="isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 100000})">100K</button>
+                  <button *ngIf="isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 200000})">200K</button>
+                  <button *ngIf="isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 500000})">500K</button>
+                  <button *ngIf="!isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 600000})">600K</button>
+                  <button *ngIf="!isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 1200000})">1.2M</button>
+                  <button *ngIf="!isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 2400000})">2.4M</button>
+                  <button *ngIf="!isMonthly" type="button" class="quick-chip" (click)="form.patchValue({salaryAmount: 6000000})">6M</button>
+                </div>
+              </div>
+
+            </form>
+
+            <!-- FBR Notice -->
+            <div class="fbr-notice">
+              <span class="material-symbols-outlined">verified_user</span>
+              <p>Based on official FBR Income Tax Ordinance 2001 slab rates for salaried individuals.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+
+          <!-- Summary Dashboard -->
+          <div class="results-card" *ngIf="result">
+
+            <div class="card-header">
+              <span class="material-symbols-outlined">analytics</span>
+              <h2 class="card-title">Tax Summary — {{ form.get('fiscalYear')?.value | slice:0:4 }}-{{ form.get('fiscalYear')?.value | slice:5:9 }}</h2>
+            </div>
+
+            <!-- Effective Rate Banner -->
+            <div class="effective-rate-banner">
+              <div class="erb-left">
+                <span class="erb-rate">{{ result.effectiveRate | number:'1.2-2' }}%</span>
+                <span class="erb-label">Effective Tax Rate</span>
+              </div>
+              <div class="erb-divider"></div>
+              <div class="erb-right">
+                <span class="erb-slab-tag">Slab {{ result.activeSlabIndex + 1 }} of {{ result.slabs.length }}</span>
+                <span class="erb-rate-label">
+                  {{ result.slabs[result.activeSlabIndex].rate }}% Marginal Rate
+                </span>
+              </div>
+            </div>
+
+            <!-- 5 Metric Tiles -->
+            <div class="summary-grid">
+              <div class="metric-tile metric-tile--primary">
+                <span class="tile-icon material-symbols-outlined">payments</span>
+                <span class="tile-label">Gross Annual Salary</span>
+                <span class="tile-value">PKR {{ formatPKR(result.grossAnnual) }}</span>
+                <span class="tile-sub">PKR {{ formatPKR(result.grossAnnual / 12) }}/month</span>
+              </div>
+              <div class="metric-tile metric-tile--danger">
+                <span class="tile-icon material-symbols-outlined">account_balance</span>
+                <span class="tile-label">Estimated Annual Tax</span>
+                <span class="tile-value">PKR {{ formatPKR(result.annualTax) }}</span>
+                <span class="tile-sub">FY {{ form.get('fiscalYear')?.value }}</span>
+              </div>
+              <div class="metric-tile metric-tile--warning">
+                <span class="tile-icon material-symbols-outlined">calendar_month</span>
+                <span class="tile-label">Estimated Monthly Tax</span>
+                <span class="tile-value">PKR {{ formatPKR(result.monthlyTax) }}</span>
+                <span class="tile-sub">Deducted at source</span>
+              </div>
+              <div class="metric-tile metric-tile--success">
+                <span class="tile-icon material-symbols-outlined">savings</span>
+                <span class="tile-label">Annual Take-Home</span>
+                <span class="tile-value">PKR {{ formatPKR(result.annualTakeHome) }}</span>
+                <span class="tile-sub">After income tax</span>
+              </div>
+              <div class="metric-tile metric-tile--green">
+                <span class="tile-icon material-symbols-outlined">wallet</span>
+                <span class="tile-label">Monthly Take-Home</span>
+                <span class="tile-value">PKR {{ formatPKR(result.monthlyTakeHome) }}</span>
+                <span class="tile-sub">Net in hand per month</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty / Zero State -->
+          <div class="results-empty" *ngIf="!result || (result && result.grossAnnual === 0)">
+            <span class="results-empty-icon material-symbols-outlined">calculate</span>
+            <p>Enter your salary above to instantly see your FBR income tax breakdown, effective rate, and take-home pay.</p>
+          </div>
+
+          <!-- Tax Slab Breakdown Table -->
+          <div class="slab-card" *ngIf="result && result.grossAnnual > 0">
+            <div class="card-header">
+              <span class="material-symbols-outlined">table_chart</span>
+              <h2 class="card-title">
+                FBR Tax Slab Breakdown
+                <span class="fy-badge">{{ form.get('fiscalYear')?.value }}</span>
+              </h2>
+            </div>
+            <p class="slab-intro">Your salary falls in the <strong>highlighted row</strong> below.</p>
+            <div class="table-wrapper">
+              <table class="slab-table" aria-label="FBR Tax Slabs">
+                <thead>
+                  <tr>
+                    <th>Annual Income Range</th>
+                    <th>Fixed Tax</th>
+                    <th>Rate</th>
+                    <th>Excess Over</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let slab of result.slabs; let i = index"
+                      [class.active-slab]="i === result.activeSlabIndex">
+                    <td>
+                      <span class="slab-range">{{ formatSlabRange(slab) }}</span>
+                      <span class="active-badge" *ngIf="i === result.activeSlabIndex">
+                        <span class="material-symbols-outlined">arrow_right</span> Your Bracket
+                      </span>
+                    </td>
+                    <td>{{ formatFixedTax(slab) }}</td>
+                    <td>
+                      <span class="rate-pill" [class.rate-zero]="slab.rate === 0">
+                        {{ slab.rate }}%
+                      </span>
+                    </td>
+                    <td>{{ slab.excess === 0 ? '—' : 'PKR ' + formatPKR(slab.excess) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is FBR Salary Income Tax in Pakistan?</h2>
+        <p>
+          The <strong>Federal Board of Revenue (FBR)</strong> is Pakistan's apex tax authority responsible for collecting federal taxes under the <em>Income Tax Ordinance, 2001</em>. For salaried individuals — those who receive more than 50% of their total income in the form of salary, wages, or pay from an employer — the FBR uses a <strong>progressive slab-based system</strong> to determine annual tax liability.
+        </p>
+        <p>
+          Unlike a flat tax rate, the slab system ensures that only income <em>above</em> each threshold is taxed at the higher rate. Lower-income earners pay less (or nothing), while higher earners contribute progressively more. This calculator applies the official Finance Act rates for each fiscal year, giving you an accurate estimate in seconds — with no sign-up required.
+        </p>
+      </div>
+
+      <div class="edu-section">
+        <h2>How the FBR Slab System Works</h2>
+        <p>
+          Pakistan's income tax is structured around income brackets called <strong>tax slabs</strong>. Each slab defines a range of annual income, a fixed base tax already computed for amounts up to that bracket's entry point, and a marginal rate applied only to income exceeding the lower bound of that bracket.
+        </p>
+        <div class="formula-block">
+          <div class="formula-line">
+            <strong>Formula:</strong> Tax = Fixed Tax + ((Taxable Annual Income − Excess Over Threshold) × Rate ÷ 100)
+          </div>
+          <div class="formula-line">
+            <strong>Example (2026-27):</strong> Annual salary = PKR 1,800,000 → Slab 3: Fixed PKR 6,000 + (1,800,000 − 1,200,000) × 11% = PKR 6,000 + PKR 66,000 = <strong>PKR 72,000/year</strong>
+          </div>
+          <div class="formula-line">
+            <strong>Monthly deduction:</strong> PKR 72,000 ÷ 12 = <strong>PKR 6,000/month</strong>
+          </div>
+        </div>
+        <p>
+          The employer deducts this amount each month and deposits it directly with FBR — this is called <strong>withholding tax on salaries</strong>. You must still file your annual income tax return to confirm your liability or claim any refund.
+        </p>
+      </div>
+
+      <div class="edu-section">
+        <h2>How to Use the Salary Tax Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select Fiscal Year</strong> — choose the FBR financial year you want to calculate tax for (July to June).</li>
+          <li><strong>Choose Input Mode</strong> — toggle between Monthly or Annual salary input using the switch.</li>
+          <li><strong>Enter Your Salary</strong> — type your gross salary in PKR. Results update in real time as you type.</li>
+          <li><strong>Read the Summary</strong> — the dashboard instantly shows your gross annual salary, annual/monthly tax, effective rate, and net take-home pay.</li>
+          <li><strong>Check Your Bracket</strong> — the highlighted row in the tax slab table shows exactly which FBR bracket your income falls in.</li>
+        </ol>
+      </div>
+
+      <div class="edu-section">
+        <h2>Key Changes Across Fiscal Years</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="FBR Tax changes across fiscal years">
+            <thead>
+              <tr>
+                <th>Fiscal Year</th>
+                <th>Top Slab Rate</th>
+                <th>Tax-Free Limit</th>
+                <th>Notable Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>2026-27</strong></td>
+                <td>35%</td>
+                <td>PKR 600,000/yr</td>
+                <td>New 1% slab for 600K-1.2M; 8 slabs total; reduced rate for 2.2M-3.2M bracket (20% vs 23%)</td>
+              </tr>
+              <tr>
+                <td><strong>2025-26</strong></td>
+                <td>35%</td>
+                <td>PKR 600,000/yr</td>
+                <td>Rates significantly increased vs 2024-25; 23% on 2.2M-3.2M; 30% on 3.2M-4.1M</td>
+              </tr>
+              <tr>
+                <td><strong>2024-25</strong></td>
+                <td>35%</td>
+                <td>PKR 600,000/yr</td>
+                <td>5% rate on second slab; rates increased due to IMF program fiscal consolidation</td>
+              </tr>
+              <tr>
+                <td><strong>2023-24</strong></td>
+                <td>35%</td>
+                <td>PKR 600,000/yr</td>
+                <td>Reduced entry rates (2.5%, 12.5%); 6 slabs with wider brackets</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="edu-section">
+        <h2>What Your Tax Figures Mean</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon">
+              <span class="material-symbols-outlined">receipt_long</span>
+            </div>
+            <h3>Tax Filing Obligation</h3>
+            <p>Even if tax is deducted at source, salaried individuals earning above the exempt threshold must file an annual income tax return with FBR by September 30 each year. Filing makes you a "filer" — which carries significant benefits in Pakistan including lower withholding rates on banking transactions and property purchases.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon">
+              <span class="material-symbols-outlined">savings</span>
+            </div>
+            <h3>Reduce Your Tax Liability</h3>
+            <p>Salaried individuals can reduce taxable income through approved deductions including contributions to approved pension funds, voluntary pension schemes (VPS), and charitable donations to approved organizations under Section 61. Consult a tax professional to identify all eligible deductions before filing.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon">
+              <span class="material-symbols-outlined">compare_arrows</span>
+            </div>
+            <h3>Filer vs Non-Filer</h3>
+            <p>FBR's tax laws impose <strong>higher withholding rates</strong> on non-filers for banking transactions, property transfers, vehicle purchases, and other activities. Becoming an active filer by submitting your annual return is often financially worthwhile even for those below the taxable threshold.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon">
+              <span class="material-symbols-outlined">trending_up</span>
+            </div>
+            <h3>Salary Negotiations</h3>
+            <p>Use this calculator when negotiating salary packages. Understanding your effective tax rate helps you ask for the right gross salary to achieve your desired take-home pay. For example, moving from PKR 200K/month to PKR 250K/month may push you into a higher slab — this tool makes that impact transparent.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item"
+               *ngFor="let faq of faqs; let i = index"
+               [class.open]="openFaqIndex === i">
+            <button class="faq-question"
+                    [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)"
+                    [id]="'taxFaqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">
+                {{ openFaqIndex === i ? 'remove' : 'add' }}
+              </span>
+            </button>
+            <div class="faq-answer"
+                 [class.open]="openFaqIndex === i"
+                 [attr.aria-labelledby]="'taxFaqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-workforce-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Automate Payroll &amp; Tax with BriskPeople</h2>
+          <p>Let BriskPeople handle salary calculations, FBR tax deductions, payslip generation, and compliance — all in one integrated HR platform built for Pakistan.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="taxCtaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="taxCtaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
