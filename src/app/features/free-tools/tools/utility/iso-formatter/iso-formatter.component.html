@@ -91,14 +91,85 @@
   <section class="tool-edu">
     <div class="container">
       <div class="edu-section">
+        <h2>What is ISO 8601?</h2>
+        <p><strong>ISO 8601</strong> is the internationally recognized standard for representing dates and times. It was created to eliminate confusion caused by different regional formats (for example, 04/05/2023 could mean April 5th in the US, but May 4th in Europe). ISO 8601 uses a logical, largest-to-smallest format: <code>YYYY-MM-DDThh:mm:ssZ</code>.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why is ISO Formatting Important?</h2>
+        <p>Software applications, databases, and APIs rely on ISO 8601 because it is unambiguous, easily sortable as a string, and universally understood by programming languages. Using this standard ensures that timestamp data remains consistent across different servers and geographic locations.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Use the Formatter</h2>
+        <p>Simply select a local date and time using the input field. The tool instantly translates your local time into various ISO 8601 formats, including the standard UTC format (with the "Z" suffix), local time with timezone offsets, basic formats (without dashes), and even ISO Week dates. Click the copy icon next to any format to grab the string.</p>
+      </div>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of ISO 8601 formatting">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Universally understood standard that eliminates regional date confusion</td>
+                <td>Not as human-readable or aesthetically pleasing as traditional formats</td>
+              </tr>
+              <tr>
+                <td>Strings can be sorted alphabetically, resulting in chronological order</td>
+                <td>Some legacy systems still require proprietary date formatting</td>
+              </tr>
+              <tr>
+                <td>Natively parsed by almost all modern programming languages</td>
+                <td>Week date formats (e.g. 2023-W05) can confuse non-technical users</td>
+              </tr>
+              <tr>
+                <td>Clearly indicates timezone offset or UTC (Z)</td>
+                <td>Takes up more string characters than a simple Unix timestamp integer</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">api</span></div>
+            <h3>API Payload Generation</h3>
+            <p>Developers use this tool to quickly generate valid ISO strings to hardcode into JSON payloads when testing REST APIs via Postman.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">database</span></div>
+            <h3>Database Queries</h3>
+            <p>When manually querying a SQL or NoSQL database, use this tool to format your query boundaries into standard ISO strings.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">folder</span></div>
+            <h3>File & Document Naming</h3>
+            <p>Using the basic ISO format (YYYYMMDD) in file names ensures that operating systems sort your reports and backups in perfect chronological order.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">science</span></div>
+            <h3>Scientific Data Logging</h3>
+            <p>Researchers use the strict ISO 8601 standard to record experimental data, ensuring unambiguous timestamps for international peer review.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -117,4 +188,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

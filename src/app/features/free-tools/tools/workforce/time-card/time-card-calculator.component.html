@@ -126,6 +126,95 @@
 
   <article class="tool-edu">
     <div class="container">
+
+      <section class="edu-section">
+        <h2>What is a Weekly Time Card Calculator?</h2>
+        <p>
+          A <strong>weekly time card calculator</strong> is a digital timesheet tool that sums daily hours worked across a 7-day week,
+          separates regular hours from overtime hours (based on the FLSA 40-hour threshold), and estimates your gross pay when you enter
+          your hourly rate. It replaces paper time cards and manual timesheet spreadsheets — eliminating the arithmetic errors that
+          frequently appear in payroll submissions.
+        </p>
+        <p>
+          This calculator is designed for hourly employees, freelancers tracking billable hours, and HR and payroll teams who need to
+          verify weekly timesheet totals before payroll is processed. You can enter hours in decimal format (e.g., 7.5 for 7 hours 30 min)
+          for any day of the week, including partial days and rest days.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Weekly Time Card Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Eliminate timesheet arithmetic errors:</strong> Manually adding up daily hours across 7 days — especially when some days have partial hours — is surprisingly error-prone. This calculator removes that risk entirely.</li>
+          <li><strong>Instantly identify overtime:</strong> See immediately whether your week crossed the 40-hour threshold and exactly how many overtime hours you've accumulated — before you submit the timesheet.</li>
+          <li><strong>Estimate your gross pay:</strong> Enter your hourly rate to see an estimated gross pay figure based on your regular hours and overtime hours for the week, with the 1.5× multiplier applied automatically.</li>
+          <li><strong>Payroll verification:</strong> HR and payroll teams can use this to quickly verify a submitted timesheet total against employee-reported hours before releasing payroll — a fast sanity check before processing.</li>
+          <li><strong>Freelancer billing support:</strong> Freelancers tracking billable hours can use this to sum hours per week and calculate the week's invoice amount, with an instant download to a timestamped CSV.</li>
+          <li><strong>CSV export:</strong> Download the completed timesheet as a CSV file — importable into accounting software, project management tools, or sent directly to a client or employer.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Weekly Time Card Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — formats the gross pay estimate.</li>
+          <li><strong>Enter your Hourly Rate</strong> (optional) — if entered, the calculator will estimate your gross pay including overtime at 1.5×. Leave blank to just sum hours.</li>
+          <li><strong>Enter hours for each day</strong> (Monday through Sunday) — enter in decimal format: e.g., 8 for 8 hours, 7.5 for 7 hours 30 minutes, 0 for a rest day.</li>
+          <li>Click <strong>Calculate Timesheet</strong> to see your total weekly hours, regular hours (up to 40), overtime hours (above 40), and estimated gross pay.</li>
+          <li>Click <strong>Download Timesheet</strong> to export a CSV version of the week, or <strong>Print</strong> to produce a physical record.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How Weekly Time Cards and Overtime are Calculated</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Total Weekly Hours</strong> = Sum of hours entered for Monday through Sunday</div>
+          <div class="formula-line"><strong>Regular Hours</strong> = Min(Total Weekly Hours, 40)</div>
+          <div class="formula-line"><strong>Overtime Hours</strong> = Max(0, Total Weekly Hours − 40)</div>
+          <div class="formula-line"><strong>Regular Pay</strong> = Regular Hours × Hourly Rate</div>
+          <div class="formula-line"><strong>Overtime Pay</strong> = Overtime Hours × Hourly Rate × 1.5</div>
+          <div class="formula-line"><strong>Estimated Gross Pay</strong> = Regular Pay + Overtime Pay</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Hours: Mon 8, Tue 8, Wed 8, Thu 8, Fri 8, Sat 5, Sun 0. Hourly rate: <strong>$18/hr</strong>.</p>
+          <ul>
+            <li>Total Hours = 8+8+8+8+8+5 = <strong>45 hours</strong></li>
+            <li>Regular Hours = 40 | Overtime Hours = <strong>5 hours</strong></li>
+            <li>Regular Pay = 40 × $18 = <strong>$720</strong></li>
+            <li>Overtime Pay = 5 × $18 × 1.5 = <strong>$135</strong></li>
+            <li>Estimated Gross Pay = $720 + $135 = <strong>$855</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons of Digital Time Card Tracking</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of time card tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Eliminates manual addition errors in weekly timesheet totals — the most common source of payroll discrepancies</td><td>Based on weekly overtime threshold (FLSA US standard); does not apply daily OT rules (California-style regulations)</td></tr>
+              <tr><td>Instant overtime detection — employees know before submitting whether they have crossed the 40-hour threshold</td><td>Uses a fixed 1.5× overtime multiplier — does not support double-time or other premium rate structures</td></tr>
+              <tr><td>CSV export enables direct import into payroll systems, invoicing software, or project tracking tools</td><td>Tracks one week at a time only — for multi-week or monthly summaries, a dedicated timesheet tool is needed</td></tr>
+              <tr><td>Free and browser-based — no registration, no app installation, accessible from any device</td><td>Does not validate against scheduled shifts or approved hours — it is a calculation tool, not an attendance management system</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Timesheet and Time Tracking Best Practices</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>Use Decimal Hours, Not HH:MM</h3><p>Entering 7.5 instead of 7:30 avoids the most common timesheet input error. Decimal format also makes arithmetic consistent — especially when hours include 15-minute increments (0.25 hr each).</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">edit_calendar</span></div><h3>Log Daily, Not Weekly</h3><p>Completing your timesheet daily (rather than filling in the whole week on Friday) produces significantly more accurate records. Memory of exact hours fades quickly over a 5-day period.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">more_time</span></div><h3>Watch for Overtime Creep</h3><p>Five days of 8 hours is exactly 40 hours — any Saturday or evening hours push you into overtime territory. If you are an employer, monitor weekly totals mid-week to avoid unexpected overtime costs.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">download</span></div><h3>Save Your CSV</h3><p>Download and archive your weekly CSV exports as a record of hours worked. These become valuable evidence in any timesheet dispute, and are useful for tax purposes if you are a self-employed contractor.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">gavel</span></div><h3>FLSA Record-Keeping</h3><p>US employers must keep records of hours worked by non-exempt employees for at least 2 years (FLSA Section 11). A downloadable weekly time card is a lightweight but compliant starting point for small businesses.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">business</span></div><h3>Scaling Up?</h3><p>If you manage multiple employees, manual time cards become unmanageable quickly. An HRMS with built-in timesheet approval workflows, shift scheduling, and automatic payroll integration eliminates the entire manual process.</p></div>
+        </div>
+      </section>
+
       <section class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list" role="list">
@@ -139,6 +228,41 @@
           }
         </div>
       </section>
+
     </div>
   </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Replace Paper Time Cards with Smart Digital Timesheets</h2>
+          <p>BriskPeople HRMS gives every employee a digital timesheet that auto-calculates regular and overtime hours, routes approvals to managers, and feeds directly into payroll — eliminating the entire manual time card process.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-tc-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-tc-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

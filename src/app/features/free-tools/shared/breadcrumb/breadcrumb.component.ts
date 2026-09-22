@@ -39,7 +39,7 @@ export interface Crumb {
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
-      padding: var(--spacing-sm) 0;
+      padding: 0 0 var(--spacing-sm);
     }
     .breadcrumb-list {
       display: flex;

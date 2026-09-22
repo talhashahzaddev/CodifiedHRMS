@@ -152,29 +152,83 @@
 
       <div class="edu-section">
         <h2>What is a Timetable Generator?</h2>
-        <p>
-          A timetable generator helps you plan and visualize a recurring weekly schedule across fixed time slots.
-          Whether you're organizing a class schedule, shift roster, study plan, or weekly work routine, a timetable
-          gives you an at-a-glance view of all activities across all days and hours.
-        </p>
-        <p>
-          This tool lets you build your timetable interactively directly in your browser. Click any cell to add
-          a subject, description, and color. Your timetable auto-saves to localStorage every time you make a
-          change, and exports to CSV (for spreadsheets) or PNG (for sharing or printing).
-        </p>
+        <p>A <strong>Timetable Generator</strong> is a visual scheduling tool that lets you organize classes, meetings, or daily routines into a structured weekly grid. It provides an intuitive interface to map out your week from Monday to Friday.</p>
       </div>
+      <div class="edu-section">
+        <h2>Why Use a Visual Schedule?</h2>
+        <p>For students, teachers, and professionals, a visual grid makes it significantly easier to identify free blocks of time and avoid scheduling conflicts. Unlike complex digital calendar apps, a static timetable provides a persistent, easily readable overview of your recurring weekly commitments.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Create Your Timetable</h2>
+        <p>Use the form to add a subject, select a day of the week, choose the start and end times, and pick a color label. Click "Add Class" to place the block onto the grid. Your schedule is saved automatically to your browser. Once your week is fully planned, click "Download PNG" to save an image of your timetable for printing or sharing.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Timetable Generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Provides a static, highly readable overview of your recurring week</td>
+                <td>Not designed for dynamic, daily changing schedules</td>
+              </tr>
+              <tr>
+                <td>Auto-saves to the browser so your schedule is never lost</td>
+                <td>Does not send push notifications or alarms for upcoming classes</td>
+              </tr>
+              <tr>
+                <td>Color-coding helps visually distinguish different subjects or tasks</td>
+                <td>Limited to a Monday-Friday grid structure (excludes weekends)</td>
+              </tr>
+              <tr>
+                <td>Exportable as a high-quality PNG for printing or phone wallpapers</td>
+                <td>Clearing your browser cache will erase the saved timetable</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">school</span></div>
+            <h3>University Class Schedules</h3>
+            <p>Students map out their lectures, labs, and seminars, saving the PNG as their phone lock screen to avoid getting lost on campus.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">fitness_center</span></div>
+            <h3>Workout & Meal Planning</h3>
+            <p>Fitness enthusiasts plot their weekly gym routines (Legs, Push, Pull) and meal prep windows to ensure consistency.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">work</span></div>
+            <h3>Time Blocking for Productivity</h3>
+            <p>Professionals divide their week into dedicated blocks (e.g., Deep Work, Meetings, Email Processing) to maintain focus and boundary management.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">child_care</span></div>
+            <h3>Family Routine Management</h3>
+            <p>Parents print out the color-coded timetable and stick it on the fridge so children know when it's time for homework, chores, and screen time.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
             <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
                     (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>

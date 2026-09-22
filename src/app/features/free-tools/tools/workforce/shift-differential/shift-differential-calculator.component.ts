@@ -190,42 +190,61 @@ export class ShiftDifferentialCalculatorComponent implements OnInit, OnDestroy {
   }
 
   private updateSeo(): void {
-    const t = 'Free Shift Differential Calculator — Night & Weekend Pay | Brisk People';
-    const d = 'Calculate shift differential pay instantly. Enter base hours, premium shift hours, and a flat or percentage differential rate to calculate total gross pay. Free HR tool.';
+    const tool = getToolBySlug('shift-differential-calculator');
+    if (!tool) return;
+    const t = tool.seoTitle;
+    const d = tool.seoDescription;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    
     this.title.setTitle(t);
     this.meta.updateTag({ name: 'description',        content: d });
-    this.meta.updateTag({ name: 'keywords',           content: 'shift differential calculator, night shift pay calculator, weekend differential, calculate shift premium, flat vs percentage differential' });
+    this.meta.updateTag({ name: 'keywords',           content: tool.keywords });
     this.meta.updateTag({ property: 'og:title',       content: t });
     this.meta.updateTag({ property: 'og:description', content: d });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://www.briskpeople.com/free-workforce-tools/shift-differential-calculator' });
+    this.meta.updateTag({ property: 'og:url',         content: url });
     this.meta.updateTag({ name: 'twitter:card',       content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',      content: t });
     this.meta.updateTag({ name: 'twitter:description', content: d });
+    
+    // Set canonical tag
+    let canonicalLink = this.document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.remove();
+    canonicalLink = this.document.createElement('link');
+    canonicalLink.setAttribute('rel', 'canonical');
+    canonicalLink.setAttribute('href', url);
+    this.document.head.appendChild(canonicalLink);
   }
 
   private injectJsonLd(): void {
-    const schemas = [
+    const tool = getToolBySlug('shift-differential-calculator');
+    if (!tool) return;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    const schemas: any[] = [
       {
-        '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-        name: 'Shift Differential Calculator', applicationCategory: 'BusinessApplication',
-        operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        description: 'Free online shift differential calculator for night, weekend, and premium shift pay calculation.',
-        url: 'https://www.briskpeople.com/free-workforce-tools/shift-differential-calculator'
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: tool.title, applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: tool.seoDescription,
+        url: url
       },
       {
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',                 item: 'https://www.briskpeople.com' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.briskpeople.com' },
           { '@type': 'ListItem', position: 2, name: 'Free Workforce Tools', item: 'https://www.briskpeople.com/free-workforce-tools' },
-          { '@type': 'ListItem', position: 3, name: 'Shift Differential Calculator', item: 'https://www.briskpeople.com/free-workforce-tools/shift-differential-calculator' }
+          { '@type': 'ListItem', position: 3, name: tool.title, item: url }
         ]
-      },
-      {
-        '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
       }
     ];
+
+    if (this.faqs && this.faqs.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      });
+    }
+
     this.jsonLdScript = this.document.createElement('script');
     this.jsonLdScript.type = 'application/ld+json';
     this.jsonLdScript.text = JSON.stringify(schemas);

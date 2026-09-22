@@ -215,54 +215,84 @@
     <div class="container">
 
       <div class="edu-section">
-        <h2>How the Banner Generator Works</h2>
-        <p>
-          The Banner Generator uses the browser's built-in HTML5 Canvas API — no server-side rendering, no
-          image upload, and no external services. Your banner is generated entirely in your browser using the
-          <code>CanvasRenderingContext2D</code> drawing API, which provides GPU-accelerated pixel-level control
-          over every element drawn on screen.
-        </p>
-        <p>
-          When you click "Generate Banner," the tool creates an off-screen canvas at the full native resolution
-          (e.g. 1584×396 for LinkedIn), draws the background, composites your logo, then renders the heading
-          and subheading with automatic line wrapping. The on-screen preview is the same canvas element — just
-          CSS-scaled to fit the panel. The downloaded PNG exports at full resolution, pixel-perfect.
-        </p>
+        <h2>What is a Web Banner Generator?</h2>
+        <p>A <strong>Web Banner Generator</strong> is a fast, in-browser design tool that lets you create custom placeholder images, hero banners, and social media headers. It renders the image dynamically using HTML5 Canvas, allowing you to download the final result instantly as a PNG.</p>
       </div>
-
       <div class="edu-section">
-        <h2>Social Media Banner Size Guide</h2>
-        <div class="size-table-wrap">
-          <table class="size-table">
+        <h2>Why Use a Simple Banner Maker?</h2>
+        <p>Sometimes you need a quick, clean banner for a blog post, a website placeholder, or an email newsletter, but you don't want to open heavy design software like Photoshop. This tool provides instant gratification—just pick your dimensions, set your colors, type your text, and download. No signups or watermarks.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Create a Custom Banner</h2>
+        <p>Start by entering the width and height for your banner. Use the color pickers to select a vibrant background gradient and a contrasting text color. Type your message, adjust the font size, and watch the live preview update in real-time. When you're satisfied, click "Download PNG."</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Banner Generator">
             <thead>
-              <tr>
-                <th>Platform</th>
-                <th>Dimensions</th>
-                <th>Use Case</th>
-              </tr>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
             </thead>
             <tbody>
-              <tr *ngFor="let p of presets; let last = last" [class.last-row]="last">
-                <td>{{ p.label.split('(')[0].trim() }}</td>
-                <td>{{ p.width > 0 ? p.width + ' × ' + p.height + ' px' : 'Custom' }}</td>
-                <td>{{ p.width > 0 ? 'Profile / channel header image' : 'Any custom format' }}</td>
+              <tr>
+                <td>Creates web-ready placeholder images instantly in the browser</td>
+                <td>Does not support advanced photo editing or image layering</td>
+              </tr>
+              <tr>
+                <td>No design software, account, or subscription required</td>
+                <td>Limited to a single font family and basic gradient backgrounds</td>
+              </tr>
+              <tr>
+                <td>Customizable exact pixel dimensions for any platform</td>
+                <td>Cannot upload custom logos or watermark vectors</td>
+              </tr>
+              <tr>
+                <td>Downloads instantly as a high-quality, lossless PNG file</td>
+                <td>Text wrapping for very long paragraphs is not supported</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">web</span></div>
+            <h3>Website Placeholders</h3>
+            <p>Web developers use generated banners as exact-dimension placeholders while waiting for final graphic assets from the design team.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">article</span></div>
+            <h3>Blog Post Headers</h3>
+            <p>Content creators can quickly generate a clean, typography-focused hero image for a blog post when they don't have time to search for stock photography.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">campaign</span></div>
+            <h3>Social Media Announcements</h3>
+            <p>Generate a 1200x628 banner in seconds to announce a flash sale, webinar, or quick update on Twitter, Facebook, or LinkedIn.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">mail</span></div>
+            <h3>Email Newsletter Dividers</h3>
+            <p>Create bright, text-based dividers or call-to-action blocks that fit perfectly into your Mailchimp or HubSpot email templates.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
             <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
                     (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>

@@ -107,14 +107,85 @@
   <section class="tool-edu">
     <div class="container">
       <div class="edu-section">
+        <h2>What is the Chronological Age Calculator?</h2>
+        <p>The <strong>Chronological Age Calculator</strong> is a precise tool designed to determine your exact age down to the day. By comparing your date of birth with a specific target date (usually today), it calculates the exact number of years, months, and days you have been alive.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Use an Exact Age Calculator?</h2>
+        <p>While calculating your age in years is simple, determining your exact age in months and days is complex due to leap years and varying month lengths. This tool is essential for filling out official medical, legal, or governmental forms that require your precise chronological age. It also includes a fun countdown to your next birthday!</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Calculate Your Exact Age</h2>
+        <p>Enter your date of birth in the first field. By default, the "Calculate Age As Of" field is set to today's date, but you can change it to any past or future date to find out exactly how old you were (or will be) on that specific day. The results will instantly update.</p>
+      </div>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Age Calculator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Calculates exact chronological age down to the specific day</td>
+                <td>Relies on the user's local system timezone for the definition of "today"</td>
+              </tr>
+              <tr>
+                <td>Automatically accounts for leap years and irregular month lengths</td>
+                <td>Does not store birth dates (privacy advantage, but requires re-entry)</td>
+              </tr>
+              <tr>
+                <td>Allows calculating age at a specific past or future date</td>
+                <td>Cannot determine gestational age for medical purposes</td>
+              </tr>
+              <tr>
+                <td>Provides a fun countdown to your next birthday</td>
+                <td>Calculations prior to the adoption of the Gregorian calendar may be skewed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">policy</span></div>
+            <h3>Legal & Compliance Forms</h3>
+            <p>Many government and insurance forms require your exact age in years, months, and days at the time of application to determine eligibility or premium rates.</p>
+          </div>
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">pediatrics</span></div>
+            <h3>Pediatric Milestones</h3>
+            <p>For infants and toddlers, age is often tracked in exact months and weeks. This tool helps parents pinpoint exact chronological age for vaccine schedules.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">history</span></div>
+            <h3>Historical Research</h3>
+            <p>Genealogists use chronological calculators to determine exactly how old an ancestor was during a specific historical event or census.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">cake</span></div>
+            <h3>Event Planning</h3>
+            <p>Use the "Calculate Age As Of" feature to find out exactly how old someone will be on a specific future date, like a graduation or a wedding.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -133,4 +204,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

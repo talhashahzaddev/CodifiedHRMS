@@ -115,14 +115,85 @@
   <section class="tool-edu">
     <div class="container">
       <div class="edu-section">
+        <h2>What is a Unix Epoch Timestamp?</h2>
+        <p>A <strong>Unix Timestamp</strong> (or Epoch time) is a system for describing a point in time. It is defined as the number of seconds that have elapsed since the Unix Epoch—midnight Coordinated Universal Time (UTC) on January 1, 1970—minus leap seconds.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Do Computers Use Epoch Time?</h2>
+        <p>Storing dates as a single integer (the number of seconds) is incredibly efficient for computer systems and databases. It completely bypasses the complexities of time zones, daylight saving time, and varying month lengths. Developers use Epoch time to ensure reliable cross-platform time sorting and arithmetic.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Convert Timestamps</h2>
+        <p>To decode a timestamp, enter the integer (in seconds or milliseconds) into the top box to instantly see the human-readable UTC and local time. To encode a date, select a local date and time in the bottom section, and the tool will generate the corresponding Unix timestamp.</p>
+      </div>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of Unix Timestamps">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Incredibly efficient integer format for database storage and sorting</td>
+                <td>Completely unreadable to human users without a conversion tool</td>
+              </tr>
+              <tr>
+                <td>Completely bypasses all time zone and daylight saving time complexities</td>
+                <td>Vulnerable to the Year 2038 problem (32-bit integer overflow limit)</td>
+              </tr>
+              <tr>
+                <td>Mathematical date operations (add/subtract days) are trivially easy</td>
+                <td>Leap seconds are generally ignored, causing minor drift in high-precision systems</td>
+              </tr>
+              <tr>
+                <td>Universally supported across Unix, Linux, and all programming languages</td>
+                <td>Requires distinguishing between seconds and milliseconds depending on the language</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">bug_report</span></div>
+            <h3>Debugging Database Entries</h3>
+            <p>Developers use this tool to translate raw integer data found in SQL databases (like <code>created_at</code> fields) into readable dates while debugging.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">code</span></div>
+            <h3>API Integration Testing</h3>
+            <p>When interacting with REST APIs that require Epoch time (like Stripe or Twilio), use the tool to generate the exact timestamp for your request payload.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">security</span></div>
+            <h3>JWT Token Expiration</h3>
+            <p>Security engineers decode JSON Web Tokens (JWT) and convert the <code>exp</code> (expiration) claim to verify when a user's session will expire.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">dns</span></div>
+            <h3>Server Cron Jobs</h3>
+            <p>Sysadmins calculate future Epoch timestamps to schedule one-off background tasks or maintenance windows on Linux servers.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-section">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -141,4 +212,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>

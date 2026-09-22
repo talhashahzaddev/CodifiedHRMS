@@ -187,42 +187,61 @@ export class ProjectCostCalculatorComponent implements OnInit, OnDestroy {
   }
 
   private updateSeo(): void {
-    const t = 'Free Project Cost Estimator & Pricing Calculator | Brisk People';
-    const d = 'Calculate your total project costs, labor expenses, overhead, and determine the exact pricing needed to hit your target profit margin. Free online business tool.';
+    const tool = getToolBySlug('project-cost-calculator');
+    if (!tool) return;
+    const t = tool.seoTitle;
+    const d = tool.seoDescription;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    
     this.title.setTitle(t);
     this.meta.updateTag({ name: 'description',        content: d });
-    this.meta.updateTag({ name: 'keywords',           content: 'project cost calculator, cost estimation tool, pricing calculator, calculate profit margin, project budget calculator' });
+    this.meta.updateTag({ name: 'keywords',           content: tool.keywords });
     this.meta.updateTag({ property: 'og:title',       content: t });
     this.meta.updateTag({ property: 'og:description', content: d });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://www.briskpeople.com/free-workforce-tools/project-cost-calculator' });
+    this.meta.updateTag({ property: 'og:url',         content: url });
     this.meta.updateTag({ name: 'twitter:card',       content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',      content: t });
     this.meta.updateTag({ name: 'twitter:description', content: d });
+    
+    // Set canonical tag
+    let canonicalLink = this.document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.remove();
+    canonicalLink = this.document.createElement('link');
+    canonicalLink.setAttribute('rel', 'canonical');
+    canonicalLink.setAttribute('href', url);
+    this.document.head.appendChild(canonicalLink);
   }
 
   private injectJsonLd(): void {
-    const schemas = [
+    const tool = getToolBySlug('project-cost-calculator');
+    if (!tool) return;
+    const url = `https://www.briskpeople.com/free-workforce-tools/${tool.slug}`;
+    const schemas: any[] = [
       {
-        '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-        name: 'Project Cost Calculator', applicationCategory: 'BusinessApplication',
-        operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        description: 'Free online project cost estimator and pricing calculator with margin targeting.',
-        url: 'https://www.briskpeople.com/free-workforce-tools/project-cost-calculator'
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: tool.title, applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: tool.seoDescription,
+        url: url
       },
       {
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',                 item: 'https://www.briskpeople.com' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.briskpeople.com' },
           { '@type': 'ListItem', position: 2, name: 'Free Workforce Tools', item: 'https://www.briskpeople.com/free-workforce-tools' },
-          { '@type': 'ListItem', position: 3, name: 'Project Cost Calculator', item: 'https://www.briskpeople.com/free-workforce-tools/project-cost-calculator' }
+          { '@type': 'ListItem', position: 3, name: tool.title, item: url }
         ]
-      },
-      {
-        '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
       }
     ];
+
+    if (this.faqs && this.faqs.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: this.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      });
+    }
+
     this.jsonLdScript = this.document.createElement('script');
     this.jsonLdScript.type = 'application/ld+json';
     this.jsonLdScript.text = JSON.stringify(schemas);

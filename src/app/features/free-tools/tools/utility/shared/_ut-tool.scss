@@ -14,7 +14,7 @@
 .tool-breadcrumb {
   background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid var(--gray-100);
-  padding: var(--spacing-sm) 0;
+  padding: 0 0 var(--spacing-sm);
 
   .breadcrumb-list {
     display: flex;
@@ -95,7 +95,7 @@
     color: var(--text-secondary) !important;
     line-height: 1.75;
     margin: 0;
-    max-width: 680px;
+    max-width: 100%;
   }
 }
 
@@ -568,6 +568,216 @@
       &:last-child { margin-bottom: 0; }
     }
   }
+}
+
+// Why list
+.why-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-base);
+    color: var(--text-secondary) !important;
+    line-height: 1.7;
+    padding-left: var(--spacing-md);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary-500);
+      flex-shrink: 0;
+    }
+
+    strong { color: var(--text-primary); font-weight: 700; }
+  }
+}
+
+// How-to list
+.how-to-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  counter-reset: howto;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-base);
+    color: var(--text-secondary) !important;
+    line-height: 1.7;
+    counter-increment: howto;
+
+    &::before {
+      content: counter(howto);
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+      font-size: var(--font-size-sm);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    strong { color: var(--text-primary); }
+  }
+}
+
+// ── Formula Block ─────────────────────────────────────────────────────────────
+.formula-block {
+  background: linear-gradient(135deg, var(--primary-50), rgba(240, 248, 255, 0.8));
+  border: 1px solid rgba(12, 142, 255, 0.2);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+
+  .formula-line {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-size-sm);
+    color: var(--primary-800);
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(12, 142, 255, 0.15);
+    line-height: 1.6;
+
+    &:last-child { border-bottom: none; padding-bottom: 0; }
+
+    strong { color: var(--primary-700); font-size: var(--font-size-sm); }
+  }
+}
+
+.formula-example {
+  background: var(--gray-50);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--gray-200);
+
+  h3 { font-size: var(--font-size-lg); color: var(--text-primary); margin-bottom: var(--spacing-md); }
+
+  p { font-size: var(--font-size-base); color: var(--text-secondary) !important; margin-bottom: var(--spacing-md); line-height: 1.7; }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+
+    li {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary) !important;
+      padding: 6px 0 6px var(--spacing-md);
+      border-left: 3px solid var(--primary-200);
+      line-height: 1.6;
+      strong { color: var(--text-primary); font-weight: 700; }
+    }
+  }
+}
+
+// ── Pros & Cons Table ─────────────────────────────────────────────────────────
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--gray-200);
+}
+
+.pros-cons-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+
+  th {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 2px solid var(--gray-200);
+  }
+
+  .pros-col-header { background: rgba(209, 250, 229, 0.5); color: #065f46; }
+  .cons-col-header { background: rgba(254, 243, 199, 0.5); color: #92400e; }
+
+  td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+    line-height: 1.6;
+
+    &:first-child {
+      border-right: 1px solid var(--gray-100);
+      color: #065f46;
+    }
+
+    &:last-child { color: #7c2d12; }
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+}
+
+// ── Insight Cards ─────────────────────────────────────────────────────────────
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.insight-card {
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .insight-card-icon {
+    margin-bottom: var(--spacing-sm);
+    .material-symbols-outlined { font-size: 26px; }
+  }
+
+  h3 {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  p {
+    font-size: var(--font-size-sm);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  &--green  { background: rgba(209, 250, 229, 0.3); border-color: rgba(16, 185, 129, 0.25); h3 { color: #065f46; } .material-symbols-outlined { color: var(--success); } }
+  &--yellow { background: rgba(254, 243, 199, 0.3); border-color: rgba(245, 158, 11, 0.25); h3 { color: #92400e; } .material-symbols-outlined { color: var(--warning); } }
+  &--orange { background: rgba(255, 237, 213, 0.3); border-color: rgba(249, 115, 22, 0.25); h3 { color: #9a3412; } .material-symbols-outlined { color: #f97316; } }
+  &--red    { background: rgba(254, 226, 226, 0.3); border-color: rgba(239, 68, 68, 0.25);  h3 { color: #991b1b; } .material-symbols-outlined { color: var(--error); } }
+  &--blue   { background: rgba(219, 234, 254, 0.3); border-color: rgba(59, 130, 246, 0.25); h3 { color: #1e40af; } .material-symbols-outlined { color: #3b82f6; } }
+  &--purple { background: rgba(237, 233, 254, 0.3); border-color: rgba(139, 92, 246, 0.25); h3 { color: #5b21b6; } .material-symbols-outlined { color: #8b5cf6; } }
 }
 
 // ── FAQ Accordion ─────────────────────────────────────────────────────────────

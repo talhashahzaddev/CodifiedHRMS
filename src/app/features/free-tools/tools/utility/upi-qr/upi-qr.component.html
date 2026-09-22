@@ -178,29 +178,71 @@
 
       <div class="edu-section">
         <h2>What is a UPI QR Code?</h2>
-        <p>
-          UPI (Unified Payments Interface) is India's real-time interbank payment system developed by
-          the National Payments Corporation of India (NPCI). A UPI QR code is a machine-readable image that
-          encodes the <strong>UPI payment URI</strong> in the format:
-          <code>upi://pay?pa=UPI_ID&amp;pn=NAME&amp;am=AMOUNT&amp;tn=NOTE&amp;cu=INR</code>.
-        </p>
-        <p>
-          When a user scans this QR code with any UPI-enabled app (Google Pay, PhonePe, Paytm, BHIM, Amazon Pay),
-          the app opens a payment confirmation screen with all fields pre-filled — making payment fast, accurate,
-          and contactless.
-        </p>
+        <p>A <strong>UPI QR Code</strong> is a quick-response barcode formatted specifically for the Unified Payments Interface (UPI) system used in India. It encodes a merchant or individual's Virtual Payment Address (VPA / UPI ID), payee name, and optionally, a predefined payment amount.</p>
       </div>
-
       <div class="edu-section">
-        <h2>UPI QR Code Use Cases</h2>
-        <ul class="how-to-list">
-          <li><strong>Retail & Shops:</strong> Print and display at your counter for contactless payments.</li>
-          <li><strong>Freelancers & Consultants:</strong> Include in invoices for instant client payment.</li>
-          <li><strong>Events & Fundraisers:</strong> Accept donations and registrations via QR scan.</li>
-          <li><strong>Restaurants:</strong> Table QR codes for bill settlement without card machines.</li>
-          <li><strong>Online Businesses:</strong> Embed in order confirmation emails as a payment alternative.</li>
-        </ul>
+        <h2>Why Generate Custom UPI QR Codes?</h2>
+        <p>Freelancers, small business owners, and event organizers can use custom UPI QR codes to collect payments instantly. By embedding a specific amount and transaction note directly into the QR code, you eliminate the chance of the payer entering the wrong amount, making the checkout process frictionless.</p>
       </div>
+      <div class="edu-section">
+        <h2>How to Create a Payment QR Code</h2>
+        <p>Enter your valid UPI ID (e.g., yourname@bank) and your payee name. You can optionally lock in a specific currency amount and add a transaction note. The QR code updates in real-time. Scan it with any UPI app (Google Pay, PhonePe, Paytm) to verify it, then download the PNG to print or share online.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of UPI QR Codes">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Allows instant, frictionless payments directly from bank to bank</td>
+                <td>Only works within the Indian banking ecosystem via UPI apps</td>
+              </tr>
+              <tr>
+                <td>Eliminates typing errors by pre-filling the exact amount and payee</td>
+                <td>Does not confirm whether the payment was actually successful</td>
+              </tr>
+              <tr>
+                <td>Zero setup fees or merchant transaction costs compared to credit cards</td>
+                <td>Cannot handle complex dynamic pricing or cart systems natively</td>
+              </tr>
+              <tr>
+                <td>Generates a static QR code that can be printed permanently</td>
+                <td>Users must have a registered UPI app (GPay, PhonePe) installed on their phone</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">storefront</span></div>
+            <h3>Small Businesses & Shops</h3>
+            <p>Retailers print their generated UPI QR code and display it at the billing counter to accept fee-free payments from any customer app.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+            <h3>Freelance Invoicing</h3>
+            <p>Freelancers embed a predefined-amount QR code directly into their PDF invoices, allowing clients to scan and pay instantly from their screen.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">volunteer_activism</span></div>
+            <h3>Charity & Donations</h3>
+            <p>NGOs include QR codes on pamphlets and social media posts, making it incredibly easy for supporters to send micro-donations.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">celebration</span></div>
+            <h3>Event Ticketing</h3>
+            <p>Event organizers generate QR codes locked to a specific ticket price, speeding up the registration desk queue by removing manual amount entry.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ -->
       <div class="edu-section">
@@ -212,7 +254,7 @@
               {{ faq.q }}
               <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
             </button>
-            <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
               <p>{{ faq.a }}</p>
             </div>
           </div>
