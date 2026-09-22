@@ -281,6 +281,14 @@ export const routes: Routes = [
         .then(m => m.GmtTimestampComponent)
   },
 
+  // ── Salary Tax Calculator ──────────────────────────────────────────────────
+  {
+    path: 'free-tools/salary-tax-calculator',
+    loadComponent: () =>
+      import('./features/free-tools/tools/utility/salary-tax-calculator/salary-tax-calculator.component')
+        .then(m => m.SalaryTaxCalculatorComponent)
+  },
+
   // ── Catch-all ─────────────────────────────────────────────────────────────
   {
     path: '**',
