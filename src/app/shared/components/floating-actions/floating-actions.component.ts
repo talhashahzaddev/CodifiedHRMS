@@ -1,14 +1,15 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactFabService } from '../../../core/services/contactfab.service';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-floating-actions',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CdkDrag],
   template: `
     <!-- ── Left Contact FAB ──────────────────────────────────── -->
-    <div class="contact-fab" [class.open]="isOpen">
+    <div class="contact-fab" [class.open]="isOpen" cdkDrag>
 
       <!-- Action Buttons — appear ABOVE the toggle -->
       <div class="fab-actions">
