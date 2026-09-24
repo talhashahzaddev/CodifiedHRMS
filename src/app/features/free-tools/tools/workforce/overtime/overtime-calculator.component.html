@@ -1,0 +1,302 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Overtime Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">more_time</span></div>
+        <div>
+          <h1>Overtime Calculator</h1>
+          <p class="tool-intro">Calculate your regular pay, overtime pay (time-and-a-half), and total gross wages. Enter your hourly rate and total hours worked in a week to instantly see the breakdown of your standard and premium earnings.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Pay Details</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="ot-curr" class="field-label">Currency</label>
+                <select id="ot-curr" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('regularHourlyRate')">
+                <label for="ot-rate" class="field-label">Regular Hourly Rate <span class="required">*</span></label>
+                <input id="ot-rate" type="number" formControlName="regularHourlyRate" class="field-input" placeholder="e.g. 20" min="0" step="0.5" aria-required="true" aria-label="Regular hourly rate"/>
+                @if (getFieldError('regularHourlyRate'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalHoursWorked')">
+                <label for="ot-hours" class="field-label">Total Hours Worked (Weekly) <span class="required">*</span></label>
+                <input id="ot-hours" type="number" formControlName="totalHoursWorked" class="field-input" placeholder="e.g. 45" min="0" step="0.5" aria-required="true" aria-label="Total hours worked in a week"/>
+                @if (getFieldError('totalHoursWorked'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('standardHoursLimit')">
+                <label for="ot-limit" class="field-label">Overtime Starts After (Hours) <span class="required">*</span></label>
+                <input id="ot-limit" type="number" formControlName="standardHoursLimit" class="field-input" placeholder="40" min="1" aria-required="true" aria-label="Standard hours limit before overtime begins"/>
+                <span class="field-hint">Usually 40 hours per week (FLSA standard)</span>
+                @if (getFieldError('standardHoursLimit'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('overtimeMultiplier')">
+                <label for="ot-mult" class="field-label">Overtime Rate Multiplier <span class="required">*</span></label>
+                <input id="ot-mult" type="number" formControlName="overtimeMultiplier" class="field-input" placeholder="1.5" min="1" step="0.1" aria-required="true" aria-label="Overtime multiplier"/>
+                <span class="field-hint">Usually 1.5x ("time and a half") or 2.0x ("double time")</span>
+                @if (getFieldError('overtimeMultiplier'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-ot-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Pay
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-ot-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--high">
+                <div class="result-badge"><span class="material-symbols-outlined">payments</span>Total Gross Pay</div>
+                <div class="result-main-value">{{ result.totalGrossPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</div>
+                <div class="result-main-label">Estimated Weekly Pay</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Hours</span>
+                    <span class="metric-value">{{ result.regularHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">more_time</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime Hours</span>
+                    <span class="metric-value">{{ result.overtimeHours | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">attach_money</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Regular Pay</span>
+                    <span class="metric-value">{{ result.regularPay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">monetization_on</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime Pay ({{ result.overtimeMultiplier }}x)</span>
+                    <span class="metric-value">{{ result.overtimePay | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">pie_chart</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Overtime % of Total Pay</span>
+                    <span class="metric-value">{{ result.overtimePctOfTotalPay | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">speed</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Effective Hourly Rate</span>
+                    <span class="metric-value">{{ result.effectiveHourlyRate | currency: result.currency : 'symbol-narrow' : '1.2-2' }} / hr</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-ot-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-ot-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">more_time</span>
+              <p>Enter your regular rate and hours worked to calculate your gross pay and see the split between regular and overtime earnings.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is an Overtime Calculator?</h2>
+        <p>
+          An <strong>overtime calculator</strong> automatically splits your total weekly hours into regular hours and overtime hours,
+          then applies the correct pay multipliers to compute your total gross wages. For employers, it is an essential payroll
+          verification tool. For employees, it lets you instantly check whether your pay stub reflects the correct time-and-a-half
+          (or double-time) overtime calculation before you query your payroll department.
+        </p>
+        <p>
+          This calculator follows the <strong>US Fair Labor Standards Act (FLSA)</strong> methodology — overtime begins after 40 hours
+          per week at a default multiplier of 1.5×. However, both thresholds are fully customizable, making this tool valid for UK,
+          Indian, Australian, and other global labor frameworks where overtime rules differ.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Overtime Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Verify your pay stub accuracy:</strong> Employees can cross-check whether their employer has correctly applied the 1.5× or 2× premium to overtime hours — catching payroll errors before they compound.</li>
+          <li><strong>Plan weekly labor costs:</strong> Managers and business owners can forecast total gross payroll costs in advance by entering projected hours, avoiding overtime budget overruns.</li>
+          <li><strong>Model different overtime scenarios:</strong> Compare the gross pay impact of a 45-hour week vs. a 50-hour week to inform scheduling decisions.</li>
+          <li><strong>FLSA compliance:</strong> US employers can use this to verify they are meeting the FLSA minimum overtime rate of 1.5× for all non-exempt employees working over 40 hours per week.</li>
+          <li><strong>Understand your effective hourly rate:</strong> The effective hourly rate metric shows what your overtime hours are actually worth in total compensation terms — useful when negotiating hourly contracts.</li>
+          <li><strong>Global applicability:</strong> Supports any overtime threshold and multiplier, covering jurisdictions like India (2× after 9 hrs/day under Factories Act) and Australia (various EBA rates).</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Overtime Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — sets the format for all monetary outputs.</li>
+          <li><strong>Enter Regular Hourly Rate</strong> — your base hourly wage before any premium is applied.</li>
+          <li><strong>Enter Total Hours Worked (Weekly)</strong> — your total hours for the week including all overtime.</li>
+          <li><strong>Set Overtime Starts After</strong> — the standard hours limit before overtime kicks in. Defaults to 40 (FLSA). Change to 48 for Indian Factories Act, or 37.5 for some UK contracts.</li>
+          <li><strong>Set Overtime Rate Multiplier</strong> — typically 1.5× ("time and a half") for US FLSA. Use 2.0× for double time, or 1.25× for some UK agreements.</li>
+          <li>Click <strong>Calculate Pay</strong> to see the full breakdown: regular pay, overtime pay, total gross pay, overtime as a % of total pay, and effective hourly rate.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Overtime Pay</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Regular Hours</strong> = Min(Total Hours Worked, Standard Hours Limit)</div>
+          <div class="formula-line"><strong>Overtime Hours</strong> = Max(0, Total Hours Worked − Standard Hours Limit)</div>
+          <div class="formula-line"><strong>Regular Pay</strong> = Regular Hours × Hourly Rate</div>
+          <div class="formula-line"><strong>Overtime Rate</strong> = Hourly Rate × Overtime Multiplier</div>
+          <div class="formula-line"><strong>Overtime Pay</strong> = Overtime Hours × Overtime Rate</div>
+          <div class="formula-line"><strong>Total Gross Pay</strong> = Regular Pay + Overtime Pay</div>
+          <div class="formula-line"><strong>Effective Hourly Rate</strong> = Total Gross Pay ÷ Total Hours Worked</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Employee earns <strong>$20/hr</strong>, worked <strong>45 hours</strong> in a week. Standard limit: <strong>40 hours</strong>. Multiplier: <strong>1.5×</strong>.</p>
+          <ul>
+            <li>Regular Hours = 40 | Overtime Hours = 45 − 40 = <strong>5 hours</strong></li>
+            <li>Regular Pay = 40 × $20 = <strong>$800</strong></li>
+            <li>Overtime Rate = $20 × 1.5 = <strong>$30/hr</strong></li>
+            <li>Overtime Pay = 5 × $30 = <strong>$150</strong></li>
+            <li>Total Gross Pay = $800 + $150 = <strong>$950</strong></li>
+            <li>Effective Hourly Rate = $950 ÷ 45 = <strong>$21.11/hr</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons of Overtime Pay Tracking</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of overtime tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Ensures FLSA (US) and equivalent statutory compliance — protects both employer and employee</td><td>Does not account for California's daily overtime rules (OT after 8 hrs/day, double time after 12 hrs)</td></tr>
+              <tr><td>Converts abstract hours into a concrete monetary cost — essential for labor budget planning</td><td>Employer-side payroll taxes (FICA, EPF, NI) are not included — actual cost to employer is higher</td></tr>
+              <tr><td>The effective hourly rate metric helps employees evaluate whether overtime is financially worthwhile</td><td>Does not model blended multi-rate weeks where different tasks carry different billing rates</td></tr>
+              <tr><td>Customizable threshold and multiplier covers international overtime frameworks</td><td>Salaried exempt employees (US FLSA) do not qualify for overtime — calculator assumes hourly non-exempt status</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Understanding Your Overtime Data</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>0–5 Overtime Hours/Week</h3><p>Moderate overtime. Common and legally compliant as long as the correct 1.5× rate is applied. Monitor trends to ensure it doesn't creep toward unsustainable levels.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>5–15 Overtime Hours/Week</h3><p>Significant overtime. At 15 extra hours/week, an employee is effectively working a 37.5% longer week than contracted. Consider whether additional headcount is more cost-effective than sustained premium pay.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">cancel</span></div><h3>15+ Overtime Hours/Week</h3><p>Chronic overtime. Beyond the direct pay cost, research consistently shows that sustained overtime above 50 hours/week reduces hourly output — often making overtime less productive per pound or dollar spent.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">pie_chart</span></div><h3>Overtime % of Total Pay</h3><p>If overtime routinely represents more than 20% of your gross pay, your base hourly rate may be too low relative to your actual working pattern — this is worth raising in a salary review conversation.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">speed</span></div><h3>Effective Hourly Rate</h3><p>Compare your effective hourly rate to your regular rate — the premium is the true financial value of staying late. Use this figure when deciding whether to take on additional overtime shifts.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">business</span></div><h3>Employer Perspective</h3><p>If overtime is budgeted at $0 but regularly consumed, it is likely hidden in your payroll variance. Calculate the annualized overtime cost and compare it to the cost of a part-time hire or contract worker.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Automate Overtime Tracking Across Your Entire Workforce</h2>
+          <p>BriskPeople HRMS automatically calculates regular and overtime pay for every employee, flags FLSA violations before payroll runs, and generates overtime reports by department — no spreadsheets needed.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-ot-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-ot-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -1,0 +1,299 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Event QR Code Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">qr_code_2</span>
+        </div>
+        <div>
+          <h1>Event QR Code Generator</h1>
+          <p class="tool-intro">
+            Create a scannable QR code for your event. When scanned, it adds the event directly to the
+            user's calendar or opens a URL. Generate as iCal vEvent or plain URL. Download as PNG.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">QR Configuration</h2>
+            </div>
+
+            <!-- Mode Toggle -->
+            <div class="mode-toggle-row">
+              <button class="mode-tab" [class.active]="qrMode === 'ical'" (click)="setMode('ical')" id="modeIcalBtn">
+                <span class="material-symbols-outlined">event</span> iCal Event
+              </button>
+              <button class="mode-tab" [class.active]="qrMode === 'url'"  (click)="setMode('url')"  id="modeUrlBtn">
+                <span class="material-symbols-outlined">link</span> URL / Link
+              </button>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="generate()" novalidate>
+
+              <!-- iCal mode fields -->
+              <ng-container *ngIf="qrMode === 'ical'">
+                <div class="form-group" [class.has-error]="getFieldError('title')">
+                  <label class="field-label" for="evTitle">Event Title <span class="required">*</span></label>
+                  <input id="evTitle" type="text" class="field-input"
+                         formControlName="title" placeholder="e.g. Annual HR Summit 2025">
+                  <span class="field-error" *ngIf="getFieldError('title')">
+                    <span class="material-symbols-outlined">error</span>{{ getFieldError('title') }}
+                  </span>
+                </div>
+
+                <div class="date-time-row">
+                  <div class="form-group">
+                    <label class="field-label" for="evStartDate">Start Date</label>
+                    <input id="evStartDate" type="date" class="field-input" formControlName="startDate">
+                  </div>
+                  <div class="form-group">
+                    <label class="field-label" for="evStartTime">Start Time</label>
+                    <input id="evStartTime" type="time" class="field-input" formControlName="startTime">
+                  </div>
+                </div>
+
+                <div class="date-time-row">
+                  <div class="form-group">
+                    <label class="field-label" for="evEndDate">End Date</label>
+                    <input id="evEndDate" type="date" class="field-input" formControlName="endDate">
+                  </div>
+                  <div class="form-group">
+                    <label class="field-label" for="evEndTime">End Time</label>
+                    <input id="evEndTime" type="time" class="field-input" formControlName="endTime">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="field-label" for="evLocation">Location (optional)</label>
+                  <input id="evLocation" type="text" class="field-input"
+                         formControlName="location" placeholder="e.g. Lahore Expo Centre, Hall 3">
+                </div>
+              </ng-container>
+
+              <!-- URL mode fields -->
+              <ng-container *ngIf="qrMode === 'url'">
+                <div class="form-group">
+                  <label class="field-label" for="evUrl">URL to Encode <span class="required">*</span></label>
+                  <input id="evUrl" type="url" class="field-input"
+                         formControlName="url" placeholder="https://eventbrite.com/your-event">
+                  <span class="field-hint">Any URL — Eventbrite, Luma, Zoom, Google Meet, etc.</span>
+                </div>
+              </ng-container>
+
+              <!-- QR Colors -->
+              <div class="color-row">
+                <div class="form-group color-group">
+                  <label class="field-label" for="evFgColor">QR Color</label>
+                  <div class="color-input-wrap">
+                    <input id="evFgColor" type="color" class="color-swatch" formControlName="fgColor">
+                    <span class="color-hex">{{ form.get('fgColor')?.value }}</span>
+                  </div>
+                </div>
+                <div class="form-group color-group">
+                  <label class="field-label" for="evBgColor">Background</label>
+                  <div class="color-input-wrap">
+                    <input id="evBgColor" type="color" class="color-swatch" formControlName="bgColor">
+                    <span class="color-hex">{{ form.get('bgColor')?.value }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="generateEventQrBtn">
+                  <span class="material-symbols-outlined">qr_code_2</span>
+                  Generate QR
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="resetEventQrBtn">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Canvas -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">qr_code_2</span>
+              <h2 class="card-title">Event QR Code</h2>
+            </div>
+
+            <!-- Canvas (always mounted for ViewChild) -->
+            <div class="canvas-container" [class.canvas-hidden]="!qrGenerated">
+              <canvas #qrCanvas id="eventQrCanvas"></canvas>
+            </div>
+
+            <div class="results-empty" *ngIf="!qrGenerated" style="min-height:220px">
+              <span class="results-empty-icon material-symbols-outlined">qr_code_2</span>
+              <p>Configure your event and click <strong>Generate QR</strong>.</p>
+            </div>
+
+            <!-- Mode indicator -->
+            <div class="qr-mode-badge" *ngIf="qrGenerated">
+              <span class="material-symbols-outlined">{{ qrMode === 'ical' ? 'event' : 'link' }}</span>
+              {{ qrMode === 'ical' ? 'Encodes iCal vEvent' : 'Encodes URL' }}
+            </div>
+
+            <div class="result-actions" *ngIf="qrGenerated">
+              <button class="btn btn-sm btn-download" (click)="downloadPng()" id="downloadEventQrBtn">
+                <span class="material-symbols-outlined">download</span>
+                Download PNG
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is an Event QR Code?</h2>
+        <p>An <strong>Event QR Code</strong> is a scannable barcode that contains calendar event data (encoded as a vCalendar or iCalendar string). When a user scans the QR code with their smartphone camera, their phone automatically parses the data and prompts them to save the event directly to their native calendar app.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Use QR Codes for Events?</h2>
+        <p>Event QR codes bridge the gap between physical marketing and digital calendars. By printing these codes on flyers, posters, wedding invitations, or conference badges, you eliminate the friction of attendees having to manually type out event dates and times. It drastically increases event attendance and engagement.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Generate a Calendar QR Code</h2>
+        <p>Fill out your event details including the title, start/end dates, location, and a brief description. As you type, the QR code on the right updates instantly. Once your details are finalized, click "Download PNG" to save the high-resolution QR code for your print or digital marketing materials.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Event QR Generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Converts offline physical marketing into digital calendar events</td>
+                <td>Requires users to have a smartphone with a QR-capable camera</td>
+              </tr>
+              <tr>
+                <td>Encodes the data entirely offline; no server or internet needed to scan</td>
+                <td>Very long descriptions make the QR code dense and harder to scan</td>
+              </tr>
+              <tr>
+                <td>Works universally across iOS (Apple Calendar) and Android</td>
+                <td>Cannot update the event details dynamically once the code is printed</td>
+              </tr>
+              <tr>
+                <td>High-resolution PNG download suitable for professional printing</td>
+                <td>Older phones may require a third-party QR scanning app</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">print</span></div>
+            <h3>Print Advertising & Flyers</h3>
+            <p>Print the QR code on posters and flyers so people walking by can instantly save your concert, gallery opening, or pop-up shop date.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">card_membership</span></div>
+            <h3>Conference Badges & Tickets</h3>
+            <p>Include QR codes on event tickets or conference lanyards that link to keynote speeches, breakout sessions, or networking hours.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">celebration</span></div>
+            <h3>Wedding & Party Invitations</h3>
+            <p>Add a small QR code to physical wedding invitations, allowing guests to effortlessly block out the weekend in their digital planners.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">storefront</span></div>
+            <h3>Retail Store Signage</h3>
+            <p>Place a QR code in your shop window to remind customers of an upcoming weekend sale or exclusive VIP shopping event.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

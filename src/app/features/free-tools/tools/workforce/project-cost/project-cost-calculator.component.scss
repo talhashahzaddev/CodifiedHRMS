@@ -1,0 +1,47 @@
+@use '../shared/wf-tool';
+
+.cost-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: var(--spacing-md) 0 var(--spacing-xl);
+  
+  .cost-segment {
+    height: 100%;
+    transition: width var(--transition-slow);
+  }
+  
+  .segment-labor { background: var(--primary-500); }
+  .segment-materials { background: var(--warning); }
+  .segment-overhead { background: var(--gray-400); }
+}
+
+.cost-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: calc(var(--spacing-sm) * -1);
+  margin-bottom: var(--spacing-xl);
+  padding: 0 var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--gray-500);
+  font-weight: 500;
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    
+    &.legend-labor::before { background: var(--primary-500); }
+    &.legend-materials::before { background: var(--warning); }
+    &.legend-overhead::before { background: var(--gray-400); }
+  }
+}

@@ -1,0 +1,256 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Time Difference Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">timer</span>
+        </div>
+        <div>
+          <h1>Time Difference Calculator</h1>
+          <p class="tool-intro">
+            Calculate the exact difference between two dates in years, months, days, hours, and minutes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Select Dates</h2>
+            </div>
+
+            <form [formGroup]="form" novalidate>
+              
+              <div class="card-divider">Start Date & Time</div>
+              
+              <div class="two-col-row">
+                <div class="form-group" [class.has-error]="getFieldError('startDate')">
+                  <label class="field-label" for="startDate">Date</label>
+                  <input id="startDate" type="date" class="field-input" formControlName="startDate">
+                </div>
+                <div class="form-group" [class.has-error]="getFieldError('startTime')">
+                  <label class="field-label" for="startTime">Time</label>
+                  <input id="startTime" type="time" class="field-input" formControlName="startTime">
+                </div>
+              </div>
+
+              <div class="card-divider">End Date & Time</div>
+              
+              <div class="two-col-row">
+                <div class="form-group" [class.has-error]="getFieldError('endDate')">
+                  <label class="field-label" for="endDate">Date</label>
+                  <input id="endDate" type="date" class="field-input" formControlName="endDate">
+                </div>
+                <div class="form-group" [class.has-error]="getFieldError('endTime')">
+                  <label class="field-label" for="endTime">Time</label>
+                  <input id="endTime" type="time" class="field-input" formControlName="endTime">
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Outputs -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">analytics</span>
+              <h2 class="card-title">Difference</h2>
+            </div>
+
+            <div class="results-empty" *ngIf="!result">
+              <span class="results-empty-icon material-symbols-outlined">pending_actions</span>
+              <p>Enter valid start and end dates to see the precise difference.</p>
+            </div>
+
+            <div class="results-content" *ngIf="result">
+              <div class="metric-highlight">
+                <span class="metric-value">
+                  {{ result.years }}<span class="metric-unit">y</span> 
+                  {{ result.months }}<span class="metric-unit">m</span> 
+                  {{ result.days }}<span class="metric-unit">d</span> 
+                  {{ result.hours }}<span class="metric-unit">h</span> 
+                  {{ result.minutes }}<span class="metric-unit">m</span>
+                </span>
+                <span class="metric-label">
+                  Exact Calendar Difference {{ result.isPast ? '(End date is in the past)' : '' }}
+                </span>
+              </div>
+
+              <div class="result-details">
+                <div class="detail-row">
+                  <span class="detail-label">Total Milliseconds</span>
+                  <span class="detail-value font-mono">{{ result.totalMilliseconds | number }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Total Seconds</span>
+                  <span class="detail-value font-mono">{{ (result.totalMilliseconds / 1000) | number:'1.0-0' }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Total Minutes</span>
+                  <span class="detail-value font-mono">{{ (result.totalMilliseconds / 60000) | number:'1.0-0' }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Total Hours</span>
+                  <span class="detail-value font-mono">{{ (result.totalMilliseconds / 3600000) | number:'1.0-2' }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Total Days</span>
+                  <span class="detail-value font-mono">{{ (result.totalMilliseconds / 86400000) | number:'1.0-2' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is a Time Difference Calculator?</h2>
+        <p>A <strong>Time Difference Calculator</strong> measures the exact duration between two specific points in time. It calculates the total elapsed time and breaks it down into comprehensive units: total days, total hours, and total minutes.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Calculate Time Elapsed?</h2>
+        <p>Whether you are tracking the duration of a project, measuring a fasting window, calculating flight times, or logging billable hours, calculating elapsed time manually across different days and months is highly prone to mathematical errors. This tool handles the complex date arithmetic instantly.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Find the Time Difference</h2>
+        <p>Select a Start Date/Time and an End Date/Time. The tool will automatically compute the absolute difference. The results will display a detailed breakdown of the time gap, clearly separating the total hours and minutes from the combined day/hour/minute representation.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Time Difference Calculator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Computes elapsed time factoring in uneven months and leap years</td>
+                <td>Does not account for time zone shifts if the start/end happen in different locations</td>
+              </tr>
+              <tr>
+                <td>Breaks down the result into both compound units and absolute totals</td>
+                <td>Cannot subtract weekend days or holidays (use a working days calculator instead)</td>
+              </tr>
+              <tr>
+                <td>Highly accurate down to the minute</td>
+                <td>If the end date is earlier than the start date, it simply shows absolute magnitude</td>
+              </tr>
+              <tr>
+                <td>Free, fast, and does not store your entered data</td>
+                <td>Does not natively handle historical dates before the Gregorian calendar</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">assignment</span></div>
+            <h3>Contract & Lease Durations</h3>
+            <p>Landlords and HR managers use this tool to calculate exactly how many days a tenant has occupied a property or an employee has been on contract.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">flight</span></div>
+            <h3>Travel & Flight Times</h3>
+            <p>Calculate the total elapsed travel time of a trip by entering the departure time and the arrival time (assuming both are in the same time zone).</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">restaurant</span></div>
+            <h3>Fasting & Health Tracking</h3>
+            <p>Individuals practicing intermittent fasting use the exact hour/minute calculation to ensure they have met their fasting window goals.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">construction</span></div>
+            <h3>Project Management</h3>
+            <p>Calculate the exact amount of time a specific piece of equipment was rented, or how long a server was experiencing downtime.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

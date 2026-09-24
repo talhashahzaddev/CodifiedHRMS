@@ -1,0 +1,22 @@
+@use '../shared/ut-tool';
+
+.two-col-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.card-divider {
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
+}

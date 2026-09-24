@@ -1,0 +1,434 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ──────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Absence Percentage Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ─────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">event_busy</span>
+        </div>
+        <div>
+          <h1>Absence Percentage Calculator</h1>
+          <p class="tool-intro">
+            Measure your team's absenteeism rate in seconds using the SHRM-standard formula.
+            Enter your headcount, workdays, and absent days to calculate the exact absence
+            percentage — plus the financial impact, yearly projection, and your target allowance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ──────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Form -->
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Your Data</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <!-- Currency -->
+              <div class="form-group">
+                <label for="absence-currency" class="field-label">Currency</label>
+                <select id="absence-currency" formControlName="currency" class="field-select" aria-label="Select currency">
+                  @for (c of currencies; track c.value) {
+                    <option [value]="c.value">{{ c.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Total Employees -->
+              <div class="form-group" [class.has-error]="getFieldError('totalEmployees')">
+                <label for="absence-employees" class="field-label">Total Employees <span class="required">*</span></label>
+                <input id="absence-employees" type="number" formControlName="totalEmployees"
+                  class="field-input" placeholder="e.g. 50" min="1" aria-required="true" aria-label="Total number of employees"/>
+                @if (getFieldError('totalEmployees'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Total Workdays -->
+              <div class="form-group" [class.has-error]="getFieldError('totalWorkdays')">
+                <label for="absence-workdays" class="field-label">Total Working Days in Period <span class="required">*</span></label>
+                <input id="absence-workdays" type="number" formControlName="totalWorkdays"
+                  class="field-input" placeholder="e.g. 22 (one month)" min="1" aria-required="true" aria-label="Total working days in period"/>
+                @if (getFieldError('totalWorkdays'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Total Days Absent -->
+              <div class="form-group" [class.has-error]="getFieldError('totalDaysAbsent')">
+                <label for="absence-absent" class="field-label">Total Days Absent (all employees) <span class="required">*</span></label>
+                <input id="absence-absent" type="number" formControlName="totalDaysAbsent"
+                  class="field-input" placeholder="e.g. 34" min="0" aria-required="true" aria-label="Total days absent across all employees"/>
+                @if (getFieldError('totalDaysAbsent'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Work Hours Per Day -->
+              <div class="form-group" [class.has-error]="getFieldError('workHoursPerDay')">
+                <label for="absence-hours" class="field-label">Work Hours Per Day <span class="required">*</span></label>
+                <input id="absence-hours" type="number" formControlName="workHoursPerDay"
+                  class="field-input" placeholder="8" min="1" max="24" step="0.5" aria-required="true" aria-label="Working hours per day"/>
+                @if (getFieldError('workHoursPerDay'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Avg Salary Per Day -->
+              <div class="form-group" [class.has-error]="getFieldError('avgSalaryPerDay')">
+                <label for="absence-salary" class="field-label">Average Daily Salary (per employee) <span class="required">*</span></label>
+                <input id="absence-salary" type="number" formControlName="avgSalaryPerDay"
+                  class="field-input" placeholder="e.g. 250" min="0" step="0.01" aria-required="true" aria-label="Average daily salary per employee"/>
+                @if (getFieldError('avgSalaryPerDay'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              <!-- Target Absence Rate -->
+              <div class="form-group" [class.has-error]="getFieldError('targetAbsenceRate')">
+                <label for="absence-target" class="field-label">Target Absence Rate (%) <span class="required">*</span></label>
+                <input id="absence-target" type="number" formControlName="targetAbsenceRate"
+                  class="field-input" placeholder="2" min="0" max="100" step="0.1" aria-required="true" aria-label="Target absence rate percentage"/>
+                <span class="field-hint">Industry benchmark: 2–3%</span>
+                @if (getFieldError('targetAbsenceRate'); as err) {
+                  <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span>
+                }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert">
+                  <span class="material-symbols-outlined">warning</span>
+                  {{ formError }}
+                </div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-absence-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-absence-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              <!-- Main Result -->
+              <div class="result-hero result-hero--{{ result.status }}">
+                <div class="result-badge">
+                  <span class="material-symbols-outlined">
+                    {{ result.status === 'low' ? 'check_circle' : result.status === 'moderate' ? 'warning' : 'cancel' }}
+                  </span>
+                  {{ result.statusLabel }}
+                </div>
+                <div class="result-main-value">{{ result.absenteeismRate | number: '1.2-2' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Absenteeism Rate</div>
+              </div>
+
+              <!-- Metrics Grid -->
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">group</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Possible Working Days</span>
+                    <span class="metric-value">{{ result.totalPossibleDays | number }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">event_busy</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Days Absent</span>
+                    <span class="metric-value">{{ result.daysAbsent | number }} days</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">schedule</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Time Lost</span>
+                    <span class="metric-value">{{ result.timeLostHours | number: '1.1-1' }} hours</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">payments</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Estimated Financial Impact</span>
+                    <span class="metric-value">{{ result.financialImpact | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">calendar_today</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Yearly Projection</span>
+                    <span class="metric-value">{{ result.yearlyProjectionDays | number: '1.1-1' }} days / {{ result.yearlyProjectionHours | number: '1.0-0' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">flag</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Target Allowance (days)</span>
+                    <span class="metric-value">≤ {{ result.targetAllowanceDays | number }} days</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-absence-csv">
+                  <span class="material-symbols-outlined">download</span> Download CSV
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-absence-print">
+                  <span class="material-symbols-outlined">print</span> Print
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">bar_chart</span>
+              <p>Fill in the form and click <strong>Calculate</strong> to see your absenteeism rate, financial impact, and yearly projection.</p>
+            </div>
+          }
+        </div>
+
+      </div><!-- /tool-grid -->
+    </div>
+  </section>
+
+  <!-- ── Educational Content ─────────────────────────────── -->
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is an Absence Percentage Calculator?</h2>
+        <p>
+          An <strong>absence percentage calculator</strong> (also called an absenteeism rate calculator) is an HR tool that
+          measures the proportion of total available working time lost to employee absence over a defined period. It applies
+          the industry-standard SHRM formula — <em>(Total Absent Days ÷ Total Possible Working Days) × 100</em> — to give
+          you an objective, percentage-based view of your workforce's attendance.
+        </p>
+        <p>
+          Beyond the headline rate, this calculator quantifies the time lost in hours, estimates the direct financial
+          impact based on average daily salary, and projects your current absence trend onto a full year (250 working days).
+          It also calculates how many absent days your policy target actually allows — giving HR teams an immediate picture
+          of whether the current absence level is within acceptable bounds or requires escalation.
+        </p>
+        <p>
+          Unlike manual spreadsheet tracking, this tool updates all outputs simultaneously the moment you submit your
+          data, eliminating errors that occur when formulas are copied incorrectly or applied inconsistently across
+          departments or time periods.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Absence Percentage Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Benchmark against industry standards:</strong> The CIPD reports an average of ~7.8 days lost per employee per year (~3.2% rate). Knowing your rate tells you whether you are above or below the industry norm — and by how much.</li>
+          <li><strong>Quantify the financial cost:</strong> Most organisations underestimate absenteeism's cost. The financial impact field converts days absent into a direct salary cost, making the business case for attendance management initiatives tangible to leadership.</li>
+          <li><strong>Plan annual workforce budgets:</strong> The yearly projection figure lets HR teams forecast how many total days will be lost over the coming year, enabling accurate staffing, overtime, and temporary cover budgeting.</li>
+          <li><strong>Set data-driven absence targets:</strong> Enter your target absence rate (e.g., 2%) and the calculator tells you exactly how many absent days are permissible — removing ambiguity from absence policies.</li>
+          <li><strong>Spot trends early:</strong> Running this calculation monthly or quarterly reveals whether absence is trending up, down, or remaining stable — enabling proactive rather than reactive HR management.</li>
+          <li><strong>Segment by department or team:</strong> Run the calculation separately for each department to identify where absence is highest and where targeted interventions will deliver the most return.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Absence Percentage Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — used to display the financial impact in your local format.</li>
+          <li><strong>Enter Total Employees</strong> — the number of employees in the group being measured (team, department, or whole company).</li>
+          <li><strong>Enter Total Working Days in Period</strong> — the number of scheduled working days in your measurement period (e.g., 22 for a typical month, 65 for a quarter, 250 for a year).</li>
+          <li><strong>Enter Total Days Absent</strong> — the cumulative sum of all absent days across all employees in the period (not per employee; sum all individual absences together).</li>
+          <li><strong>Enter Work Hours Per Day</strong> — typically 8, but adjust for compressed workweek or shift patterns.</li>
+          <li><strong>Enter Average Daily Salary</strong> — the average gross daily pay per employee (Monthly Salary ÷ 22 for a typical month, or Annual Salary ÷ 250).</li>
+          <li><strong>Set Target Absence Rate %</strong> — your internal policy limit (e.g., 2%). The calculator will tell you the maximum allowable absent days to stay within this target.</li>
+          <li>Click <strong>Calculate</strong> to instantly see all results. Click <strong>Download CSV</strong> to export the report or <strong>Print</strong> for a physical record.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Absence Percentage</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Total Possible Working Days</strong> = Total Employees × Working Days in Period</div>
+          <div class="formula-line"><strong>Absenteeism Rate (%)</strong> = (Total Days Absent ÷ Total Possible Working Days) × 100</div>
+          <div class="formula-line"><strong>Time Lost (Hours)</strong> = Total Days Absent × Work Hours Per Day</div>
+          <div class="formula-line"><strong>Financial Impact</strong> = Total Days Absent × Average Daily Salary</div>
+          <div class="formula-line"><strong>Yearly Projection (Days)</strong> = (Total Days Absent ÷ Working Days in Period) × 250</div>
+          <div class="formula-line"><strong>Target Allowance (Days)</strong> = ⌈ (Target Rate % ÷ 100) × Total Possible Working Days ⌉</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>
+            Company has <strong>50 employees</strong>, <strong>22 working days</strong> in the month, and <strong>110 days absent</strong> total.
+            Average daily salary = <strong>$200</strong>. Target absence rate = <strong>2%</strong>.
+          </p>
+          <ul>
+            <li>Total Possible Working Days = 50 × 22 = <strong>1,100</strong></li>
+            <li>Absenteeism Rate = (110 ÷ 1,100) × 100 = <strong>10%</strong> 🔴 High</li>
+            <li>Time Lost = 110 × 8 = <strong>880 hours</strong></li>
+            <li>Financial Impact = 110 × $200 = <strong>$22,000</strong></li>
+            <li>Yearly Projection = (110 ÷ 22) × 250 = <strong>1,250 days</strong></li>
+            <li>Target Allowance = ⌈(2 ÷ 100) × 1,100⌉ = <strong>22 days</strong> (actual is 110 — far over target)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of absenteeism rate tracking">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Industry-standard metric used by SHRM, CIPD, and most HR benchmarking surveys</td>
+                <td>Does not distinguish between authorized (sick, casual) and unauthorized absence</td>
+              </tr>
+              <tr>
+                <td>Instantly converts raw absence data into a comparable, percentage-based KPI</td>
+                <td>Treats all absent days equally — a 1-day absence and a 3-month illness both count</td>
+              </tr>
+              <tr>
+                <td>Financial impact field creates a business case for absence management investment</td>
+                <td>Excludes indirect costs: overtime for cover, temporary staff fees, productivity loss</td>
+              </tr>
+              <tr>
+                <td>Yearly projection enables proactive planning and budget allocation</td>
+                <td>A single period's result may be skewed by seasonal illness or one-off events</td>
+              </tr>
+              <tr>
+                <td>Target allowance helps HR set concrete, measurable attendance policies</td>
+                <td>Should be segmented by department and role level for meaningful root-cause analysis</td>
+              </tr>
+              <tr>
+                <td>Free, browser-based, and requires no software installation or account</td>
+                <td>Does not model the Bradford Factor (frequency weighting) — a separate metric</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Absence Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <h3>Below 2% — Excellent Attendance</h3>
+            <p>Your workforce has strong attendance. Focus on sustaining this through flexible policies, recognition, and proactive wellbeing support.</p>
+          </div>
+          <div class="insight-card insight-card--yellow">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div>
+            <h3>2–5% — Monitor Closely</h3>
+            <p>Within acceptable range but approaching the boundary. Review whether specific departments or individuals are driving the rate up disproportionately.</p>
+          </div>
+          <div class="insight-card insight-card--red">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">cancel</span></div>
+            <h3>Above 5% — Action Required</h3>
+            <p>High absenteeism signals systemic issues: workload stress, management problems, or health & safety concerns. Conduct individual Return-to-Work interviews and investigate root causes.</p>
+          </div>
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div>
+            <h3>Rising Month-on-Month</h3>
+            <p>Even if the current rate is below 5%, a consistent upward trend is a leading indicator of a developing problem. Track quarterly and act early.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">payments</span></div>
+            <h3>High Financial Impact</h3>
+            <p>Use the financial impact figure to build the business case for an Employee Assistance Programme (EAP) or occupational health service — the ROI is usually fast and measurable.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">flag</span></div>
+            <h3>Exceeding Target Allowance</h3>
+            <p>If actual absent days consistently exceed your target allowance, your policy target may be unrealistic — or there is a structural absence driver that the policy alone cannot fix.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button"
+                [attr.aria-expanded]="openFaqIndex === i"
+                [attr.id]="'absence-faq-' + i"
+                (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span>
+                <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i">
+                <p>{{ faq.a }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info">
+              <h3>{{ tool.title }}</h3>
+              <p>{{ tool.description }}</p>
+            </div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS automates attendance tracking, generates absence reports, and alerts managers when absence thresholds are crossed — no spreadsheets required.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-absence-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-absence-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -1,0 +1,284 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">PTO Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">flight_takeoff</span></div>
+        <div>
+          <h1>PTO Accrual Calculator</h1>
+          <p class="tool-intro">Calculate your available Paid Time Off (PTO) balance. Enter your annual allowance, accrual schedule, and time already taken to find out exactly how many hours (and days) you have available right now, and what your balance will be at year-end.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter PTO Policy</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group" [class.has-error]="getFieldError('annualPtoHours')">
+                <label for="pto-annual" class="field-label">Annual PTO Allowance (Hours) <span class="required">*</span></label>
+                <input id="pto-annual" type="number" formControlName="annualPtoHours" class="field-input" placeholder="e.g. 120" min="0" aria-required="true"/>
+                <span class="field-hint">e.g. 15 days × 8 hours = 120 hours</span>
+                @if (getFieldError('annualPtoHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group">
+                <label for="pto-freq" class="field-label">Accrual Frequency</label>
+                <select id="pto-freq" formControlName="accrualFrequency" class="field-select">
+                  @for (f of accrualFrequencies; track f.value) { <option [value]="f.value">{{ f.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('periodsPassed')">
+                <label for="pto-periods" class="field-label">Pay Periods Passed this Year <span class="required">*</span></label>
+                <input id="pto-periods" type="number" formControlName="periodsPassed" class="field-input" placeholder="e.g. 10" min="0" max="52" aria-required="true"/>
+                @if (getFieldError('periodsPassed'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('carryoverHours')">
+                <label for="pto-carry" class="field-label">Carryover Hours from Last Year</label>
+                <input id="pto-carry" type="number" formControlName="carryoverHours" class="field-input" placeholder="0" min="0"/>
+                @if (getFieldError('carryoverHours'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('ptoHoursUsed')">
+                <label for="pto-used" class="field-label">PTO Hours Used this Year</label>
+                <input id="pto-used" type="number" formControlName="ptoHoursUsed" class="field-input" placeholder="0" min="0"/>
+                @if (getFieldError('ptoHoursUsed'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('standardHoursPerDay')">
+                <label for="pto-hrsday" class="field-label">Standard Hours per Workday <span class="required">*</span></label>
+                <input id="pto-hrsday" type="number" formControlName="standardHoursPerDay" class="field-input" placeholder="8" min="1" max="24" aria-required="true"/>
+                <span class="field-hint">Used to convert your hour balance into days</span>
+                @if (getFieldError('standardHoursPerDay'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-pto-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate PTO
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-pto-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--{{ result.isNegativeBalance ? 'warning' : 'high' }}">
+                <div class="result-badge"><span class="material-symbols-outlined">event_available</span>Current Balance</div>
+                <div class="result-main-value">{{ result.remainingBalance | number:'1.1-2' }}<span class="result-unit"> hrs</span></div>
+                <div class="result-main-label">{{ result.daysRemaining | number:'1.1-2' }} Days Available</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">trending_up</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Earned per Pay Period</span>
+                    <span class="metric-value">{{ result.accrualRatePerPeriod | number:'1.3-3' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">hourglass_top</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Total Accrued Year-to-Date</span>
+                    <span class="metric-value">{{ result.totalAccruedToDate | number:'1.1-2' }} hrs</span>
+                  </div>
+                </div>
+                <div class="metric-row metric-row--highlight">
+                  <span class="metric-icon material-symbols-outlined">today</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Projected Year-End Balance</span>
+                    <span class="metric-value">{{ result.projectedYearEndBalance | number:'1.1-2' }} hrs ({{ (result.projectedYearEndBalance / result.standardHoursPerDay) | number:'1.1-1' }} days)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-pto-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-pto-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">flight_takeoff</span>
+              <p>Enter your annual allowance and pay periods passed to see how much vacation time you have available today.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is a PTO Accrual Calculator?</h2>
+        <p>
+          A <strong>PTO accrual calculator</strong> (Paid Time Off calculator) tracks how much vacation, sick, or personal leave you have
+          earned based on your employer's accrual policy and how many pay periods you have completed. Instead of manually dividing your
+          annual allowance across 12, 24, or 52 pay periods, this tool does the math instantly — showing your current hour and day balance,
+          your accrual rate per pay period, and a projected year-end balance.
+        </p>
+        <p>
+          Unlike a simple "days remaining" counter, this calculator accounts for <strong>carryover hours from prior years</strong>,
+          hours already used, and any accrual frequency (monthly, biweekly, or weekly). This makes it useful for employees planning
+          vacations and for HR teams verifying leave balances before approvals.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the PTO Accrual Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Know your exact balance:</strong> Instantly calculate how many PTO hours and days you have available right now — not at year-end, but today, after accounting for actual hours earned vs. used.</li>
+          <li><strong>Plan vacations with confidence:</strong> The projected year-end balance shows whether you'll have enough hours for a planned vacation later in the year — before you submit the request.</li>
+          <li><strong>Avoid negative balances:</strong> Taking too much PTO before it accrues creates a negative balance. This calculator surfaces that risk immediately, preventing awkward conversations with HR.</li>
+          <li><strong>Verify your pay stub:</strong> Cross-check the PTO balance shown on your paycheck against what this calculator says you should have accrued — catching HR data entry errors early.</li>
+          <li><strong>HR leave management:</strong> HR teams can use this to verify employee PTO balances before approving or denying requests, ensuring policy compliance without opening the HRIS for every query.</li>
+          <li><strong>Supports any accrual frequency:</strong> Whether your company uses monthly, biweekly (26 periods), or weekly (52 periods) accrual — this calculator handles all schedules.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the PTO Accrual Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Enter Annual PTO Allowance (Hours)</strong> — your total entitlement for the year. Convert days to hours if needed (e.g., 15 days × 8 hours = 120 hours).</li>
+          <li><strong>Select Accrual Frequency</strong> — how often PTO accrues: Monthly (12×), Biweekly (26×), or Weekly (52×).</li>
+          <li><strong>Enter Pay Periods Passed</strong> — how many pay periods you have completed since the start of the accrual year (e.g., if it's July and you're on a monthly cycle, enter 6).</li>
+          <li><strong>Enter Carryover Hours</strong> — any PTO hours rolled over from the previous year (0 if your policy does not allow carryover).</li>
+          <li><strong>Enter PTO Hours Used</strong> — total hours you have already taken so far this year.</li>
+          <li><strong>Enter Standard Hours per Workday</strong> — usually 8, but adjust for part-time or compressed schedules. Used to convert hour balances into day equivalents.</li>
+          <li>Click <strong>Calculate PTO</strong> to see your current balance, accrual rate per period, and projected year-end balance.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How PTO Accrual is Calculated</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Accrual Rate per Period</strong> = Annual PTO Hours ÷ Number of Pay Periods per Year</div>
+          <div class="formula-line"><strong>Total Accrued Year-to-Date</strong> = Accrual Rate per Period × Pay Periods Passed</div>
+          <div class="formula-line"><strong>Current Balance</strong> = Carryover Hours + Total Accrued YTD − PTO Hours Used</div>
+          <div class="formula-line"><strong>Days Available</strong> = Current Balance ÷ Standard Hours per Workday</div>
+          <div class="formula-line"><strong>Projected Year-End Balance</strong> = Carryover + Annual Allowance − PTO Hours Used</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Annual PTO: <strong>120 hours (15 days)</strong>. Biweekly accrual (26 periods). Pay periods passed: <strong>13</strong>. Hours used: <strong>16</strong>. Carryover: <strong>8 hours</strong>. Workday: <strong>8 hrs</strong>.</p>
+          <ul>
+            <li>Accrual Rate = 120 ÷ 26 = <strong>4.615 hrs/period</strong></li>
+            <li>Total Accrued YTD = 4.615 × 13 = <strong>60 hours</strong></li>
+            <li>Current Balance = 8 + 60 − 16 = <strong>52 hours (6.5 days)</strong></li>
+            <li>Projected Year-End Balance = 8 + 120 − 16 = <strong>112 hours (14 days)</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons of PTO Accrual Tracking</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of PTO accrual tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Real-time view of earned PTO — more accurate than annual entitlement statements</td><td>Does not model PTO caps (maximum accrual limits) — some employers stop accrual once a cap is hit</td></tr>
+              <tr><td>Projected year-end balance enables proactive vacation planning without risking negative balances</td><td>Does not model waiting periods for new hires (e.g., PTO accrual starts after 90 days)</td></tr>
+              <tr><td>Supports monthly, biweekly, and weekly accrual — covers most employer policies globally</td><td>Does not account for employer-granted PTO advances or special circumstances</td></tr>
+              <tr><td>Carryover field handles rollover policies — a common source of confusion in annual balance tracking</td><td>Lump-sum PTO grants (all days given at start of year) work differently than accrual-based policies</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your PTO Balance Tells You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">check_circle</span></div><h3>Healthy Balance (10+ Days)</h3><p>You have plenty of flexibility. Consider planning a longer vacation now while the balance is positive — and before year-end pressures make it harder to take time off.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>Low Balance (2–5 Days)</h3><p>Be cautious about committing to long leave. Check your projected year-end balance to see if it will grow enough before your planned vacation dates.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">cancel</span></div><h3>Negative Balance</h3><p>You have taken more PTO than accrued. Coordinate with HR immediately — many employers allow advances but require formal approval. Some will deduct the deficit from your final paycheck if you resign.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div><h3>Large Projected Year-End Balance</h3><p>If your year-end projection is high, check whether your employer has a carryover cap. In "use it or lose it" states, unused PTO above the cap expires on December 31 — plan accordingly.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">event_available</span></div><h3>Planning a Long Trip?</h3><p>Use this calculator to find the earliest date your balance will cover the full duration of a planned vacation. Work backwards from the required PTO hours to determine when you'll hit that accrual milestone.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">business</span></div><h3>HR Tip</h3><p>If an employee's current balance doesn't match this calculation, check for missed pay period entries, an incorrect accrual frequency setting, or leave hours coded to the wrong period in your HRIS.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Automate PTO Tracking for Your Entire Team</h2>
+          <p>BriskPeople HRMS automatically accrues PTO every pay period, lets employees check live balances, and gives managers instant leave approval workflows — no spreadsheets, no manual calculations.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-pto-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-pto-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

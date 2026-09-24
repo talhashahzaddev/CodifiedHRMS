@@ -1,0 +1,198 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">GMT Timestamp</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">language</span>
+        </div>
+        <div>
+          <h1>GMT / UTC Time Now</h1>
+          <p class="tool-intro">
+            A live, auto-refreshing display of the current UTC time, Unix timestamps, and global offsets.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      
+      <!-- Live Clock Display (Full Width) -->
+      <div class="live-clock-card">
+        <div class="clock-label">Current UTC / GMT Time</div>
+        <div class="clock-time font-mono" role="timer">{{ utcTimeStr }}</div>
+        <div class="clock-date">{{ utcDateStr }}</div>
+        
+        <div class="clock-epochs">
+          <div class="epoch-item">
+            <span class="epoch-label">Unix Seconds</span>
+            <span class="epoch-val font-mono">{{ unixSecs }}</span>
+          </div>
+          <div class="epoch-item">
+            <span class="epoch-label">Unix Milliseconds</span>
+            <span class="epoch-val font-mono">{{ unixMs }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offset Table -->
+      <div class="offset-card">
+        <h2 class="card-title">Major Time Zones</h2>
+        <div class="table-wrap">
+          <table class="offset-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>UTC Offset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tz of timezones">
+                <td>{{ tz.name }}</td>
+                <td class="font-mono">{{ formatOffset(tz.offset) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+      <div class="edu-section">
+        <h2>What is GMT (Greenwich Mean Time)?</h2>
+        <p><strong>Greenwich Mean Time (GMT)</strong> is the mean solar time at the Royal Observatory in Greenwich, London. For decades, it served as the international standard for timekeeping. Today, it is widely used interchangeably with Coordinated Universal Time (UTC) in computing and aviation, serving as the baseline (UTC+0) from which all other time zones are calculated.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why is a GMT Clock Useful?</h2>
+        <p>In our globally connected world, coordinating meetings, server logs, and software deployments across different time zones can be confusing. Using GMT/UTC as a single, absolute reference point eliminates ambiguity. This tool provides a real-time, synchronized GMT clock alongside quick offsets for major global time zones.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Read the GMT Dashboard</h2>
+        <p>The main digital clock displays the current, live GMT/UTC time. Below it, the reference table shows how major time zones (like EST, PST, CET, and IST) relate to GMT. You can use these offsets to quickly convert GMT back into your local time or coordinate with international teams.</p>
+      </div>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of using GMT">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Provides a single, absolute point of reference for global teams</td>
+                <td>GMT does not observe Daylight Saving Time (DST), confusing some users</td>
+              </tr>
+              <tr>
+                <td>Crucial for synchronizing server logs and database timestamps</td>
+                <td>Users must manually calculate their local offset from the GMT baseline</td>
+              </tr>
+              <tr>
+                <td>Eliminates the ambiguity of regional time zone abbreviations (e.g. CST)</td>
+                <td>Often used interchangeably with UTC, though UTC is technically more precise</td>
+              </tr>
+              <tr>
+                <td>Displays Unix epoch time simultaneously for developer debugging</td>
+                <td>Not intuitive for scheduling local, in-person events</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">terminal</span></div>
+            <h3>Server Log Analysis</h3>
+            <p>System administrators use this live GMT clock to correlate the current time with timestamps found in distributed server error logs.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">flight_takeoff</span></div>
+            <h3>Aviation & Logistics</h3>
+            <p>Pilots, air traffic controllers, and global shipping companies rely entirely on GMT (Zulu time) to coordinate routes across time zones.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">forum</span></div>
+            <h3>Global Team Coordination</h3>
+            <p>Remote teams distribute meeting agendas in GMT/UTC so that every member can calculate their local meeting time reliably.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">currency_exchange</span></div>
+            <h3>Financial Trading</h3>
+            <p>Forex traders and stock market analysts use GMT to track when global markets open and close, unaffected by local DST shifts.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let rt of relatedTools" [routerLink]="'/free-tools/' + rt.slug">
+          <span class="material-symbols-outlined">{{ rt.icon }}</span>
+          {{ rt.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

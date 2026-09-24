@@ -1,0 +1,370 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Add to Calendar Link Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">event</span>
+        </div>
+        <div>
+          <h1>Add to Calendar Link Generator</h1>
+          <p class="tool-intro">
+            Generate shareable "Add to Calendar" links for Google Calendar, Outlook, and Yahoo — plus a
+            downloadable .ics file for Apple Calendar, Outlook Desktop, and any iCalendar-compatible app.
+            No account required.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Form Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Event Details</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="generate()" novalidate>
+
+              <!-- All-Day Toggle -->
+              <div class="toggle-row">
+                <span class="toggle-label">All-Day Event</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" formControlName="allDay" id="allDayToggle">
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+              </div>
+
+              <!-- Event Title -->
+              <div class="form-group" [class.has-error]="getFieldError('title')">
+                <label class="field-label" for="eventTitle">
+                  Event Title <span class="required">*</span>
+                </label>
+                <input id="eventTitle" type="text" class="field-input"
+                       formControlName="title" placeholder="e.g. Team All-Hands Meeting"
+                       autocomplete="off">
+                <span class="field-error" *ngIf="getFieldError('title')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('title') }}
+                </span>
+              </div>
+
+              <!-- Start Date / Time -->
+              <div class="date-time-row">
+                <div class="form-group" [class.has-error]="getFieldError('startDate')">
+                  <label class="field-label" for="startDate">Start Date <span class="required">*</span></label>
+                  <input id="startDate" type="date" class="field-input" formControlName="startDate">
+                  <span class="field-error" *ngIf="getFieldError('startDate')">
+                    <span class="material-symbols-outlined">error</span>{{ getFieldError('startDate') }}
+                  </span>
+                </div>
+                <div class="form-group" *ngIf="!form.get('allDay')?.value">
+                  <label class="field-label" for="startTime">Start Time</label>
+                  <input id="startTime" type="time" class="field-input" formControlName="startTime">
+                </div>
+              </div>
+
+              <!-- End Date / Time -->
+              <div class="date-time-row">
+                <div class="form-group" [class.has-error]="getFieldError('endDate')">
+                  <label class="field-label" for="endDate">End Date <span class="required">*</span></label>
+                  <input id="endDate" type="date" class="field-input" formControlName="endDate">
+                  <span class="field-error" *ngIf="getFieldError('endDate')">
+                    <span class="material-symbols-outlined">error</span>{{ getFieldError('endDate') }}
+                  </span>
+                </div>
+                <div class="form-group" *ngIf="!form.get('allDay')?.value">
+                  <label class="field-label" for="endTime">End Time</label>
+                  <input id="endTime" type="time" class="field-input" formControlName="endTime">
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="form-group">
+                <label class="field-label" for="location">Location (optional)</label>
+                <input id="location" type="text" class="field-input"
+                       formControlName="location" placeholder="e.g. Zoom / Office 3B, Lahore">
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="field-label" for="description">Description (optional)</label>
+                <textarea id="description" class="field-input field-textarea"
+                          formControlName="description"
+                          placeholder="Brief notes, agenda, or meeting link..."
+                          rows="3"></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="generateCalBtn">
+                  <span class="material-symbols-outlined">bolt</span>
+                  Generate Links
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="resetCalBtn">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="tool-outputs">
+
+          <!-- Empty state -->
+          <div class="results-empty" *ngIf="!links">
+            <span class="results-empty-icon material-symbols-outlined">event_available</span>
+            <p>Fill in your event details and click <strong>Generate Links</strong> to create calendar links for all platforms.</p>
+          </div>
+
+          <!-- Results -->
+          <div class="results-card" *ngIf="links">
+            <div class="card-header">
+              <span class="material-symbols-outlined">link</span>
+              <h2 class="card-title">Your Calendar Links</h2>
+            </div>
+
+            <!-- Google Calendar -->
+            <div class="platform-link-block">
+              <div class="platform-link-header">
+                <div class="platform-icon google">
+                  <span class="material-symbols-outlined">calendar_today</span>
+                </div>
+                <div>
+                  <div class="platform-name">Google Calendar</div>
+                  <div class="platform-hint">Opens Google Calendar compose view</div>
+                </div>
+              </div>
+              <div class="output-block">
+                <div class="output-value">
+                  <span class="output-text">{{ links.google }}</span>
+                  <button class="btn-copy" [class.copied]="copiedKey === 'google'"
+                          (click)="copyLink('google', links.google)" id="copyGoogleBtn">
+                    <span class="material-symbols-outlined">{{ copiedKey === 'google' ? 'check' : 'content_copy' }}</span>
+                    {{ copiedKey === 'google' ? 'Copied!' : 'Copy' }}
+                  </button>
+                </div>
+              </div>
+              <a [href]="links.google" target="_blank" rel="noopener" class="btn btn-sm btn-outline platform-open-btn" id="openGoogleBtn">
+                <span class="material-symbols-outlined">open_in_new</span> Open in Google
+              </a>
+            </div>
+
+            <!-- Outlook -->
+            <div class="platform-link-block">
+              <div class="platform-link-header">
+                <div class="platform-icon outlook">
+                  <span class="material-symbols-outlined">mail</span>
+                </div>
+                <div>
+                  <div class="platform-name">Outlook Web</div>
+                  <div class="platform-hint">Opens Outlook Live calendar compose</div>
+                </div>
+              </div>
+              <div class="output-block">
+                <div class="output-value">
+                  <span class="output-text">{{ links.outlook }}</span>
+                  <button class="btn-copy" [class.copied]="copiedKey === 'outlook'"
+                          (click)="copyLink('outlook', links.outlook)" id="copyOutlookBtn">
+                    <span class="material-symbols-outlined">{{ copiedKey === 'outlook' ? 'check' : 'content_copy' }}</span>
+                    {{ copiedKey === 'outlook' ? 'Copied!' : 'Copy' }}
+                  </button>
+                </div>
+              </div>
+              <a [href]="links.outlook" target="_blank" rel="noopener" class="btn btn-sm btn-outline platform-open-btn" id="openOutlookBtn">
+                <span class="material-symbols-outlined">open_in_new</span> Open in Outlook
+              </a>
+            </div>
+
+            <!-- Yahoo -->
+            <div class="platform-link-block">
+              <div class="platform-link-header">
+                <div class="platform-icon yahoo">
+                  <span class="material-symbols-outlined">calendar_month</span>
+                </div>
+                <div>
+                  <div class="platform-name">Yahoo Calendar</div>
+                  <div class="platform-hint">Opens Yahoo Calendar event form</div>
+                </div>
+              </div>
+              <div class="output-block">
+                <div class="output-value">
+                  <span class="output-text">{{ links.yahoo }}</span>
+                  <button class="btn-copy" [class.copied]="copiedKey === 'yahoo'"
+                          (click)="copyLink('yahoo', links.yahoo)" id="copyYahooBtn">
+                    <span class="material-symbols-outlined">{{ copiedKey === 'yahoo' ? 'check' : 'content_copy' }}</span>
+                    {{ copiedKey === 'yahoo' ? 'Copied!' : 'Copy' }}
+                  </button>
+                </div>
+              </div>
+              <a [href]="links.yahoo" target="_blank" rel="noopener" class="btn btn-sm btn-outline platform-open-btn" id="openYahooBtn">
+                <span class="material-symbols-outlined">open_in_new</span> Open in Yahoo
+              </a>
+            </div>
+
+            <!-- ICS Download -->
+            <div class="ics-download-block">
+              <div class="ics-icon">
+                <span class="material-symbols-outlined">download</span>
+              </div>
+              <div>
+                <div class="ics-title">.ics File Download</div>
+                <div class="ics-hint">Works with Apple Calendar, Outlook Desktop, Thunderbird &amp; more</div>
+              </div>
+              <button class="btn btn-primary btn-sm" (click)="downloadIcs()" id="downloadIcsBtn">
+                <span class="material-symbols-outlined">download</span>
+                Download .ics
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is an Add to Calendar Link?</h2>
+        <p>An <strong>Add to Calendar link</strong> is a specially formatted URL that allows users to seamlessly add an event to their preferred digital calendar. Instead of manually typing out event details, attendees can simply click a link to instantly save the date, time, location, and description to Google Calendar, Outlook, Yahoo, or Apple Calendar.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Use an Event Link Generator?</h2>
+        <p>Creating these links manually can be tedious and prone to errors, as different calendar providers use completely different URL structures and require strict URL encoding. Our generator automatically handles time zone conversions (UTC), URL encoding, and formats the links perfectly for every major platform. It also generates a standard <code>.ics</code> file for maximum compatibility.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Generate Calendar Links</h2>
+        <p>Simply enter your event's title, start and end times, location, and a brief description. If it's a multi-day or full-day event, toggle the "All-Day Event" option. Once you click "Generate Link," you can instantly copy the raw URLs or HTML snippets to embed directly into your emails, newsletters, or website.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of Add to Calendar generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Eliminates manual data entry for attendees</td>
+                <td>Requires users to be logged into their calendar provider on their browser</td>
+              </tr>
+              <tr>
+                <td>Dramatically increases event attendance and RSVP rates</td>
+                <td>ICS files must be downloaded and manually opened on some mobile devices</td>
+              </tr>
+              <tr>
+                <td>Automatically handles time zone conversions (using UTC format)</td>
+                <td>URL length can be long if the description contains extensive text</td>
+              </tr>
+              <tr>
+                <td>Free, browser-based, and supports all major calendar platforms</td>
+                <td>Does not track who actually clicked the link (unless you use a URL shortener)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">mail</span></div>
+            <h3>Email Marketing Campaigns</h3>
+            <p>Embed these links directly into your newsletter templates so subscribers can instantly add webinars, product launches, or sales events to their schedules.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">web</span></div>
+            <h3>Website "Register Now" Pages</h3>
+            <p>Place an "Add to Google Calendar" button on your thank-you page immediately after a user registers for an online event to reduce no-show rates.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">business_center</span></div>
+            <h3>Corporate Meeting Invites</h3>
+            <p>Ensure external clients or candidates never miss an interview by including a direct Outlook calendar link in their confirmation emails.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">school</span></div>
+            <h3>Educational Schedules</h3>
+            <p>Allow students to download their class schedules or important academic deadlines directly to their personal Apple or Google calendars.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>
+            Beyond free tools — automate payroll, attendance, leave, and performance management for your team.
+          </p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

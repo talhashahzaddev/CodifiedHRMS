@@ -1,0 +1,334 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Completion Percentage Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">data_check</span></div>
+        <div>
+          <h1>Completion Percentage Calculator</h1>
+          <p class="tool-intro">Calculate project or task completion percentage instantly. Optionally add start and due dates for time-elapsed analysis, days remaining, projected finish date, and a schedule status (ahead / on-track / behind). Enter a planned completion % to check whether you are on plan.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Project Data</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group form-section-label">
+                <span class="section-label-text">Required</span>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalTasks')">
+                <label for="cp-total" class="field-label">Total Tasks / Units <span class="required">*</span></label>
+                <input id="cp-total" type="number" formControlName="totalTasks" class="field-input" placeholder="e.g. 50" min="1" aria-required="true" aria-label="Total number of tasks or units in the project"/>
+                <span class="field-hint">Can be tasks, story points, deliverables, or any measurable unit</span>
+                @if (getFieldError('totalTasks'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('completedTasks')">
+                <label for="cp-done" class="field-label">Completed Tasks / Units <span class="required">*</span></label>
+                <input id="cp-done" type="number" formControlName="completedTasks" class="field-input" placeholder="e.g. 32" min="0" aria-required="true" aria-label="Number of completed tasks or units"/>
+                @if (getFieldError('completedTasks'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-divider"><span>Optional — for schedule analysis</span></div>
+
+              <div class="form-group">
+                <label for="cp-planned" class="field-label">Planned Completion % (as of today)</label>
+                <input id="cp-planned" type="number" formControlName="plannedPct" class="field-input" placeholder="e.g. 70" min="0" max="100" step="1" aria-label="Planned completion percentage as of today per the project plan"/>
+                <span class="field-hint">Enter the % that should be done by today per your project plan</span>
+              </div>
+
+              <div class="form-group">
+                <label for="cp-start" class="field-label">Project Start Date</label>
+                <input id="cp-start" type="date" formControlName="startDate" class="field-input" aria-label="Project start date"/>
+              </div>
+
+              <div class="form-group">
+                <label for="cp-due" class="field-label">Project Due Date</label>
+                <input id="cp-due" type="date" formControlName="dueDate" class="field-input" aria-label="Project due date"/>
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-cp-calculate" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-cp-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+
+              <!-- Main completion hero -->
+              <div class="result-hero result-hero--{{ result.statusClass }}">
+                @if (result.scheduleStatusLabel) {
+                  <div class="result-badge">
+                    <span class="material-symbols-outlined">
+                      {{ result.scheduleStatus === 'ahead' || result.scheduleStatus === 'complete' ? 'check_circle' : result.scheduleStatus === 'on-track' ? 'schedule' : 'warning' }}
+                    </span>
+                    {{ result.scheduleStatusLabel }}
+                  </div>
+                }
+                <div class="result-main-value">{{ result.completionPct | number:'1.1-1' }}<span class="result-unit">%</span></div>
+                <div class="result-main-label">Project Completion</div>
+                <div class="result-sub-label">{{ result.completedTasks }} of {{ result.totalTasks }} tasks completed</div>
+              </div>
+
+              <!-- Progress visual bar -->
+              <div class="progress-bar-wrapper" aria-label="Project progress visual">
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" [style.width.%]="result.completionPct" [class.fill--complete]="result.completionPct === 100">
+                  </div>
+                  @if (result.hasPlan && result.plannedPct !== null) {
+                    <div class="progress-bar-planned-marker" [style.left.%]="result.plannedPct" title="Planned: {{ result.plannedPct }}%"></div>
+                  }
+                </div>
+                <div class="progress-bar-labels">
+                  <span>0%</span>
+                  <span class="progress-bar-value">{{ result.completionPct | number:'1.1-1' }}% done</span>
+                  <span>100%</span>
+                </div>
+              </div>
+
+              <!-- Core metrics -->
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">check_box</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Tasks Completed</span>
+                    <span class="metric-value">{{ result.completedTasks | number }}</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">pending</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Tasks Remaining</span>
+                    <span class="metric-value">{{ result.remainingTasks | number }}</span>
+                  </div>
+                </div>
+
+                <!-- Plan comparison (if provided) -->
+                @if (result.hasPlan && result.varianceFromPlan !== null) {
+                  <div class="metric-row" [class.metric-row--highlight]="true">
+                    <span class="metric-icon material-symbols-outlined">compare_arrows</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Variance from Plan</span>
+                      <span class="metric-value" [class.value--positive]="result.varianceFromPlan >= 0" [class.value--negative]="result.varianceFromPlan < 0">
+                        {{ result.varianceFromPlan >= 0 ? '+' : '' }}{{ result.varianceFromPlan | number:'1.1-1' }}%
+                        <span class="metric-sub">vs planned {{ result.plannedPct }}%</span>
+                      </span>
+                    </div>
+                  </div>
+                }
+
+                <!-- Date-based metrics (if provided) -->
+                @if (result.hasDates) {
+                  <div class="metric-row">
+                    <span class="metric-icon material-symbols-outlined">hourglass_bottom</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Time Elapsed</span>
+                      <span class="metric-value">{{ result.elapsedDays }} days ({{ result.timeElapsedPct | number:'1.1-1' }}%)</span>
+                    </div>
+                  </div>
+                  <div class="metric-row" [class.metric-row--highlight]="result.isOverdue">
+                    <span class="metric-icon material-symbols-outlined">{{ result.isOverdue ? 'alarm_off' : 'alarm' }}</span>
+                    <div class="metric-info">
+                      <span class="metric-label">Days Remaining</span>
+                      <span class="metric-value" [class.value--negative]="result.isOverdue">
+                        {{ result.isOverdue ? 'Overdue by ' + (-result.daysRemaining!) + ' days' : result.daysRemaining + ' days' }}
+                      </span>
+                    </div>
+                  </div>
+                  @if (result.projectedFinishDate) {
+                    <div class="metric-row">
+                      <span class="metric-icon material-symbols-outlined">event_available</span>
+                      <div class="metric-info">
+                        <span class="metric-label">Projected Finish Date</span>
+                        <span class="metric-value">{{ result.projectedFinishDate | date:'mediumDate' }}</span>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-cp-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-cp-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">data_check</span>
+              <p>Enter completed and total tasks to calculate project completion %. Optionally add dates for schedule analysis and projected finish date.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+      <section class="edu-section">
+        <h2>What is a Completion Percentage Calculator?</h2>
+        <p>A <strong>completion percentage calculator</strong> (also called a "% Complete" tool) measures how much of a project or task list has been finished relative to the total scope. It is the most fundamental project health metric in existence — used in project management, construction, software development, and operations to express where a project stands at any moment.</p>
+        <p>This calculator extends the basic formula with optional schedule analysis: when you add start and due dates, it calculates <em>time elapsed %</em>, <em>days remaining</em>, and a <em>projected finish date</em> based on your current completion velocity. You can also enter a <em>planned completion %</em> — what the project plan says should be done by today — to instantly see whether you are ahead, on plan, or behind your baseline.</p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Completion Percentage Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Instant project health snapshot:</strong> At a glance, all stakeholders understand where the project stands — no complex dashboards or EVM knowledge required.</li>
+          <li><strong>Schedule status without EVM complexity:</strong> The time-elapsed vs completion comparison gives a schedule status (ahead/on-track/behind) without requiring Earned Value methodology, making it accessible to non-PMO teams.</li>
+          <li><strong>Projected finish date:</strong> The velocity-based projection (tasks completed per day × remaining tasks) gives an evidence-based completion date — far more reliable than a gut-feel estimate.</li>
+          <li><strong>Plan variance check:</strong> Entering your planned % from the Gantt chart immediately quantifies the deviation, triggering the right corrective action conversation.</li>
+          <li><strong>Communication tool:</strong> A simple % figure and a "Behind Schedule" flag communicate faster to leadership than a detailed status report, enabling faster decision-making.</li>
+          <li><strong>Progress tracking over time:</strong> Run weekly to track velocity changes. If completion % growth is slowing, it is a leading indicator of an emerging bottleneck before it causes a missed deadline.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Completion Percentage Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Enter Total Tasks</strong> — the total scope of the project expressed as a countable unit (tasks, user stories, deliverables, milestones, etc.).</li>
+          <li><strong>Enter Completed Tasks</strong> — the number of units fully completed as of today. Partially complete tasks should not be counted.</li>
+          <li><strong>Enter Planned Completion %</strong> (optional) — what your project plan says should be done by today. Creates a plan-vs-actual comparison.</li>
+          <li><strong>Enter Start Date</strong> (optional) — when the project began. Enables time-elapsed and velocity calculations.</li>
+          <li><strong>Enter Due Date</strong> (optional) — the project deadline. Enables days remaining and projected finish date.</li>
+          <li>Click <strong>Calculate</strong>. Core results always appear; schedule analysis appears automatically when dates are provided.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Calculate Completion Percentage</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Completion %</strong> = (Completed Tasks ÷ Total Tasks) × 100</div>
+          <div class="formula-line"><strong>Remaining Tasks</strong> = Total Tasks − Completed Tasks</div>
+          <div class="formula-line"><strong>Time Elapsed %</strong> = (Days Elapsed ÷ Total Duration) × 100</div>
+          <div class="formula-line"><strong>Schedule Status</strong> = if Completion % &gt; Time Elapsed % + 5% → Ahead | within ±5% → On Track | else → Behind</div>
+          <div class="formula-line"><strong>Completion Velocity</strong> = Completed Tasks ÷ Days Elapsed</div>
+          <div class="formula-line"><strong>Projected Finish</strong> = Today + (Remaining Tasks ÷ Velocity) days</div>
+          <div class="formula-line"><strong>Variance from Plan</strong> = Actual Completion % − Planned Completion %</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Project: <strong>50 tasks total</strong>. Completed: <strong>32</strong>. Plan says <strong>70% should be done</strong> by now. Start: Jan 1. Due: Mar 31 (90 days). Today: Feb 15 (46 days in).</p>
+          <ul>
+            <li>Completion % = (32 ÷ 50) × 100 = <strong>64%</strong></li>
+            <li>Variance from Plan = 64% − 70% = <strong>−6%</strong> 🔴 Behind plan</li>
+            <li>Time Elapsed % = (46 ÷ 90) × 100 = <strong>51.1%</strong></li>
+            <li>Schedule Status: 64% completion vs 51.1% elapsed = <strong>Ahead of schedule</strong> 🟢 (despite being behind plan)</li>
+            <li>Velocity = 32 ÷ 46 = 0.696 tasks/day</li>
+            <li>Projected Finish = Feb 15 + (18 ÷ 0.696) = Feb 15 + 26 days = <strong>~March 13</strong> ✅ Before deadline</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of completion percentage tracking">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Universally understood by all stakeholders — no training or project management expertise required</td><td>Treats all tasks as equal — a 1-hour task counts the same as a 2-week task. Use weighted units for heterogeneous tasks.</td></tr>
+              <tr><td>Velocity-based projected finish is more reliable than subjective end-date estimates</td><td>Velocity assumes uniform completion rate — projects often slow down in the final 20% due to integration and testing</td></tr>
+              <tr><td>Plan variance check provides instant deviation analysis from the baseline</td><td>Requires an accurate and up-to-date planned % figure — if the plan is not maintained, variance results are meaningless</td></tr>
+              <tr><td>Combining % complete with time-elapsed % provides schedule status without EVM complexity</td><td>Does not measure quality, risk, or budget performance — use alongside Cost Variance and risk registers for a full picture</td></tr>
+              <tr><td>Weekly tracking creates a completion velocity time series useful for burn-down chart analysis</td><td>"Done" definition must be consistently applied — partially completed items being counted as done leads to false high readings</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>What Your Completion Data Could Be Telling You</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">trending_up</span></div><h3>Completion % &gt; Time Elapsed %</h3><p>Your team is completing work faster than the schedule assumed. Verify the accuracy of your "done" definition. If accurate, consider whether the deadline could be moved earlier or scope could be safely increased.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">schedule</span></div><h3>Completion % ≈ Time Elapsed %</h3><p>You are on schedule. Maintain the current velocity and monitor for emerging risks. Even on-track projects can fall behind quickly if a key dependency is delayed or a team member is unavailable.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>Completion % &lt; Time Elapsed %</h3><p>You are behind schedule. Assess immediately: Is the remaining work achievable in the time left? What is causing the velocity shortfall? Do you need to reduce scope or add resources?</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">alarm_off</span></div><h3>Project is Overdue</h3><p>The due date has passed and the project is incomplete. Re-baseline the plan with a new due date, communicate transparently with stakeholders, and identify blockers to finalise the remaining tasks.</p></div>
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">speed</span></div><h3>Declining Velocity?</h3><p>If weekly completion % growth is slowing down, investigate: accumulating technical debt, resource allocation changes, scope creep, or hidden dependencies that are blocking work. Address before the deadline impact becomes unrecoverable.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">event_available</span></div><h3>Projected Finish After Due Date?</h3><p>At your current velocity, you will miss the deadline. Options: reduce remaining scope (defer non-critical tasks), accelerate velocity (add resources), or negotiate a deadline extension. Do not wait — the sooner the conversation, the more options remain available.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" [attr.id]="'cp-faq-' + i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-hidden]="openFaqIndex !== i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Ready to Manage Your Workforce Smarter?</h2>
+          <p>BriskPeople HRMS tracks project progress in real time, automates completion reporting, and gives your team live visibility into completion status and projected timelines.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-cp-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-cp-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

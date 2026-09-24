@@ -1,0 +1,335 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Banner Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">image</span>
+        </div>
+        <div>
+          <h1>Banner Generator</h1>
+          <p class="tool-intro">
+            Design custom banners for LinkedIn, Twitter, Facebook, YouTube, and Instagram using HTML5 Canvas.
+            Add headings, subtext, gradients, and your logo — then download as a full-resolution PNG.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Banner Settings</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="generate()" novalidate>
+
+              <!-- Text content -->
+              <div class="form-group" [class.has-error]="getFieldError('heading')">
+                <label class="field-label" for="heading">Heading <span class="required">*</span></label>
+                <input id="heading" type="text" class="field-input"
+                       formControlName="heading" placeholder="e.g. We're Hiring! Join Our Team">
+                <span class="field-error" *ngIf="getFieldError('heading')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('heading') }}
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label" for="subheading">Subheading (optional)</label>
+                <input id="subheading" type="text" class="field-input"
+                       formControlName="subheading" placeholder="e.g. Apply at briskpeople.com/careers">
+              </div>
+
+              <!-- Preset size -->
+              <div class="form-group">
+                <label class="field-label" for="preset">Banner Size</label>
+                <select id="preset" class="field-input field-select" formControlName="preset">
+                  <option *ngFor="let p of presets; let i = index" [value]="i">
+                    {{ p.label }}{{ p.width > 0 ? ' — ' + p.width + '×' + p.height : '' }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Custom size (only when "Custom" is selected) -->
+              <div class="custom-size-row" *ngIf="+form.get('preset')?.value === presets.length - 1">
+                <div class="form-group">
+                  <label class="field-label" for="customW">Width (px)</label>
+                  <input id="customW" type="number" class="field-input"
+                         formControlName="customW" min="100" max="4096" step="1">
+                </div>
+                <div class="form-group">
+                  <label class="field-label" for="customH">Height (px)</label>
+                  <input id="customH" type="number" class="field-input"
+                         formControlName="customH" min="100" max="4096" step="1">
+                </div>
+              </div>
+
+              <!-- Background type -->
+              <div class="form-group">
+                <label class="field-label">Background Type</label>
+                <div class="radio-row">
+                  <label class="radio-option">
+                    <input type="radio" formControlName="bgType" value="solid">
+                    <span>Solid Color</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" formControlName="bgType" value="gradient">
+                    <span>Gradient</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Colors -->
+              <div class="color-row">
+                <div class="form-group color-group">
+                  <label class="field-label" for="bgColor1">
+                    {{ form.get('bgType')?.value === 'gradient' ? 'Start Color' : 'Background' }}
+                  </label>
+                  <div class="color-input-wrap">
+                    <input id="bgColor1" type="color" class="color-swatch" formControlName="bgColor1">
+                    <span class="color-hex">{{ form.get('bgColor1')?.value }}</span>
+                  </div>
+                </div>
+                <div class="form-group color-group" *ngIf="form.get('bgType')?.value === 'gradient'">
+                  <label class="field-label" for="bgColor2">End Color</label>
+                  <div class="color-input-wrap">
+                    <input id="bgColor2" type="color" class="color-swatch" formControlName="bgColor2">
+                    <span class="color-hex">{{ form.get('bgColor2')?.value }}</span>
+                  </div>
+                </div>
+                <div class="form-group color-group">
+                  <label class="field-label" for="textColor">Text Color</label>
+                  <div class="color-input-wrap">
+                    <input id="textColor" type="color" class="color-swatch" formControlName="textColor">
+                    <span class="color-hex">{{ form.get('textColor')?.value }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Font size + alignment -->
+              <div class="two-col-row">
+                <div class="form-group" [class.has-error]="getFieldError('fontSize')">
+                  <label class="field-label" for="fontSize">Font Size (px)</label>
+                  <input id="fontSize" type="number" class="field-input"
+                         formControlName="fontSize" min="12" max="200" step="2">
+                  <span class="field-error" *ngIf="getFieldError('fontSize')">
+                    <span class="material-symbols-outlined">error</span>{{ getFieldError('fontSize') }}
+                  </span>
+                </div>
+                <div class="form-group">
+                  <label class="field-label" for="textAlign">Text Align</label>
+                  <select id="textAlign" class="field-input field-select" formControlName="textAlign">
+                    <option value="left">Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Logo upload -->
+              <div class="form-group">
+                <label class="field-label" for="logoUpload">Logo / Image (optional)</label>
+                <div class="file-upload-wrap">
+                  <label for="logoUpload" class="file-upload-label">
+                    <span class="material-symbols-outlined">upload</span>
+                    <span>Click to upload PNG, JPG, SVG…</span>
+                  </label>
+                  <input id="logoUpload" type="file" accept="image/*" (change)="onLogoUpload($event)" hidden>
+                </div>
+                <span class="field-hint">Logo will be placed above your text. PNG with transparent bg recommended.</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="generateBannerBtn">
+                  <span class="material-symbols-outlined">brush</span>
+                  Generate Banner
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="resetBannerBtn">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Canvas Preview -->
+        <div class="tool-outputs">
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">preview</span>
+              <h2 class="card-title">Preview</h2>
+              <span class="preview-dims" *ngIf="bannerGenerated">
+                {{ canvasWidth }} × {{ canvasHeight }} px
+              </span>
+            </div>
+
+            <!-- Canvas preview wrapper (CSS scaled) -->
+            <div class="banner-preview-wrap">
+              <div class="results-empty" *ngIf="!bannerGenerated">
+                <span class="results-empty-icon material-symbols-outlined">image</span>
+                <p>Configure your banner settings and click <strong>Generate Banner</strong> to preview it here.</p>
+              </div>
+              <canvas #bannerCanvas id="bannerCanvas"
+                      [class.canvas-visible]="bannerGenerated"
+                      [class.canvas-hidden]="!bannerGenerated">
+              </canvas>
+            </div>
+
+            <div class="result-actions" *ngIf="bannerGenerated">
+              <button class="btn btn-sm btn-download" (click)="downloadPng()" id="downloadBannerBtn">
+                <span class="material-symbols-outlined">download</span>
+                Download Full-Res PNG
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is a Web Banner Generator?</h2>
+        <p>A <strong>Web Banner Generator</strong> is a fast, in-browser design tool that lets you create custom placeholder images, hero banners, and social media headers. It renders the image dynamically using HTML5 Canvas, allowing you to download the final result instantly as a PNG.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Use a Simple Banner Maker?</h2>
+        <p>Sometimes you need a quick, clean banner for a blog post, a website placeholder, or an email newsletter, but you don't want to open heavy design software like Photoshop. This tool provides instant gratification—just pick your dimensions, set your colors, type your text, and download. No signups or watermarks.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Create a Custom Banner</h2>
+        <p>Start by entering the width and height for your banner. Use the color pickers to select a vibrant background gradient and a contrasting text color. Type your message, adjust the font size, and watch the live preview update in real-time. When you're satisfied, click "Download PNG."</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of the Banner Generator">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Creates web-ready placeholder images instantly in the browser</td>
+                <td>Does not support advanced photo editing or image layering</td>
+              </tr>
+              <tr>
+                <td>No design software, account, or subscription required</td>
+                <td>Limited to a single font family and basic gradient backgrounds</td>
+              </tr>
+              <tr>
+                <td>Customizable exact pixel dimensions for any platform</td>
+                <td>Cannot upload custom logos or watermark vectors</td>
+              </tr>
+              <tr>
+                <td>Downloads instantly as a high-quality, lossless PNG file</td>
+                <td>Text wrapping for very long paragraphs is not supported</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">web</span></div>
+            <h3>Website Placeholders</h3>
+            <p>Web developers use generated banners as exact-dimension placeholders while waiting for final graphic assets from the design team.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">article</span></div>
+            <h3>Blog Post Headers</h3>
+            <p>Content creators can quickly generate a clean, typography-focused hero image for a blog post when they don't have time to search for stock photography.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">campaign</span></div>
+            <h3>Social Media Announcements</h3>
+            <p>Generate a 1200x628 banner in seconds to announce a flash sale, webinar, or quick update on Twitter, Facebook, or LinkedIn.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">mail</span></div>
+            <h3>Email Newsletter Dividers</h3>
+            <p>Create bright, text-based dividers or call-to-action blocks that fit perfectly into your Mailchimp or HubSpot email templates.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

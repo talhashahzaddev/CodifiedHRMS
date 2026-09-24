@@ -1,0 +1,14 @@
+@use '../shared/ut-tool';
+
+.highlight-value {
+  font-weight: 700;
+  color: var(--primary-700);
+  background: var(--primary-50);
+  padding: 4px 10px;
+  border-radius: var(--border-radius-sm);
+  display: inline-block;
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
+}

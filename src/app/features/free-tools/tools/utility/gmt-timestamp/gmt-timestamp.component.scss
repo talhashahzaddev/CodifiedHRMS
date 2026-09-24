@@ -1,0 +1,109 @@
+@use '../shared/ut-tool';
+
+.live-clock-card {
+  background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  text-align: center;
+  color: white;
+  margin-bottom: var(--spacing-2xl);
+  box-shadow: 0 12px 32px rgba(12, 142, 255, 0.2);
+}
+
+.clock-label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary-200);
+  margin-bottom: var(--spacing-md);
+}
+
+.clock-time {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.02em;
+}
+
+.clock-date {
+  font-size: var(--font-size-lg);
+  color: var(--primary-100);
+  margin-bottom: var(--spacing-xl);
+}
+
+.clock-epochs {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: var(--spacing-xl);
+}
+
+.epoch-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.epoch-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-300);
+}
+
+.epoch-val {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.offset-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--bg-primary);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: var(--spacing-md);
+}
+
+.offset-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  
+  th {
+    text-align: left;
+    padding: 10px;
+    background: var(--gray-50);
+    border-bottom: 2px solid var(--gray-200);
+    color: var(--text-secondary);
+    font-weight: 700;
+  }
+  
+  td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--text-primary);
+    
+    &:last-child {
+      color: var(--primary-700);
+      font-weight: 600;
+    }
+  }
+  
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
+}

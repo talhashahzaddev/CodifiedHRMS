@@ -1,0 +1,297 @@
+<main class="tool-page">
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-tools">Free Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">UPI QR Code Generator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────── -->
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon">
+          <span class="material-symbols-outlined">qr_code</span>
+        </div>
+        <div>
+          <h1>UPI QR Code Generator</h1>
+          <p class="tool-intro">
+            Generate a standard UPI payment QR code from your UPI ID, payee name, and amount.
+            Works with Google Pay, PhonePe, Paytm, BHIM, and all UPI-enabled apps. Download as PNG.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tool Interface ─────────────────────────────────────────────── -->
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Inputs -->
+        <div class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Payment Details</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="generate()" novalidate>
+
+              <div class="form-group" [class.has-error]="getFieldError('upiId')">
+                <label class="field-label" for="upiId">
+                  UPI ID (VPA) <span class="required">*</span>
+                </label>
+                <input id="upiId" type="text" class="field-input"
+                       formControlName="upiId" placeholder="e.g. yourname@okicici"
+                       autocomplete="off" inputmode="email">
+                <span class="field-hint">Format: identifier&#64;bankhandle (e.g. business&#64;paytm)</span>
+                <span class="field-error" *ngIf="getFieldError('upiId')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('upiId') }}
+                </span>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('name')">
+                <label class="field-label" for="payeeName">
+                  Payee Name <span class="required">*</span>
+                </label>
+                <input id="payeeName" type="text" class="field-input"
+                       formControlName="name" placeholder="e.g. BriskPeople Ltd.">
+                <span class="field-error" *ngIf="getFieldError('name')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('name') }}
+                </span>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('amount')">
+                <label class="field-label" for="amount">Amount ₹ (optional)</label>
+                <input id="amount" type="number" class="field-input"
+                       formControlName="amount" placeholder="e.g. 500"
+                       min="0" max="100000" step="0.01" inputmode="decimal">
+                <span class="field-hint">Leave blank to let payer enter any amount.</span>
+                <span class="field-error" *ngIf="getFieldError('amount')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('amount') }}
+                </span>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('note')">
+                <label class="field-label" for="txnNote">Transaction Note (optional)</label>
+                <input id="txnNote" type="text" class="field-input"
+                       formControlName="note" placeholder="e.g. Invoice #1045">
+                <span class="field-error" *ngIf="getFieldError('note')">
+                  <span class="material-symbols-outlined">error</span>{{ getFieldError('note') }}
+                </span>
+              </div>
+
+              <!-- QR Colors -->
+              <div class="color-row">
+                <div class="form-group color-group">
+                  <label class="field-label" for="fgColor">QR Color</label>
+                  <div class="color-input-wrap">
+                    <input id="fgColor" type="color" class="color-swatch" formControlName="fgColor">
+                    <span class="color-hex">{{ form.get('fgColor')?.value }}</span>
+                  </div>
+                </div>
+                <div class="form-group color-group">
+                  <label class="field-label" for="bgColor">Background</label>
+                  <div class="color-input-wrap">
+                    <input id="bgColor" type="color" class="color-swatch" formControlName="bgColor">
+                    <span class="color-hex">{{ form.get('bgColor')?.value }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="generateUpiBtn">
+                  <span class="material-symbols-outlined">qr_code_2</span>
+                  Generate QR
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="resetUpiBtn">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Canvas + Results -->
+        <div class="tool-outputs">
+
+          <div class="results-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">qr_code_2</span>
+              <h2 class="card-title">UPI QR Code</h2>
+            </div>
+
+            <!-- QR Canvas (always in DOM for Angular ViewChild) -->
+            <div class="canvas-container" [class.canvas-hidden]="!qrGenerated">
+              <canvas #qrCanvas id="upiQrCanvas"></canvas>
+            </div>
+
+            <!-- Empty state -->
+            <div class="results-empty" *ngIf="!qrGenerated" style="min-height:220px">
+              <span class="results-empty-icon material-symbols-outlined">qr_code_2</span>
+              <p>Enter your UPI ID and click <strong>Generate QR</strong> to create your payment QR code.</p>
+            </div>
+
+            <!-- UPI URI display -->
+            <div class="output-block" *ngIf="qrGenerated && upiUri">
+              <div class="output-label">UPI URI</div>
+              <div class="output-value">
+                <span class="output-text">{{ upiUri }}</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="result-actions" *ngIf="qrGenerated">
+              <button class="btn btn-sm btn-download" (click)="downloadPng()" id="downloadUpiPngBtn">
+                <span class="material-symbols-outlined">download</span>
+                Download PNG
+              </button>
+            </div>
+
+            <!-- App logos row -->
+            <div class="upi-apps-row" *ngIf="qrGenerated">
+              <span class="upi-apps-label">Works with:</span>
+              <span class="upi-app-badge">GPay</span>
+              <span class="upi-app-badge">PhonePe</span>
+              <span class="upi-app-badge">Paytm</span>
+              <span class="upi-app-badge">BHIM</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Educational Content ────────────────────────────────────────── -->
+  <section class="tool-edu">
+    <div class="container">
+
+      <div class="edu-section">
+        <h2>What is a UPI QR Code?</h2>
+        <p>A <strong>UPI QR Code</strong> is a quick-response barcode formatted specifically for the Unified Payments Interface (UPI) system used in India. It encodes a merchant or individual's Virtual Payment Address (VPA / UPI ID), payee name, and optionally, a predefined payment amount.</p>
+      </div>
+      <div class="edu-section">
+        <h2>Why Generate Custom UPI QR Codes?</h2>
+        <p>Freelancers, small business owners, and event organizers can use custom UPI QR codes to collect payments instantly. By embedding a specific amount and transaction note directly into the QR code, you eliminate the chance of the payer entering the wrong amount, making the checkout process frictionless.</p>
+      </div>
+      <div class="edu-section">
+        <h2>How to Create a Payment QR Code</h2>
+        <p>Enter your valid UPI ID (e.g., yourname@bank) and your payee name. You can optionally lock in a specific currency amount and add a transaction note. The QR code updates in real-time. Scan it with any UPI app (Google Pay, PhonePe, Paytm) to verify it, then download the PNG to print or share online.</p>
+      </div>
+  
+      <section class="edu-section">
+        <h2>Pros and Cons</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of UPI QR Codes">
+            <thead>
+              <tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Allows instant, frictionless payments directly from bank to bank</td>
+                <td>Only works within the Indian banking ecosystem via UPI apps</td>
+              </tr>
+              <tr>
+                <td>Eliminates typing errors by pre-filling the exact amount and payee</td>
+                <td>Does not confirm whether the payment was actually successful</td>
+              </tr>
+              <tr>
+                <td>Zero setup fees or merchant transaction costs compared to credit cards</td>
+                <td>Cannot handle complex dynamic pricing or cart systems natively</td>
+              </tr>
+              <tr>
+                <td>Generates a static QR code that can be printed permanently</td>
+                <td>Users must have a registered UPI app (GPay, PhonePe) installed on their phone</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Top Use Cases & Insights</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">storefront</span></div>
+            <h3>Small Businesses & Shops</h3>
+            <p>Retailers print their generated UPI QR code and display it at the billing counter to accept fee-free payments from any customer app.</p>
+          </div>
+          <div class="insight-card insight-card--green">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+            <h3>Freelance Invoicing</h3>
+            <p>Freelancers embed a predefined-amount QR code directly into their PDF invoices, allowing clients to scan and pay instantly from their screen.</p>
+          </div>
+          <div class="insight-card insight-card--purple">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">volunteer_activism</span></div>
+            <h3>Charity & Donations</h3>
+            <p>NGOs include QR codes on pamphlets and social media posts, making it incredibly easy for supporters to send micro-donations.</p>
+          </div>
+          <div class="insight-card insight-card--orange">
+            <div class="insight-card-icon"><span class="material-symbols-outlined">celebration</span></div>
+            <h3>Event Ticketing</h3>
+            <p>Event organizers generate QR codes locked to a specific ticket price, speeding up the registration desk queue by removing manual amount entry.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <div class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index" [class.open]="openFaqIndex === i">
+            <button class="faq-question" [attr.aria-expanded]="openFaqIndex === i"
+                    (click)="toggleFaq(i)" [id]="'faqQ' + i">
+              {{ faq.q }}
+              <span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'remove' : 'add' }}</span>
+            </button>
+            <div class="faq-answer" [class.open]="openFaqIndex === i" [attr.aria-labelledby]="'faqQ' + i">
+              <p>{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Related Tools ──────────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <h2 class="section-subtitle" style="margin-bottom: var(--spacing-lg);">Related Free Tools</h2>
+      <div class="related-tools">
+        <a *ngFor="let tool of relatedTools" [routerLink]="'/free-tools/' + tool.slug">
+          <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          {{ tool.title }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────────── -->
+  <section class="tool-cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <span class="material-symbols-outlined">rocket_launch</span>
+          <h2>Manage Your Entire Workforce with BriskPeople</h2>
+          <p>Automate HR processes — payroll, attendance, leave, and performance — all in one platform.</p>
+          <div class="cta-actions">
+            <a routerLink="/sign-up" class="btn btn-primary" id="ctaSignUpBtn">Start Free Trial</a>
+            <a routerLink="/book-demo" class="btn btn-outline" id="ctaDemoBtn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

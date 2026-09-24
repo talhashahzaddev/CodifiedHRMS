@@ -1,0 +1,274 @@
+<main class="tool-page">
+
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li><a routerLink="/">Home</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li><a routerLink="/free-workforce-tools">Free Workforce Tools</a></li>
+        <li><span class="bc-sep material-symbols-outlined">chevron_right</span></li>
+        <li aria-current="page">Leave Encashment Calculator</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="tool-header">
+    <div class="container">
+      <div class="tool-header-inner">
+        <div class="tool-header-icon"><span class="material-symbols-outlined">request_quote</span></div>
+        <div>
+          <h1>Leave Encashment Calculator</h1>
+          <p class="tool-intro">Calculate the cash payout value of your unused vacation or PTO days. Enter your basic monthly salary and your unused leave balance to determine your daily pay rate and the total gross encashment value.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-interface">
+    <div class="container">
+      <div class="tool-grid">
+
+        <aside class="tool-inputs">
+          <div class="inputs-card">
+            <div class="card-header">
+              <span class="material-symbols-outlined">tune</span>
+              <h2 class="card-title">Enter Salary & Leave</h2>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="calculate()" novalidate>
+
+              <div class="form-group">
+                <label for="le-curr" class="field-label">Currency</label>
+                <select id="le-curr" formControlName="currency" class="field-select">
+                  @for (c of currencies; track c.value) { <option [value]="c.value">{{ c.label }}</option> }
+                </select>
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('monthlySalary')">
+                <label for="le-salary" class="field-label">Monthly Basic Salary <span class="required">*</span></label>
+                <input id="le-salary" type="number" formControlName="monthlySalary" class="field-input" placeholder="e.g. 5000" min="0" step="100" aria-required="true"/>
+                <span class="field-hint">Use basic salary (excluding variable allowances) for standard encashment</span>
+                @if (getFieldError('monthlySalary'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('daysInMonth')">
+                <label for="le-dim" class="field-label">Standard Days in Month <span class="required">*</span></label>
+                <input id="le-dim" type="number" formControlName="daysInMonth" class="field-input" placeholder="30" min="1" max="31" aria-required="true"/>
+                <span class="field-hint">Often 30 or 26 days depending on local labor laws</span>
+                @if (getFieldError('daysInMonth'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('totalLeaveBalance')">
+                <label for="le-bal" class="field-label">Total Unused Leave Balance (Days) <span class="required">*</span></label>
+                <input id="le-bal" type="number" formControlName="totalLeaveBalance" class="field-input" placeholder="e.g. 21" min="0" step="0.5" aria-required="true"/>
+                @if (getFieldError('totalLeaveBalance'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              <div class="form-group" [class.has-error]="getFieldError('daysToEncash')">
+                <label for="le-encash" class="field-label">Days to Encash <span class="required">*</span></label>
+                <input id="le-encash" type="number" formControlName="daysToEncash" class="field-input" placeholder="e.g. 10" min="0" step="0.5" aria-required="true"/>
+                <span class="field-hint">Cannot exceed total leave balance</span>
+                @if (getFieldError('daysToEncash'); as err) { <span class="field-error" role="alert"><span class="material-symbols-outlined">error</span>{{ err }}</span> }
+              </div>
+
+              @if (formError) {
+                <div class="form-error-banner" role="alert"><span class="material-symbols-outlined">warning</span>{{ formError }}</div>
+              }
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-calc" id="btn-le-calc" [disabled]="form.invalid">
+                  <span class="material-symbols-outlined">calculate</span> Calculate Payout
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" (click)="reset()" id="btn-le-reset">
+                  <span class="material-symbols-outlined">restart_alt</span> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <div class="tool-outputs">
+          @if (result) {
+            <div class="results-card" id="results-panel">
+              <div class="result-hero result-hero--high">
+                <div class="result-badge"><span class="material-symbols-outlined">payments</span>Payout Value</div>
+                <div class="result-main-value">{{ result.grossEncashmentValue | currency: result.currency : 'symbol-narrow' : '1.2-2' }}</div>
+                <div class="result-main-label">Gross Encashment Amount</div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">point_of_sale</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Calculated Daily Rate</span>
+                    <span class="metric-value">{{ result.dailyRate | currency: result.currency : 'symbol-narrow' : '1.2-2' }} / day</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">flight_takeoff</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Leave Days Encashed</span>
+                    <span class="metric-value">{{ result.encashableDays | number:'1.1-1' }} days</span>
+                  </div>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-icon material-symbols-outlined">event_available</span>
+                  <div class="metric-info">
+                    <span class="metric-label">Remaining Leave Balance</span>
+                    <span class="metric-value">{{ result.remainingDaysAfterEncashment | number:'1.1-1' }} days</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="btn btn-sm btn-outline" (click)="downloadCsv()" id="btn-le-csv"><span class="material-symbols-outlined">download</span> Download CSV</button>
+                <button type="button" class="btn btn-sm btn-outline" (click)="print()" id="btn-le-print"><span class="material-symbols-outlined">print</span> Print</button>
+              </div>
+            </div>
+          } @else {
+            <div class="results-empty">
+              <span class="material-symbols-outlined results-empty-icon">request_quote</span>
+              <p>Enter your salary details and unused leave days to calculate your encashment payout value.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article class="tool-edu">
+    <div class="container">
+
+      <section class="edu-section">
+        <h2>What is a Leave Encashment Calculator?</h2>
+        <p>
+          A <strong>leave encashment calculator</strong> computes the cash payout value of unused earned or privilege leave when an employee
+          opts to encash it rather than take it as time off. In India, this is governed by <strong>Section 10(10AA) of the Income Tax Act</strong>,
+          which provides specific tax exemptions on leave encashment received at the time of resignation or retirement.
+        </p>
+        <p>
+          This calculator determines your encashment amount using the standard formula of <em>(Monthly Basic Salary ÷ Days in Month) × Days to Encash</em>.
+          It shows your daily rate, the total gross payout, and your remaining leave balance — giving both employees and HR teams the clarity to
+          plan leave policy decisions and financial payouts accurately.
+        </p>
+      </section>
+
+      <section class="edu-section">
+        <h2>Why Should You Use the Leave Encashment Calculator?</h2>
+        <ul class="why-list">
+          <li><strong>Calculate your payout value:</strong> Know exactly how much cash you will receive for unused leave days before accepting a resignation or retirement package — preventing surprises at settlement.</li>
+          <li><strong>Verify HR calculations:</strong> Cross-check the encashment figure shown in your full and final settlement statement against the standard formula — a common source of discrepancies in payroll departments.</li>
+          <li><strong>Plan leave strategy:</strong> If you have a large leave balance, knowing the encashment value helps you decide whether it is more financially beneficial to take the leave or encash it.</li>
+          <li><strong>HR leave liability management:</strong> HR teams can use this calculator to estimate the total leave encashment liability on the books — essential for provisions in financial statements.</li>
+          <li><strong>Different divisors supported:</strong> Some jurisdictions and employers use 26 days (working days) rather than 30 days as the monthly divisor — this calculator lets you set either value.</li>
+          <li><strong>Instant balance visibility:</strong> The remaining leave balance field shows how many days remain after the encashment — useful for employees who are partially encashing their balance.</li>
+        </ul>
+      </section>
+
+      <section class="edu-section">
+        <h2>How to Use the Leave Encashment Calculator</h2>
+        <ol class="how-to-list">
+          <li><strong>Select your currency</strong> — formats all monetary output.</li>
+          <li><strong>Enter Monthly Basic Salary</strong> — your gross basic salary per month (exclude HRA, allowances, and variable pay; use basic only for standard encashment calculations).</li>
+          <li><strong>Enter Standard Days in Month</strong> — typically 26 (working days under Indian labour law) or 30 (calendar days). Your employment contract or HR policy will specify which to use.</li>
+          <li><strong>Enter Total Unused Leave Balance</strong> — the total number of earned/privilege leave days you have accumulated and not yet taken.</li>
+          <li><strong>Enter Days to Encash</strong> — the number of days you want to convert to cash (cannot exceed your total balance).</li>
+          <li>Click <strong>Calculate Payout</strong> to see your daily rate, gross encashment value, and remaining leave balance.</li>
+        </ol>
+      </section>
+
+      <section class="edu-section">
+        <h2>How Leave Encashment is Calculated</h2>
+        <div class="formula-block">
+          <div class="formula-line"><strong>Daily Rate</strong> = Monthly Basic Salary ÷ Standard Days in Month</div>
+          <div class="formula-line"><strong>Gross Encashment Value</strong> = Daily Rate × Days to Encash</div>
+          <div class="formula-line"><strong>Remaining Balance</strong> = Total Leave Balance − Days to Encash</div>
+        </div>
+        <div class="formula-example">
+          <h3>Worked Example</h3>
+          <p>Monthly basic salary: <strong>₹40,000</strong>. Days in month: <strong>26</strong>. Total leave balance: <strong>30 days</strong>. Days to encash: <strong>10 days</strong>.</p>
+          <ul>
+            <li>Daily Rate = ₹40,000 ÷ 26 = <strong>₹1,538.46/day</strong></li>
+            <li>Gross Encashment = ₹1,538.46 × 10 = <strong>₹15,384.60</strong></li>
+            <li>Remaining Balance = 30 − 10 = <strong>20 days</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Pros and Cons of Leave Encashment</h2>
+        <div class="table-wrapper">
+          <table class="pros-cons-table" aria-label="Pros and cons of leave encashment">
+            <thead><tr><th class="pros-col-header">✅ Advantages</th><th class="cons-col-header">⚠️ Limitations</th></tr></thead>
+            <tbody>
+              <tr><td>Provides immediate cash value from accumulated but unused leave — useful during financial need or at resignation</td><td>In India, leave encashment during service is fully taxable — the Sec 10(10AA) exemption applies only at separation</td></tr>
+              <tr><td>Transparent formula based on basic salary eliminates ambiguity in settlement negotiations</td><td>Only basic salary is used — allowances (HRA, transport, etc.) are excluded, making the actual value lower than some employees expect</td></tr>
+              <tr><td>Preserves cash flow for employer by allowing partial encashment rather than full leave payout</td><td>Maximum leave that can be encashed may be capped by your employer policy or state labour law</td></tr>
+              <tr><td>Government employees in India receive full tax exemption on encashment at retirement under Sec 10(10AA)(i)</td><td>Private sector employees face a cumulative lifetime cap (₹25 lakh post-Budget 2023) on the tax-exempt amount</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Leave Encashment — Key Things to Know</h2>
+        <div class="insight-grid">
+          <div class="insight-card insight-card--blue"><div class="insight-card-icon"><span class="material-symbols-outlined">gavel</span></div><h3>26 vs 30 Days Divisor</h3><p>In India, most private sector employers use 26 working days as the monthly divisor (excluding Sundays). Some use 30 calendar days. This difference affects the daily rate significantly — always check your employment contract.</p></div>
+          <div class="insight-card insight-card--green"><div class="insight-card-icon"><span class="material-symbols-outlined">currency_rupee</span></div><h3>Tax Exemption at Separation</h3><p>When you leave a job or retire, leave encashment is exempt under Sec 10(10AA) up to ₹25 lakh (Budget 2023). Government employees get full exemption with no limit. Private sector employees use the "least of 4" limit calculation.</p></div>
+          <div class="insight-card insight-card--yellow"><div class="insight-card-icon"><span class="material-symbols-outlined">warning</span></div><h3>Taxable During Employment</h3><p>Leave encashment received while still employed is treated as salary income and fully taxable in the same financial year. This applies to mid-year or annual encashment allowances offered by employers.</p></div>
+          <div class="insight-card insight-card--purple"><div class="insight-card-icon"><span class="material-symbols-outlined">calculate</span></div><h3>Encashment Limit Caps</h3><p>Many employers cap the number of leave days that can be encashed — e.g., a maximum of 30 days per year or a lifetime maximum. Check your HR policy document before relying on a balance figure from the HRIS.</p></div>
+          <div class="insight-card insight-card--orange"><div class="insight-card-icon"><span class="material-symbols-outlined">account_balance</span></div><h3>Leave Liability for HR</h3><p>From an accounting perspective, accumulated leave represents a financial liability on the employer's balance sheet. HR and Finance teams should review the total leave encashment liability quarterly to ensure adequate provisions.</p></div>
+          <div class="insight-card insight-card--red"><div class="insight-card-icon"><span class="material-symbols-outlined">info</span></div><h3>Privilege vs Casual Leave</h3><p>In India, earned/privilege leave (EL/PL) is typically encashable. Casual leave (CL) and sick leave (SL) generally are not. Always check your company's leave policy to confirm which leave types are eligible for encashment.</p></div>
+        </div>
+      </section>
+
+      <section class="edu-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          @for (faq of faqs; track faq.q; let i = $index) {
+            <div class="faq-item" role="listitem">
+              <button class="faq-question" type="button" [attr.aria-expanded]="openFaqIndex === i" (click)="toggleFaq(i)">
+                <span>{{ faq.q }}</span><span class="faq-icon material-symbols-outlined">{{ openFaqIndex === i ? 'expand_less' : 'expand_more' }}</span>
+              </button>
+              <div class="faq-answer" [class.open]="openFaqIndex === i"><p>{{ faq.a }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── Related Tools ───────────────────────────────────── -->
+  <section class="related-tools-section">
+    <div class="container">
+      <h2 class="related-title">Explore Related Calculators</h2>
+      <div class="related-grid">
+        @for (tool of relatedTools; track tool.slug) {
+          <a class="related-card" [routerLink]="['/free-workforce-tools', tool.slug]">
+            <span class="related-icon material-symbols-outlined">{{ tool.icon }}</span>
+            <div class="related-info"><h3>{{ tool.title }}</h3><p>{{ tool.description }}</p></div>
+            <span class="related-arrow material-symbols-outlined">arrow_forward</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <section class="tool-cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-text">
+          <h2>Automate Leave Management and Encashment Across Your Organisation</h2>
+          <p>BriskPeople HRMS tracks leave balances in real time, automates encashment calculations at separation, and gives HR full visibility into leave liability — no spreadsheets required.</p>
+          <span class="cta-note">Free Trial — No Credit Card Required</span>
+        </div>
+        <div class="cta-actions">
+          <a routerLink="/sign-up" class="btn btn-primary" id="cta-le-signup">Sign Up Free</a>
+          <a routerLink="/book-demo" class="btn btn-outline" id="cta-le-demo">Quick Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

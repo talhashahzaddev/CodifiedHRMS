@@ -222,7 +222,7 @@
 
 // ── Page spacer ───────────────────────────────────────────────
 .header-spacer {
-  height: 108px; transition: height 0.3s ease;
+  height: 72px; transition: height 0.3s ease;
   &.scrolled { height: 72px; }
 }
 
@@ -534,7 +534,6 @@
     &:hover { background: var(--primary-700); }
   }
 
-  // ── Mobile Book Demo (green) ──────────────────────────────
   .mob-cta-book-demo {
     flex: 1;
     padding: 12px;
@@ -547,5 +546,49 @@
     text-decoration: none;
     transition: background 0.15s ease;
     &:hover { background: #15803d; }
+  }
+}
+
+// ── Free Tools nav link & badge ───────────────────────────────
+.free-tools-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.free-tools-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--primary-500), var(--accent-500));
+  color: white;
+  letter-spacing: 0.02em;
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(12, 142, 255, 0.35); }
+  50%       { box-shadow: 0 0 0 4px rgba(12, 142, 255, 0); }
+}
+
+// Mobile free tools link
+.mob-free-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .mob-free-tools-badge {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary-500), var(--accent-500));
+    color: white;
   }
 }
