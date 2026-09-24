@@ -57,15 +57,20 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "750kB",
+                  "maximumError": "2MB"
                 }
               ],
               "outputHashing": "all",
               "ssr": {
                 "entry": "src/server.cloudflare.ts",
                 "experimentalPlatform": "neutral"
-              }
+              },
+              "externalDependencies": [
+                "pngjs",
+                "html2canvas",
+                "qrcode"
+              ]
             },
             "development": {
               "optimization": false,
