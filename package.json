@@ -8,7 +8,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:codified-hrms": "node dist/codified-hrms/server/server.mjs",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "build:cf": "ng build --configuration cloudflare",
+    "preview:cf": "npm run build:cf && wrangler dev",
+    "deploy:cf": "npm run build:cf && wrangler deploy"
   },
   "private": true,
   "dependencies": {
