@@ -1,0 +1,24 @@
+{
+  // Cloudflare Workers configuration for CodifiedHrms Angular SSR
+  // Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+  "name": "codified-hrms",
+
+  // SSR server bundle - built by Angular CLI
+  "main": "./dist/codified-hrms/server/server.mjs",
+
+  // Minimum compatibility date - use nodejs_compat for Node-like APIs
+  "compatibility_date": "2025-11-07",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Static assets (CSS, JS, images) served from the browser output folder
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist/codified-hrms/browser"
+  },
+
+  // Observability - enable logging for debugging in Cloudflare dashboard
+  "observability": {
+    "enabled": true
+  }
+}

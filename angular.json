@@ -38,7 +38,8 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
-              "entry": "src/server.ts"
+              "entry": "src/server.ts",
+              "experimentalPlatform": "neutral"
             }
           },
           "configurations": {
@@ -51,6 +52,25 @@
                 }
               ],
               "outputHashing": "all"
+            },
+            "cloudflare": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "750kB",
+                  "maximumError": "2MB"
+                }
+              ],
+              "outputHashing": "all",
+              "ssr": {
+                "entry": "src/server.cloudflare.ts",
+                "experimentalPlatform": "neutral"
+              },
+              "externalDependencies": [
+                "pngjs",
+                "html2canvas",
+                "qrcode"
+              ]
             },
             "development": {
               "optimization": false,
