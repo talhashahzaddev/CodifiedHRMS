@@ -17,9 +17,6 @@ const angularApp = new AngularNodeAppEngine({
     'codified-hrms.vercel.app',
     'briskpeople.com',
     'www.briskpeople.com',
-    // Cloudflare Workers domains
-    'workers.dev',
-    'codified-hrms.workers.dev',
   ],
 });
 
