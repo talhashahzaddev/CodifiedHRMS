@@ -1,7 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.codifiedhrms.com/api', // Production API URL
+  apiUrl: 'https://briskpeople.blitz.cloud/api',
   appName: 'CodifiedHRMS',
   version: '1.0.0'
 };
-
